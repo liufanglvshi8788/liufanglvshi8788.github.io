@@ -302,6 +302,20 @@
       "note": "",
       "recorder": "",
       "hours": 0
+    },
+    {
+      "id": "item-1786242542438-1o99uc",
+      "title": "搜集行政法相关的法律法规以及案例库",
+      "assignee": "潘奥星律师",
+      "priority": "紧急",
+      "caseType": "",
+      "status": "待办",
+      "dueDate": "2026-08-13T10:28:00",
+      "createdAt": "2026-08-09T02:29:02.438Z",
+      "completedAt": null,
+      "note": "",
+      "recorder": "",
+      "hours": 0
     }
   ],
   "reviews": [
@@ -316,7 +330,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-08T14:07:29.023Z",
+  "lastUpdate": "2026-08-09T02:29:02.438Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
