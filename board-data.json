@@ -333,6 +333,20 @@
       "submittedBy": null,
       "reviewedAt": null,
       "reviewedBy": null
+    },
+    {
+      "id": "item-1786279743566-m3t31d",
+      "title": "金山合同从服务至今的合同梳理",
+      "assignee": "潘奥星律师",
+      "priority": "普通",
+      "caseType": "",
+      "status": "待办",
+      "dueDate": "2026-08-11T20:48:00",
+      "createdAt": "2026-08-09T12:49:03.566Z",
+      "completedAt": null,
+      "note": "",
+      "recorder": "",
+      "hours": 0
     }
   ],
   "reviews": [
@@ -356,7 +370,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-09T11:49:18.305Z",
+  "lastUpdate": "2026-08-09T12:49:03.567Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
