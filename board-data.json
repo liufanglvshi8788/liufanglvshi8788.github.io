@@ -197,13 +197,17 @@
       "assignee": "刘芳律师",
       "priority": "普通",
       "caseType": "",
-      "status": "待办",
+      "status": "进行中",
       "dueDate": "2026-08-14T20:26:00",
       "createdAt": "2026-08-08T12:27:00.436Z",
       "completedAt": null,
       "note": "",
       "recorder": "",
-      "hours": 0
+      "hours": 0,
+      "submittedForReviewAt": null,
+      "submittedBy": null,
+      "reviewedAt": null,
+      "reviewedBy": null
     },
     {
       "id": "item-1786194077832-omquod",
@@ -330,7 +334,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-09T02:29:02.438Z",
+  "lastUpdate": "2026-08-09T11:42:35.895Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
