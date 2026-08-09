@@ -49,15 +49,15 @@
       "assignee": "潘奥星律师",
       "priority": "重要",
       "caseType": "诉讼案件",
-      "status": "进行中",
+      "status": "需复核",
       "dueDate": "2026-08-10T19:21:00",
       "createdAt": "2026-08-08T11:22:03.216Z",
       "completedAt": null,
       "note": "",
       "recorder": "刘芳律师",
       "hours": 0,
-      "submittedForReviewAt": null,
-      "submittedBy": null,
+      "submittedForReviewAt": "2026-08-09T11:43:00.637Z",
+      "submittedBy": "潘奥星律师",
       "reviewedAt": null,
       "reviewedBy": null
     },
@@ -338,7 +338,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-09T11:42:47.933Z",
+  "lastUpdate": "2026-08-09T11:43:00.637Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
