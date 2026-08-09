@@ -53,7 +53,7 @@
       "dueDate": "2026-08-10T19:21:00",
       "createdAt": "2026-08-08T11:22:03.216Z",
       "completedAt": null,
-      "note": "",
+      "note": "格式内容请重新核查，按照可发送客户的正式文本",
       "recorder": "刘芳律师",
       "hours": 0,
       "submittedForReviewAt": "2026-08-09T11:43:00.637Z",
@@ -338,7 +338,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-09T11:43:00.637Z",
+  "lastUpdate": "2026-08-09T11:43:40.950Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
