@@ -322,7 +322,7 @@
       "assignee": "潘奥星律师",
       "priority": "紧急",
       "caseType": "",
-      "status": "进行中",
+      "status": "待办",
       "dueDate": "2026-08-13T10:28:00",
       "createdAt": "2026-08-09T02:29:02.438Z",
       "completedAt": null,
@@ -374,7 +374,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-09T12:50:55.230Z",
+  "lastUpdate": "2026-08-09T12:51:04.787Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
