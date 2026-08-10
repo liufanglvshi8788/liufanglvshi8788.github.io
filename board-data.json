@@ -255,18 +255,19 @@
       "assignee": "潘奥星律师",
       "priority": "普通",
       "caseType": "",
-      "status": "需复核",
+      "status": "已完成",
       "dueDate": "2026-08-09T21:03:00",
       "createdAt": "2026-08-08T13:03:57.026Z",
-      "completedAt": null,
+      "completedAt": "2026-08-10T03:35:22.119Z",
       "note": "",
       "recorder": "",
       "hours": 0,
       "submittedForReviewAt": "2026-08-09T11:44:48.259Z",
       "submittedBy": "刘芳律师",
-      "reviewedAt": null,
-      "reviewedBy": null,
-      "submitComment": "潘奥星复核"
+      "reviewedAt": "2026-08-10T03:35:22.118Z",
+      "reviewedBy": "未知",
+      "submitComment": "潘奥星复核",
+      "reviewComment": "我已完成复核"
     },
     {
       "id": "item-1786194271870-mntgig",
@@ -396,7 +397,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-10T03:31:24.803Z",
+  "lastUpdate": "2026-08-10T03:35:22.119Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
