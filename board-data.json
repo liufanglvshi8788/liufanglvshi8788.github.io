@@ -358,6 +358,20 @@
       "submittedBy": null,
       "reviewedAt": null,
       "reviewedBy": null
+    },
+    {
+      "id": "item-1786327704501-vw5y4k",
+      "title": "巫山水务案件细节补充核实，证据资料全套提交",
+      "assignee": "曾梓涵律师",
+      "priority": "普通",
+      "caseType": "诉讼案件",
+      "status": "待办",
+      "dueDate": "2026-08-11T18:07:00",
+      "createdAt": "2026-08-10T02:08:24.501Z",
+      "completedAt": null,
+      "note": "",
+      "recorder": "",
+      "hours": 0
     }
   ],
   "reviews": [
@@ -381,7 +395,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-10T02:06:33.626Z",
+  "lastUpdate": "2026-08-10T02:08:24.501Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
