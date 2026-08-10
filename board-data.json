@@ -31,11 +31,11 @@
       "assignee": "曾梓涵律师",
       "priority": "重要",
       "caseType": "合同审查",
-      "status": "待办",
+      "status": "需复核",
       "dueDate": "2026-08-10T19:21:00",
       "createdAt": "2026-08-08T11:21:24.855Z",
       "completedAt": null,
-      "note": "",
+      "note": "1.2026年8月6日接收：《人力资源服务外包合作合同》\n2.2026年8月8日接收：《静逸·橡树酒店协议书》",
       "recorder": "刘芳律师",
       "submittedForReviewAt": null,
       "submittedBy": null,
@@ -374,7 +374,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-09T12:51:31.077Z",
+  "lastUpdate": "2026-08-10T02:04:24.698Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
