@@ -176,11 +176,12 @@
       "priority": "重要",
       "caseType": "",
       "status": "待办",
-      "dueDate": "2026-08-10T19:27:00",
+      "dueDate": "2026-08-12T19:27:00",
       "createdAt": "2026-08-08T11:27:53.638Z",
       "completedAt": null,
       "note": "",
-      "recorder": ""
+      "recorder": "",
+      "hours": 0
     },
     {
       "id": "item-1786188516999-v93df0",
@@ -374,7 +375,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-10T02:04:24.698Z",
+  "lastUpdate": "2026-08-10T02:04:54.729Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
