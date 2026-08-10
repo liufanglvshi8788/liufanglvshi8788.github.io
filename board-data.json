@@ -374,6 +374,20 @@
       "note": "",
       "recorder": "",
       "hours": 0
+    },
+    {
+      "id": "item-1786333266031-sb265l",
+      "title": "罗祥红案证据重新梳理组合及证据目录",
+      "assignee": "潘奥星律师",
+      "priority": "普通",
+      "caseType": "诉讼案件",
+      "status": "待办",
+      "dueDate": null,
+      "createdAt": "2026-08-10T03:41:06.031Z",
+      "completedAt": null,
+      "note": "",
+      "recorder": "潘奥星律师",
+      "hours": 0
     }
   ],
   "reviews": [
@@ -397,7 +411,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-10T03:35:22.119Z",
+  "lastUpdate": "2026-08-10T03:41:06.031Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
