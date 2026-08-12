@@ -595,46 +595,6 @@ body {
 }
 .review-add-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px -2px rgba(139, 92, 246, 0.5); }
 
-/* ===== Error Notebook View (经验总结) ===== */
-.error-view { padding: 0 24px 24px; }
-.error-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; }
-.error-card {
-  background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow);
-  padding: 16px 18px; border-left: 4px solid #ef4444; transition: box-shadow 0.2s;
-}
-.error-card:hover { box-shadow: var(--shadow-hover); }
-.error-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 8px; }
-.error-title { font-size: 15px; font-weight: 700; word-break: break-word; flex: 1; }
-.error-cat-tag {
-  padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; color: white; white-space: nowrap;
-}
-.error-cat-tag.程序问题 { background: #ef4444; }
-.error-cat-tag.沟通问题 { background: #f59e0b; }
-.error-cat-tag.时间管理 { background: #8b5cf6; }
-.error-cat-tag.法律适用 { background: #3b82f6; }
-.error-cat-tag.文书错误 { background: #ec4899; }
-.error-cat-tag.其他 { background: #6b7280; }
-.error-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-light); margin-bottom: 8px; flex-wrap: wrap; }
-.error-section { margin-bottom: 10px; }
-.error-section-label { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 4px; }
-.error-section-content { font-size: 13px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
-.error-section.lesson .error-section-content { color: #1565c0; }
-.error-section.prevention .error-section-content { color: #2e7d32; }
-.error-actions { display: flex; gap: 6px; margin-top: 8px; }
-.error-actions button {
-  padding: 3px 10px; border: 1px solid var(--border); border-radius: 5px; background: white;
-  font-size: 12px; cursor: pointer; color: var(--text-light);
-}
-.error-actions button:hover { background: var(--bg); }
-.error-actions button.del:hover { background: #fef2f2; color: var(--urgent); border-color: var(--urgent); }
-.error-add-btn {
-  padding: 8px 20px; background: #ef4444; color: white; border: none; border-radius: 8px;
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
-}
-.error-add-btn:hover { opacity: 0.9; }
-.error-filter-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-.error-filter-bar select { padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; background: white; cursor: pointer; outline: none; }
-
 /* ===== Back to Home Button ===== */
 .back-home-bar { padding: 10px 28px 0; }
 .back-home-btn { 
@@ -1058,9 +1018,6 @@ body {
     <button class="nav-item" data-view="review" onclick="switchView('review')">
       <span class="nav-icon">📊</span><span>每日复盘</span>
     </button>
-    <button class="nav-item" data-view="error" onclick="switchView('error')">
-      <span class="nav-icon">💡</span><span>经验总结</span>
-    </button>
     <div class="nav-divider"></div>
     <button class="nav-item" onclick="openSettings()">
       <span class="nav-icon">⚙</span><span>设置</span>
@@ -1148,7 +1105,6 @@ body {
     <button class="tab" onclick="switchView('list')">列表视图</button>
     <button class="tab" onclick="switchView('member')">成员视图</button>
     <button class="tab" onclick="switchView('review')">每日复盘</button>
-    <button class="tab" onclick="switchView('error')">经验总结</button>
   </div>
   <div class="filters">
     <select id="filterPriority" onchange="render()">
@@ -1236,9 +1192,6 @@ body {
   </button>
   <button class="mobile-nav-item" data-view="review" onclick="switchView('review')">
     <span class="mni-icon">📊</span><span class="mni-label">复盘</span>
-  </button>
-  <button class="mobile-nav-item" data-view="error" onclick="switchView('error')">
-    <span class="mni-icon">💡</span><span class="mni-label">经验</span>
   </button>
   <button class="mobile-nav-item" data-view="archive" onclick="switchView('archive')">
     <span class="mni-icon">📦</span><span class="mni-label">归档</span>
@@ -1396,50 +1349,6 @@ body {
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeReview()">取消</button>
       <button class="btn-save" onclick="saveReview()">保存复盘</button>
-    </div>
-  </div>
-</div>
-
-<!-- Error Modal (经验总结) -->
-<div class="modal-overlay" id="errorModal">
-  <div class="modal" style="max-width:580px;">
-    <h2>📕 经验总结 — 记录经验教训</h2>
-    <div class="modal-field">
-      <label>问题标题</label>
-      <input type="text" id="errorTitle" placeholder="如：合同审查遗漏了违约金条款">
-    </div>
-    <div class="modal-field" style="display:flex;gap:12px;">
-      <div style="flex:1;">
-        <label>记录人</label>
-        <select id="errorAuthor" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;"></select>
-      </div>
-      <div style="flex:1;">
-        <label>分类</label>
-        <select id="errorCategory" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;">
-          <option value="程序问题">程序问题</option>
-          <option value="沟通问题">沟通问题</option>
-          <option value="时间管理">时间管理</option>
-          <option value="法律适用">法律适用</option>
-          <option value="文书错误">文书错误</option>
-          <option value="其他">其他</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-field">
-      <label>发生了什么（问题经过）</label>
-      <textarea id="errorDescription" rows="3" placeholder="描述遇到的问题或犯的错误..."></textarea>
-    </div>
-    <div class="modal-field">
-      <label>经验教训（学到了什么）</label>
-      <textarea id="errorLesson" rows="3" placeholder="从这个问题中学到了什么？"></textarea>
-    </div>
-    <div class="modal-field">
-      <label>防范措施（以后怎么避免）</label>
-      <textarea id="errorPrevention" rows="3" placeholder="以后遇到类似情况应该怎么做？"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeError()">取消</button>
-      <button class="btn-save" onclick="saveErrorEntry()">保存记录</button>
     </div>
   </div>
 </div>
@@ -1964,16 +1873,16 @@ function switchView(view) {
   // 切换视图时关闭手机端抽屉（若打开）
   if (document.body.classList.contains('mobile-panel-open')) closeMobilePanel();
   // 更新 tab 栏（隐藏的，保持兼容）
-  const allViews = ['board','calendar','list','member','archive','review','error'];
+  const allViews = ['board','calendar','list','member','archive','review'];
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', allViews[i] === view);
   });
-  // 控制工具栏显示：看板/日历/列表/成员显示快速添加和筛选，复盘/经验总结/归档隐藏
+  // 控制工具栏显示：看板/日历/列表/成员显示快速添加和筛选，复盘/归档隐藏
   const quickAdd = document.querySelector('.quick-add');
   const filterToolbar = document.getElementById('filterToolbar');
   const statsBar = document.getElementById('statsBar');
   const overdueBanner = document.getElementById('overdueBanner');
-  if (view === 'review' || view === 'error' || view === 'archive') {
+  if (view === 'review' || view === 'archive') {
     if (quickAdd) quickAdd.style.display = 'none';
     if (filterToolbar) filterToolbar.style.display = 'none';
     if (statsBar) statsBar.style.display = 'none';
@@ -2021,7 +1930,6 @@ function render() {
     : '';
   let html = '';
   if (currentView === 'review') { html = renderReview(); }
-  else if (currentView === 'error') { html = renderError(); }
   else if (currentView === 'archive') { html = renderArchive(); }
   else if (currentView === 'calendar') { html = renderCalendar(); }
   else {
@@ -2336,7 +2244,7 @@ function renderArchive() {
 function renderOverdueBanner() {
   const banner = document.getElementById('overdueBanner');
   if (!banner) return;
-  if (currentView === 'review' || currentView === 'error') { banner.classList.remove('show'); return; }
+  if (currentView === 'review') { banner.classList.remove('show'); return; }
   const now = new Date();
   const overdueItems = (cloudData.items || []).filter(i => i.dueDate && i.status !== '已完成' && new Date(i.dueDate) < now);
   if (overdueItems.length === 0) { banner.classList.remove('show'); return; }
@@ -2598,123 +2506,6 @@ async function saveReview() {
 async function deleteReview(id) {
   if (!confirm('确认删除此复盘记录？')) return;
   cloudData.reviews = (cloudData.reviews || []).filter(r => r.id !== id);
-  setSyncStatus('syncing', '删除中...');
-  try { await cloudWrite(cloudData); showToast('已删除'); refreshUI(); }
-  catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
-}
-
-// ===== Error Notebook (经验总结) =====
-let editingErrorId = null;
-
-function renderError() {
-  const errors = cloudData.errors || [];
-  if (errors.length === 0) {
-    return `<div class="empty-state"><div class="big-icon">📕</div><p>暂无错题记录</p><p class="hint">记录经验教训，让团队不再犯同样的错误</p><div style="margin-top:20px;"><button class="error-add-btn" onclick="openErrorEntry()">+ 添加错题记录</button></div></div>`;
-  }
-  return `<div class="error-view">
-    <div class="error-filter-bar">
-      <button class="error-add-btn" onclick="openErrorEntry()">+ 添加错题记录</button>
-      <select id="errorFilterCat" onchange="renderErrorFilter()">
-        <option value="">全部分类</option>
-        <option value="程序问题">程序问题</option>
-        <option value="沟通问题">沟通问题</option>
-        <option value="时间管理">时间管理</option>
-        <option value="法律适用">法律适用</option>
-        <option value="文书错误">文书错误</option>
-        <option value="其他">其他</option>
-      </select>
-      <span style="font-size:13px;color:var(--text-light);">共 ${errors.length} 条记录</span>
-    </div>
-    <div class="error-grid" id="errorGrid">${renderErrorCards(errors)}</div>
-  </div>`;
-}
-
-function renderErrorFilter() {
-  const cat = document.getElementById('errorFilterCat').value;
-  let errors = cloudData.errors || [];
-  if (cat) errors = errors.filter(e => e.category === cat);
-  document.getElementById('errorGrid').innerHTML = renderErrorCards(errors);
-}
-
-function renderErrorCards(errors) {
-  return errors.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '')).map(e => {
-    const cat = e.category || '其他';
-    return `<div class="error-card">
-      <div class="error-card-header">
-        <span class="error-title">${esc(e.title||'未命名')}</span>
-        <span class="error-cat-tag ${cat}">${cat}</span>
-      </div>
-      <div class="error-meta">
-        <span class="card-assignee">@${esc(e.author||'未知')}</span>
-        <span>📅 ${e.createdAt ? new Date(e.createdAt).toLocaleDateString('zh-CN') : ''}</span>
-      </div>
-      ${e.description ? `<div class="error-section"><div class="error-section-label">问题经过</div><div class="error-section-content">${esc(e.description)}</div></div>` : ''}
-      ${e.lesson ? `<div class="error-section lesson"><div class="error-section-label">💡 经验教训</div><div class="error-section-content">${esc(e.lesson)}</div></div>` : ''}
-      ${e.prevention ? `<div class="error-section prevention"><div class="error-section-label">🛡 防范措施</div><div class="error-section-content">${esc(e.prevention)}</div></div>` : ''}
-      <div class="error-actions">
-        <button onclick="openErrorEntry('${e.id}')">✏ 编辑</button>
-        <button class="del" onclick="deleteErrorEntry('${e.id}')">🗑 删除</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function openErrorEntry(id) {
-  editingErrorId = id || null;
-  const names = getMemberNames();
-  const authorSel = document.getElementById('errorAuthor');
-  authorSel.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
-  document.getElementById('errorTitle').value = '';
-  document.getElementById('errorCategory').value = '程序问题';
-  document.getElementById('errorDescription').value = '';
-  document.getElementById('errorLesson').value = '';
-  document.getElementById('errorPrevention').value = '';
-  if (currentUser) authorSel.value = currentUser;
-  if (id) {
-    const e = (cloudData.errors || []).find(x => x.id === id);
-    if (e) {
-      document.getElementById('errorTitle').value = e.title || '';
-      document.getElementById('errorCategory').value = e.category || '程序问题';
-      document.getElementById('errorDescription').value = e.description || '';
-      document.getElementById('errorLesson').value = e.lesson || '';
-      document.getElementById('errorPrevention').value = e.prevention || '';
-      authorSel.value = e.author || '';
-    }
-  }
-  document.getElementById('errorModal').classList.add('show');
-}
-function closeError() { document.getElementById('errorModal').classList.remove('show'); editingErrorId = null; }
-async function saveErrorEntry() {
-  const title = document.getElementById('errorTitle').value.trim();
-  const author = document.getElementById('errorAuthor').value;
-  const category = document.getElementById('errorCategory').value;
-  const description = document.getElementById('errorDescription').value.trim();
-  const lesson = document.getElementById('errorLesson').value.trim();
-  const prevention = document.getElementById('errorPrevention').value.trim();
-  if (!title) { showToast('请填写问题标题'); return; }
-  if (!author) { showToast('请选择记录人'); return; }
-  setSyncStatus('syncing', '保存中...');
-  try {
-    if (editingErrorId) {
-      const e = cloudData.errors.find(x => x.id === editingErrorId);
-      if (e) { e.title = title; e.author = author; e.category = category; e.description = description; e.lesson = lesson; e.prevention = prevention; e.updatedAt = new Date().toISOString(); }
-    } else {
-      cloudData.errors.push({
-        id: 'err-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6),
-        title, author, category, description, lesson, prevention,
-        createdAt: new Date().toISOString(),
-        updatedAt: null,
-      });
-    }
-    await cloudWrite(cloudData);
-    closeError();
-    showToast('错题记录已保存');
-    refreshUI();
-  } catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
-}
-async function deleteErrorEntry(id) {
-  if (!confirm('确认删除此错题记录？')) return;
-  cloudData.errors = (cloudData.errors || []).filter(e => e.id !== id);
   setSyncStatus('syncing', '删除中...');
   try { await cloudWrite(cloudData); showToast('已删除'); refreshUI(); }
   catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
