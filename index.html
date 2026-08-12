@@ -202,6 +202,8 @@ body {
 .stat-card.overdue .stat-icon { background: var(--urgent-soft); }
 .stat-card.week { border-top-color: #8b5cf6; } .stat-card.week .num { color: #8b5cf6; }
 .stat-card.week .stat-icon { background: #fdf4ff; }
+.stat-card.followup { border-top-color: #06b6d4; } .stat-card.followup .num { color: #0891b2; }
+.stat-card.followup .stat-icon { background: #ecfeff; }
 
 /* ===== Greeting Bar (问候栏) ===== */
 .greeting-bar {
@@ -341,7 +343,13 @@ body {
 .column-progress .column-header { background: var(--progress-grad); border-bottom-color: var(--progress-border); color: var(--progress-border); }
 .column-done .column-header { background: var(--done-grad); border-bottom-color: var(--done-border); color: var(--done-border); }
 .column-review .column-header { background: var(--review-grad); border-bottom-color: var(--review-border); color: var(--review-border); }
+.column-followup .column-header { background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%); border-bottom-color: #06b6d4; color: #0891b2; }
 .column-body { padding: 10px; min-height: 200px; }
+
+/* 事项性质徽章（每日日程 / 持续跟进） */
+.type-badge { padding: 3px 9px; border-radius: 12px; font-size: 11px; font-weight: 700; color: white; letter-spacing: 0.3px; display: inline-flex; align-items: center; }
+.type-badge.持续跟进 { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.type-badge.每日日程 { background: linear-gradient(135deg, #94a3b8, #64748b); }
 
 /* ===== Assignee Group (within board columns) ===== */
 .assignee-group { margin-bottom: 12px; }
@@ -1079,6 +1087,10 @@ body {
     <option value="重要">重要</option>
     <option value="紧急">紧急</option>
   </select>
+  <select id="quickType" title="事项性质">
+    <option value="每日日程">每日日程</option>
+    <option value="持续跟进">持续跟进</option>
+  </select>
   <select id="quickCaseType">
     <option value="">类型</option>
     <option value="诉讼案件">诉讼案件</option>
@@ -1252,6 +1264,13 @@ body {
           <option value="紧急">紧急</option>
         </select>
       </div>
+      <div style="flex:1;">
+        <label>事项性质</label>
+        <select id="editType" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;">
+          <option value="每日日程">每日日程（短期事件）</option>
+          <option value="持续跟进">持续跟进（长期事务）</option>
+        </select>
+      </div>
     </div>
     <div class="modal-field">
       <label>案件类型</label>
@@ -1278,6 +1297,7 @@ body {
       <label>事项状态</label>
       <select id="editStatus" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;">
         <option value="待办">待办</option>
+        <option value="持续跟进">持续跟进</option>
         <option value="进行中">进行中</option>
         <option value="需复核">需复核</option>
         <option value="已完成">已完成</option>
@@ -1628,6 +1648,7 @@ function renderStats() {
   const weekEnd = new Date(now.getTime() + 7 * 86400000);
   const stats = {
     todo: items.filter(i => i.status === '待办').length,
+    followup: items.filter(i => i.status === '持续跟进').length,
     inProgress: items.filter(i => i.status === '进行中').length,
     urgent: items.filter(i => i.priority === '紧急' && i.status !== '已完成').length,
     completed: items.filter(i => i.status === '已完成').length,
@@ -1644,13 +1665,14 @@ function renderStats() {
   const bar = document.getElementById('statsBar');
   const cards = [
     {cls: 'todo', num: stats.todo, label: '待办'},
+    {cls: 'followup', num: stats.followup, label: '持续跟进'},
     {cls: 'progress', num: stats.inProgress, label: '进行中'},
     {cls: 'urgent', num: stats.urgent, label: '紧急待办'},
     {cls: 'overdue', num: stats.overdue, label: '已逾期'},
     {cls: 'week', num: stats.weekDue, label: '本周到期'},
     {cls: 'done', num: stats.completed, label: '已完成'},
   ];
-  const iconMap = { todo: '📋', progress: '🔄', urgent: '🚨', overdue: '⚠️', week: '📅', done: '✅' };
+  const iconMap = { todo: '📋', followup: '🔄', progress: '⚡', urgent: '🚨', overdue: '⚠️', week: '📅', done: '✅' };
   bar.innerHTML = cards.map(c =>
     `<div class="stat-card ${c.cls}"><div class="stat-icon">${iconMap[c.cls]||''}</div><div class="stat-info"><div class="num">${c.num}</div><div class="label">${c.label}</div></div></div>`
   ).join('');
@@ -1689,7 +1711,7 @@ function renderGreetingBar() {
   const gs = document.getElementById('greetingSummary');
   if (gt) gt.textContent = `${greeting}，${userName}`;
   if (gd) gd.textContent = dateStr;
-  if (gs) gs.textContent = `今日 ${todoCount} 项待办${urgentCount > 0 ? ` · ${urgentCount} 项紧急` : ''}`;
+  if (gs) gs.textContent = `共 ${todoCount} 项待处理${urgentCount > 0 ? ` · ${urgentCount} 项紧急` : ''}`;
 
   // 更新侧边栏品牌名
   const brandName = document.getElementById('sidebarBrandName');
@@ -1818,6 +1840,7 @@ function openEdit(id) {
   editingId = id;
   document.getElementById('editTitle').value = item.title || '';
   document.getElementById('editPriority').value = item.priority || '普通';
+  document.getElementById('editType').value = item.type || '每日日程';
   document.getElementById('editCaseType').value = item.caseType || '';
   document.getElementById('editNote').value = item.note || '';
   document.getElementById('editHours').value = item.hours || '';
@@ -1843,6 +1866,7 @@ async function saveEdit() {
   const title = document.getElementById('editTitle').value.trim();
   const assignee = document.getElementById('editAssignee').value;
   const priority = document.getElementById('editPriority').value;
+  const type = document.getElementById('editType').value;
   const caseType = document.getElementById('editCaseType').value;
   const dueInput = document.getElementById('editDue').value;
   const note = document.getElementById('editNote').value;
@@ -1857,10 +1881,14 @@ async function saveEdit() {
   item.title = title;
   item.assignee = assignee;
   item.priority = priority;
+  item.type = type || '每日日程';
   item.caseType = caseType;
   item.dueDate = dueDate;
   item.note = note;
   item.hours = hours;
+  // 处理性质与起始状态的联动：改性质为持续跟进→若处于待办则转入持续跟进列；反之回待办
+  if ((type === '持续跟进') && item.status === '待办') item.status = '持续跟进';
+  else if ((type === '每日日程') && item.status === '持续跟进') item.status = '待办';
   // 处理状态变更
   if (newStatus !== item.status) {
     item.status = newStatus;
@@ -2010,6 +2038,7 @@ function cardActions(item) {
   let buttons = '';
   buttons += `<button onclick="openEdit('${item.id}')">✏ 编辑</button>`;
   if (item.status === '待办') buttons += `<button onclick="updateStatus('${item.id}','进行中')">▶ 开始</button>`;
+  if (item.status === '持续跟进') buttons += `<button onclick="updateStatus('${item.id}','进行中')">▶ 开始跟进</button>`;
   if (item.status === '进行中') {
     buttons += `<button onclick="updateStatus('${item.id}','待办')">↩ 退回</button>`;
     buttons += `<button class="review-btn" onclick="submitForReview('${item.id}')">🔍 提交复核</button>`;
@@ -2042,11 +2071,13 @@ function renderCard(item, hideAssignee) {
     reviewComment = `<div class="card-review-comment">💬 复核意见：${esc(item.reviewComment)}</div>`;
   }
   const caseTypeTag = item.caseType ? `<span class="case-type-tag ${item.caseType}">${item.caseType}</span>` : '';
+  const typeBadge = (item.type === '持续跟进') ? `<span class="type-badge 持续跟进">🔄 跟进</span>` : '';
   const hoursTag = item.hours ? `<span class="card-hours">⏱ ${formatHours(item.hours)}</span>` : '';
   return `<div class="card priority-${item.priority} ${reviewClass} ${overdueClass}">
     <div class="card-title">${esc(item.title)}</div>
     <div class="card-meta">
       ${priorityTag(item.priority)}
+      ${typeBadge}
       ${caseTypeTag}
       ${hoursTag}
       ${hideAssignee ? '' : `<span class="card-assignee">@${esc(item.assignee)}</span>`}
@@ -2061,7 +2092,7 @@ function renderCard(item, hideAssignee) {
 }
 
 function renderBoard(items) {
-  const cols = [{key:'待办',cls:'todo'},{key:'进行中',cls:'progress'},{key:'需复核',cls:'review'},{key:'已完成',cls:'done'}];
+  const cols = [{key:'待办',cls:'todo'},{key:'持续跟进',cls:'followup'},{key:'进行中',cls:'progress'},{key:'需复核',cls:'review'},{key:'已完成',cls:'done'}];
   return `<div class="board-view">${cols.map(c => {
     const colItems = items.filter(i => i.status === c.key);
     // 按负责人分组
@@ -2137,6 +2168,7 @@ function renderList(items) {
       <div class="date-group-header">📅 ${header} <span class="date-count">${groupItems.length} 项</span></div>
       ${groupItems.map(i => `<div class="list-item priority-${i.priority} ${i.status === '已完成' ? 'completed' : ''}">
         ${priorityTag(i.priority)}
+        ${i.type === '持续跟进' ? `<span class="type-badge 持续跟进">🔄 跟进</span>` : ''}
         ${i.caseType ? `<span class="case-type-tag ${i.caseType}">${i.caseType}</span>` : ''}
         <span class="card-assignee">@${esc(i.assignee)}</span>
         ${i.hours ? `<span class="card-hours">⏱ ${formatHours(i.hours)}</span>` : ''}
@@ -2147,6 +2179,7 @@ function renderList(items) {
         <div class="list-item-actions">
           <button onclick="openEdit('${i.id}')">编辑</button>
           ${i.status === '待办' ? `<button onclick="updateStatus('${i.id}','进行中')">开始</button>` : ''}
+          ${i.status === '持续跟进' ? `<button onclick="updateStatus('${i.id}','进行中')">开始跟进</button>` : ''}
           ${i.status === '进行中' ? `<button class="review-btn" onclick="submitForReview('${i.id}')">提交复核</button>` : ''}
           ${i.status === '需复核' ? `<button onclick="rejectReview('${i.id}')">退回修改</button><button class="approve-btn" onclick="approveReview('${i.id}')">复核定稿</button>` : ''}
           ${i.status === '已完成' ? `<button onclick="updateStatus('${i.id}','进行中')">重开</button>` : ''}
@@ -2172,7 +2205,7 @@ function renderMember(items) {
     const tasks = memberMap[name];
     const total = tasks.length;
     const done = tasks.filter(t => t.status === '已完成').length;
-    const todo = tasks.filter(t => t.status === '待办').length;
+    const pending = tasks.filter(t => t.status !== '已完成').length;
     const prog = tasks.filter(t => t.status === '进行中').length;
     const review = tasks.filter(t => t.status === '需复核').length;
     const urgent = tasks.filter(t => t.priority === '紧急' && t.status !== '已完成').length;
@@ -2186,7 +2219,7 @@ function renderMember(items) {
         <div class="member-stats">
           <span>总计 <b>${total}</b></span>
           <span>工时 <b>${formatHours(totalHours)}</b></span>
-          <span>待办 <b>${todo}</b></span>
+          <span>待处理 <b>${pending}</b></span>
           <span>进行中 <b>${prog}</b></span>
           ${review > 0 ? `<span style="color:var(--review-border);font-weight:700;">需复核 ${review}</span>` : ''}
           <span>已完成 <b>${done}</b></span>
@@ -2203,7 +2236,9 @@ function renderMember(items) {
           <span class="dot ${t.priority}"></span>
           ${esc(t.title)}
           ${t.status === '需复核' ? `<span style="font-size:11px;color:var(--review-border);font-weight:600;">需复核</span>` : ''}
-          ${t.status !== '已完成' && t.status !== '需复核' ? `<button onclick="cycleStatus('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--text-light)">→${t.status === '待办' ? '进行中' : '需复核'}</button>` : ''}
+          ${t.status === '待办' ? `<button onclick="cycleStatus('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--text-light)">→进行中</button>` : ''}
+          ${t.status === '持续跟进' ? `<button onclick="updateStatus('${t.id}','进行中')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--text-light)">→进行中</button>` : ''}
+          ${t.status === '进行中' ? `<button onclick="cycleStatus('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--text-light)">→需复核</button>` : ''}
           ${t.status === '需复核' ? `<button onclick="approveReview('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--done-border);font-weight:600;">→定稿</button>` : ''}
         </div>`).join('') : '<span style="font-size:13px;color:var(--text-light)">暂无事项</span>'}
       </div>
@@ -2603,6 +2638,7 @@ async function quickAdd() {
   const title = document.getElementById('quickTitle').value.trim();
   const assignee = document.getElementById('quickAssignee').value;
   const priority = document.getElementById('quickPriority').value;
+  const type = document.getElementById('quickType').value;
   const caseType = document.getElementById('quickCaseType').value;
   const dueInput = document.getElementById('quickDue').value;
   let recorder = document.getElementById('quickRecorder').value;
@@ -2616,8 +2652,9 @@ async function quickAdd() {
   const newItem = {
     id: 'item-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6),
     title, assignee, priority,
+    type: type || '每日日程',
     caseType: caseType || '',
-    status: '待办',
+    status: (type === '持续跟进' ? '持续跟进' : '待办'),
     dueDate,
     createdAt: new Date().toISOString(),
     completedAt: null,
@@ -2631,6 +2668,7 @@ async function quickAdd() {
     await cloudWrite(cloudData);
     document.getElementById('quickTitle').value = '';
     document.getElementById('quickDue').value = '';
+    document.getElementById('quickType').value = '每日日程';
     document.getElementById('quickCaseType').value = '';
     document.getElementById('quickHours').value = '';
     showToast('已添加');
