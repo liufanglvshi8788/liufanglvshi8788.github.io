@@ -110,13 +110,14 @@
       "dueDate": "2026-08-10T15:24:00",
       "createdAt": "2026-08-08T11:24:50.140Z",
       "completedAt": null,
-      "note": "1、已联系承办人朱伊童（63692980），邮件在收发室还没有收取，下次跟进时间0812",
+      "note": "1、已联系承办人朱伊童（63692980），邮件在收发室还没有收取，下次跟进时间0812，0812无人接听电话，0813再跟进",
       "recorder": "",
       "hours": 0,
       "submittedForReviewAt": null,
       "submittedBy": null,
       "reviewedAt": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "type": "每日日程"
     },
     {
       "id": "item-1786188310009-zmzpv2",
@@ -444,7 +445,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-12T09:31:34.964Z",
+  "lastUpdate": "2026-08-12T09:32:29.096Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
