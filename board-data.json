@@ -128,8 +128,10 @@
       "dueDate": null,
       "createdAt": "2026-08-08T11:25:10.009Z",
       "completedAt": null,
-      "note": "",
-      "recorder": ""
+      "note": "HHH ",
+      "recorder": "",
+      "type": "每日日程",
+      "hours": 0
     },
     {
       "id": "item-1786188327158-g315c2",
@@ -441,7 +443,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-12T07:06:07.496Z",
+  "lastUpdate": "2026-08-12T08:22:18.136Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
