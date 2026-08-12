@@ -32,17 +32,18 @@
       "assignee": "曾梓涵律师",
       "priority": "重要",
       "caseType": "合同审查",
-      "status": "需复核",
+      "status": "已完成",
       "dueDate": "2026-08-10T19:21:00",
       "createdAt": "2026-08-08T11:21:24.855Z",
-      "completedAt": null,
+      "completedAt": "2026-08-12T06:18:52.982Z",
       "note": "2026年8月7日接收：《静逸·橡树酒店协议书》；建议8月11日反馈街道办",
       "recorder": "刘芳律师",
       "submittedForReviewAt": null,
       "submittedBy": null,
-      "reviewedAt": null,
-      "reviewedBy": null,
-      "hours": 0
+      "reviewedAt": "2026-08-12T06:18:52.982Z",
+      "reviewedBy": "未知",
+      "hours": 0,
+      "reviewComment": ""
     },
     {
       "id": "item-1786188123216-h1a9id",
@@ -427,7 +428,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-12T01:26:35.609Z",
+  "lastUpdate": "2026-08-12T06:18:52.982Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
