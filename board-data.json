@@ -336,13 +336,14 @@
       "assignee": "潘奥星律师",
       "priority": "普通",
       "caseType": "",
-      "status": "待办",
+      "status": "持续跟进",
       "dueDate": "2026-08-14T22:07:00",
       "createdAt": "2026-08-08T14:07:29.022Z",
       "completedAt": null,
       "note": "",
       "recorder": "",
-      "hours": 0
+      "hours": 0,
+      "type": "持续跟进"
     },
     {
       "id": "item-1786242542438-1o99uc",
@@ -439,7 +440,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-12T07:05:08.522Z",
+  "lastUpdate": "2026-08-12T07:06:04.890Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
