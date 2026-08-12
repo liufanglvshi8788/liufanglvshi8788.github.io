@@ -318,13 +318,14 @@
       "assignee": "潘奥星律师",
       "priority": "普通",
       "caseType": "",
-      "status": "待办",
+      "status": "持续跟进",
       "dueDate": null,
       "createdAt": "2026-08-08T13:05:26.568Z",
       "completedAt": null,
       "note": "需要做一个案例检索，关于adhd的费用支持",
       "recorder": "",
-      "hours": 0
+      "hours": 0,
+      "type": "持续跟进"
     },
     {
       "id": "item-1786198049022-8z6uzg",
@@ -435,7 +436,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-12T07:04:12.864Z",
+  "lastUpdate": "2026-08-12T07:04:16.458Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
