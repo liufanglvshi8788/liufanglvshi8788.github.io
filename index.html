@@ -435,6 +435,8 @@ body {
 .card-actions button.review-btn:hover { opacity: 0.92; background: var(--review-border); color: white; transform: translateY(-1px); }
 .card-actions button.approve-btn { background: var(--done-border); color: white; border-color: var(--done-border); font-weight: 600; }
 .card-actions button.approve-btn:hover { opacity: 0.92; background: var(--done-border); color: white; transform: translateY(-1px); }
+.card-actions button.followup-btn { background: #06b6d4; color: white; border-color: #06b6d4; font-weight: 600; }
+.card-actions button.followup-btn:hover { opacity: 0.92; background: #06b6d4; color: white; transform: translateY(-1px); }
 .empty-col { text-align: center; padding: 40px 14px; color: var(--text-light); font-size: 12.5px; }
 
 /* ===== List View ===== */
@@ -2037,6 +2039,7 @@ function formatHours(h) {
 function cardActions(item) {
   let buttons = '';
   buttons += `<button onclick="openEdit('${item.id}')">✏ 编辑</button>`;
+  if (item.status === '待办') buttons += `<button class="followup-btn" onclick="moveToFollowup('${item.id}')">🔄 持续跟进</button>`;
   if (item.status === '待办') buttons += `<button onclick="updateStatus('${item.id}','进行中')">▶ 开始</button>`;
   if (item.status === '持续跟进') buttons += `<button onclick="updateStatus('${item.id}','进行中')">▶ 开始跟进</button>`;
   if (item.status === '进行中') {
@@ -2178,6 +2181,7 @@ function renderList(items) {
         <span style="font-size:12px;color:${i.status === '需复核' ? 'var(--review-border)' : i.status === '已完成' ? 'var(--done-border)' : 'var(--text-light)'};font-weight:${i.status === '需复核' ? '600' : '400'}">[${i.status}]</span>
         <div class="list-item-actions">
           <button onclick="openEdit('${i.id}')">编辑</button>
+          ${i.status === '待办' ? `<button class="followup-btn" onclick="moveToFollowup('${i.id}')">持续跟进</button>` : ''}
           ${i.status === '待办' ? `<button onclick="updateStatus('${i.id}','进行中')">开始</button>` : ''}
           ${i.status === '持续跟进' ? `<button onclick="updateStatus('${i.id}','进行中')">开始跟进</button>` : ''}
           ${i.status === '进行中' ? `<button class="review-btn" onclick="submitForReview('${i.id}')">提交复核</button>` : ''}
@@ -2236,6 +2240,7 @@ function renderMember(items) {
           <span class="dot ${t.priority}"></span>
           ${esc(t.title)}
           ${t.status === '需复核' ? `<span style="font-size:11px;color:var(--review-border);font-weight:600;">需复核</span>` : ''}
+          ${t.status === '待办' ? `<button onclick="moveToFollowup('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:#0891b2;font-weight:600;">→持续跟进</button>` : ''}
           ${t.status === '待办' ? `<button onclick="cycleStatus('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--text-light)">→进行中</button>` : ''}
           ${t.status === '持续跟进' ? `<button onclick="updateStatus('${t.id}','进行中')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--text-light)">→进行中</button>` : ''}
           ${t.status === '进行中' ? `<button onclick="cycleStatus('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--text-light)">→需复核</button>` : ''}
@@ -2697,6 +2702,24 @@ async function updateStatus(id, status) {
   setSyncStatus('syncing', '更新中...');
   try {
     await cloudWrite(cloudData);
+    refreshUI();
+  } catch(e) {
+    showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败');
+    setSyncStatus('error', '同步失败');
+  }
+}
+
+// 转入持续跟进：待办 → 持续跟进（同时标记为持续跟进性质）
+async function moveToFollowup(id) {
+  const item = cloudData.items.find(i => i.id === id);
+  if (!item) return;
+  item.status = '持续跟进';
+  item.type = '持续跟进';
+  if (item.completedAt) item.completedAt = null;
+  setSyncStatus('syncing', '更新中...');
+  try {
+    await cloudWrite(cloudData);
+    showToast('已转入持续跟进');
     refreshUI();
   } catch(e) {
     showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败');
