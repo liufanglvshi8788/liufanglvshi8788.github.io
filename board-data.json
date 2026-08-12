@@ -203,7 +203,7 @@
       "dueDate": "2026-08-12T19:27:00",
       "createdAt": "2026-08-08T11:27:53.638Z",
       "completedAt": null,
-      "note": "",
+      "note": "8月12日，无人接听电话。8月13日再打。",
       "recorder": "",
       "hours": 0,
       "type": "持续跟进"
@@ -444,7 +444,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-12T09:30:56.081Z",
+  "lastUpdate": "2026-08-12T09:31:34.964Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
