@@ -70,13 +70,17 @@
       "assignee": "潘奥星律师",
       "priority": "重要",
       "caseType": "",
-      "status": "待办",
+      "status": "进行中",
       "dueDate": null,
       "createdAt": "2026-08-08T11:22:19.916Z",
       "completedAt": null,
       "note": "8月8日，法院已签收续冻行申请书，正在联系法官核实是否已收到",
       "recorder": "",
-      "hours": 0
+      "hours": 0,
+      "submittedForReviewAt": null,
+      "submittedBy": null,
+      "reviewedAt": null,
+      "reviewedBy": null
     },
     {
       "id": "item-1786188202710-d8ctsr",
@@ -428,7 +432,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-12T06:28:36.269Z",
+  "lastUpdate": "2026-08-12T06:40:30.303Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
