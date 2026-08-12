@@ -382,8 +382,17 @@ body {
 .card.priority-紧急 { border-left-color: var(--urgent); }
 .card.priority-重要 { border-left-color: var(--important); }
 .card.priority-普通 { border-left-color: #c4c8d4; }
-.card.completed { opacity: 0.55; }
-.card.completed .card-title { text-decoration: line-through; }
+.card.completed {
+  background: linear-gradient(135deg, #f0fdf4 0%, #f7fefb 100%);
+  border-left-color: var(--done-border) !important;
+  box-shadow: 0 0 0 1px rgba(34,197,94,0.14);
+}
+.card.completed .card-title { color: #166534; }
+.done-badge {
+  display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 700;
+  color: white; background: linear-gradient(135deg, #22c55e, #16a34a);
+  padding: 2px 9px; border-radius: 11px; flex-shrink: 0; letter-spacing: 0.3px;
+}
 .card.review-pending { border-left-color: var(--review-border) !important; background: rgba(252,247,255,0.95); box-shadow: 0 0 0 1px rgba(155,109,208,0.18); }
 .card.review-pending .card-title::after { content: ' 🔍'; font-size: 12px; }
 
@@ -437,6 +446,13 @@ body {
 .card-actions button.approve-btn:hover { opacity: 0.92; background: var(--done-border); color: white; transform: translateY(-1px); }
 .card-actions button.followup-btn { background: #06b6d4; color: white; border-color: #06b6d4; font-weight: 600; }
 .card-actions button.followup-btn:hover { opacity: 0.92; background: #06b6d4; color: white; transform: translateY(-1px); }
+.card-actions button.archive-btn { background: #f59e0b; color: white; border-color: #f59e0b; font-weight: 600; }
+.card-actions button.archive-btn:hover { opacity: 0.92; background: #f59e0b; color: white; transform: translateY(-1px); }
+.archived-badge {
+  display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 700;
+  color: #92400e; background: linear-gradient(135deg, #fef3c7, #fde68a);
+  padding: 2px 9px; border-radius: 11px; flex-shrink: 0; letter-spacing: 0.3px;
+}
 .empty-col { text-align: center; padding: 40px 14px; color: var(--text-light); font-size: 12.5px; }
 
 /* ===== List View ===== */
@@ -455,8 +471,8 @@ body {
 .list-item:hover { box-shadow: var(--shadow-md); transform: translateX(2px); background: white; }
 .list-item.priority-紧急 { border-left-color: var(--urgent); }
 .list-item.priority-重要 { border-left-color: var(--important); }
-.list-item.completed { opacity: 0.55; }
-.list-item.completed .list-item-title { text-decoration: line-through; }
+.list-item.completed { background: linear-gradient(135deg, #f0fdf4 0%, #f7fefb 100%); border-left-color: var(--done-border); }
+.list-item.completed .list-item-title { color: #166534; }
 .list-item-title { flex: 1; font-size: 13.5px; min-width: 180px; font-weight: 500; color: var(--text); }
 .list-item-actions { display: flex; gap: 5px; }
 .list-item-actions button {
@@ -488,7 +504,7 @@ body {
 .member-task-chip .dot.紧急 { background: var(--urgent); }
 .member-task-chip .dot.重要 { background: var(--important); }
 .member-task-chip .dot.普通 { background: var(--normal); }
-.member-task-chip.done { opacity: 0.5; text-decoration: line-through; }
+.member-task-chip.done { opacity: 0.75; background: linear-gradient(135deg, #f0fdf4 0%, #f7fefb 100%); border-color: rgba(34,197,94,0.3); }
 
 /* ===== Modal ===== */
 .modal-overlay {
@@ -524,6 +540,19 @@ body {
 .modal-actions .btn-cancel:hover { background: var(--bg); }
 .modal-actions .btn-save { background: var(--primary-gradient); color: white; box-shadow: 0 4px 12px -2px rgba(99, 102, 241, 0.4); }
 .modal-actions .btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 16px -2px rgba(99, 102, 241, 0.5); }
+
+/* ===== Archive View (归档区) ===== */
+.archive-view { padding: 0 28px 24px; }
+.archive-summary { font-size: 13px; color: var(--text-mid); margin: 14px 2px 18px; padding: 10px 16px; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 10px; }
+.archive-card { background: rgba(255,255,255,0.9); border: 1px solid var(--border-soft); border-left: 3.5px solid #f59e0b; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--shadow-xs); transition: all 0.2s; backdrop-filter: blur(8px); }
+.archive-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.archive-card.priority-紧急 { border-left-color: var(--urgent); }
+.archive-card.priority-重要 { border-left-color: var(--important); }
+.archive-card-head { display: flex; align-items: flex-start; gap: 7px; flex-wrap: wrap; margin-bottom: 9px; }
+.archive-card-title { font-size: 14.5px; font-weight: 700; color: #1f2937; line-height: 1.5; flex: 1; min-width: 120px; }
+.archive-card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-light); }
+.archive-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 10px; padding-top: 9px; border-top: 1px dashed var(--border-soft); }
+.archive-time { font-size: 11.5px; color: var(--text-light); }
 
 /* ===== Review View (每日复盘) ===== */
 .review-view { padding: 0 24px 24px; }
@@ -1021,6 +1050,9 @@ body {
     <button class="nav-item" data-view="member" onclick="switchView('member')">
       <span class="nav-icon">👥</span><span>成员视图</span>
     </button>
+    <button class="nav-item" data-view="archive" onclick="switchView('archive')">
+      <span class="nav-icon">📦</span><span>归档区</span>
+    </button>
     <div class="nav-divider"></div>
     <button class="nav-item" data-view="review" onclick="switchView('review')">
       <span class="nav-icon">📊</span><span>每日复盘</span>
@@ -1207,6 +1239,9 @@ body {
   </button>
   <button class="mobile-nav-item" data-view="error" onclick="switchView('error')">
     <span class="mni-icon">💡</span><span class="mni-label">经验</span>
+  </button>
+  <button class="mobile-nav-item" data-view="archive" onclick="switchView('archive')">
+    <span class="mni-icon">📦</span><span class="mni-label">归档</span>
   </button>
   <button class="mobile-nav-item" data-action="settings" onclick="openSettings()">
     <span class="mni-icon">⚙</span><span class="mni-label">设置</span>
@@ -1645,7 +1680,7 @@ function setSyncStatus(type, text) {
 }
 
 function renderStats() {
-  const items = cloudData.items || [];
+  const items = (cloudData.items || []).filter(i => !i.archived);
   const now = new Date();
   const weekEnd = new Date(now.getTime() + 7 * 86400000);
   const stats = {
@@ -1916,7 +1951,7 @@ async function saveEdit() {
 function getFilteredItems() {
   const fp = (document.getElementById('filterPriority2') || document.getElementById('filterPriority')).value;
   const fa = (document.getElementById('filterAssignee2') || document.getElementById('filterAssignee')).value;
-  return (cloudData.items || []).filter(i => (!fp || i.priority === fp) && (!fa || i.assignee === fa));
+  return (cloudData.items || []).filter(i => (!fp || i.priority === fp) && (!fa || i.assignee === fa) && !i.archived);
 }
 
 // ===== View Switching =====
@@ -1929,16 +1964,16 @@ function switchView(view) {
   // 切换视图时关闭手机端抽屉（若打开）
   if (document.body.classList.contains('mobile-panel-open')) closeMobilePanel();
   // 更新 tab 栏（隐藏的，保持兼容）
-  const allViews = ['board','calendar','list','member','review','error'];
+  const allViews = ['board','calendar','list','member','archive','review','error'];
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', allViews[i] === view);
   });
-  // 控制工具栏显示：看板/日历/列表/成员显示快速添加和筛选，复盘/经验总结隐藏
+  // 控制工具栏显示：看板/日历/列表/成员显示快速添加和筛选，复盘/经验总结/归档隐藏
   const quickAdd = document.querySelector('.quick-add');
   const filterToolbar = document.getElementById('filterToolbar');
   const statsBar = document.getElementById('statsBar');
   const overdueBanner = document.getElementById('overdueBanner');
-  if (view === 'review' || view === 'error') {
+  if (view === 'review' || view === 'error' || view === 'archive') {
     if (quickAdd) quickAdd.style.display = 'none';
     if (filterToolbar) filterToolbar.style.display = 'none';
     if (statsBar) statsBar.style.display = 'none';
@@ -1987,6 +2022,7 @@ function render() {
   let html = '';
   if (currentView === 'review') { html = renderReview(); }
   else if (currentView === 'error') { html = renderError(); }
+  else if (currentView === 'archive') { html = renderArchive(); }
   else if (currentView === 'calendar') { html = renderCalendar(); }
   else {
     const items = getFilteredItems();
@@ -2051,6 +2087,7 @@ function cardActions(item) {
     buttons += `<button class="approve-btn" onclick="approveReview('${item.id}')">✓ 复核定稿</button>`;
   }
   if (item.status !== '已完成' && item.status !== '需复核') buttons += `<button onclick="updateStatus('${item.id}','已完成')">✓ 直接完成</button>`;
+  if (item.status === '已完成' && !item.archived) buttons += `<button class="archive-btn" onclick="archiveItem('${item.id}')">📦 归档</button>`;
   if (item.status === '已完成') buttons += `<button onclick="updateStatus('${item.id}','进行中')">↩ 重开</button>`;
   buttons += `<button class="del" onclick="deleteItem('${item.id}')">🗑 删除</button>`;
   return `<div class="card-actions">${buttons}</div>`;
@@ -2075,9 +2112,11 @@ function renderCard(item, hideAssignee) {
   }
   const caseTypeTag = item.caseType ? `<span class="case-type-tag ${item.caseType}">${item.caseType}</span>` : '';
   const typeBadge = (item.type === '持续跟进') ? `<span class="type-badge 持续跟进">🔄 跟进</span>` : '';
+  const doneBadge = (item.status === '已完成' && !item.archived) ? `<span class="done-badge">✓ 已结案</span>` : '';
+  const archivedBadge = item.archived ? `<span class="archived-badge">📦 已归档</span>` : '';
   const hoursTag = item.hours ? `<span class="card-hours">⏱ ${formatHours(item.hours)}</span>` : '';
   return `<div class="card priority-${item.priority} ${reviewClass} ${overdueClass}">
-    <div class="card-title">${esc(item.title)}</div>
+    <div class="card-title"><span class="title-text">${esc(item.title)}</span>${doneBadge}${archivedBadge}</div>
     <div class="card-meta">
       ${priorityTag(item.priority)}
       ${typeBadge}
@@ -2186,6 +2225,7 @@ function renderList(items) {
           ${i.status === '持续跟进' ? `<button onclick="updateStatus('${i.id}','进行中')">开始跟进</button>` : ''}
           ${i.status === '进行中' ? `<button class="review-btn" onclick="submitForReview('${i.id}')">提交复核</button>` : ''}
           ${i.status === '需复核' ? `<button onclick="rejectReview('${i.id}')">退回修改</button><button class="approve-btn" onclick="approveReview('${i.id}')">复核定稿</button>` : ''}
+          ${i.status === '已完成' && !i.archived ? `<button class="archive-btn" onclick="archiveItem('${i.id}')">归档</button>` : ''}
           ${i.status === '已完成' ? `<button onclick="updateStatus('${i.id}','进行中')">重开</button>` : ''}
           <button class="del" onclick="deleteItem('${i.id}')">删除</button>
         </div>
@@ -2245,10 +2285,51 @@ function renderMember(items) {
           ${t.status === '持续跟进' ? `<button onclick="updateStatus('${t.id}','进行中')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--text-light)">→进行中</button>` : ''}
           ${t.status === '进行中' ? `<button onclick="cycleStatus('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--text-light)">→需复核</button>` : ''}
           ${t.status === '需复核' ? `<button onclick="approveReview('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:var(--done-border);font-weight:600;">→定稿</button>` : ''}
+          ${t.status === '已完成' && !t.archived ? `<button onclick="archiveItem('${t.id}')" style="border:none;background:none;cursor:pointer;font-size:11px;color:#b45309;font-weight:600;">📦 归档</button>` : ''}
         </div>`).join('') : '<span style="font-size:13px;color:var(--text-light)">暂无事项</span>'}
       </div>
     </div>`;
   }).join('')}</div>`;
+}
+
+// ===== Archive View (归档区) =====
+function renderArchive() {
+  const archived = (cloudData.items || []).filter(i => i.archived);
+  // 按归档时间倒序
+  archived.sort((a, b) => (b.archivedAt || '').localeCompare(a.archivedAt || ''));
+  if (archived.length === 0) {
+    return `<div class="empty-state"><div class="big-icon">📦</div><p>归档区暂无事项</p><p class="hint">在「看板总览」的「已完成」列，点击卡片上的「📦 归档」即可将结案事项移入此处</p></div>`;
+  }
+  return `<div class="archive-view">
+    <div class="archive-summary">共 ${archived.length} 项已归档（均为已结案事项，已移出常规视图）</div>
+    ${archived.map(i => {
+      const caseTypeTag = i.caseType ? `<span class="case-type-tag ${i.caseType}">${i.caseType}</span>` : '';
+      const typeBadge = (i.type === '持续跟进') ? `<span class="type-badge 持续跟进">🔄 跟进</span>` : '';
+      const completedStr = i.completedAt ? new Date(i.completedAt).toLocaleDateString('zh-CN') : '';
+      const archivedStr = i.archivedAt ? new Date(i.archivedAt).toLocaleString('zh-CN', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+      return `<div class="archive-card priority-${i.priority}">
+        <div class="archive-card-head">
+          <span class="archive-card-title">${esc(i.title)}</span>
+          ${typeBadge}${caseTypeTag}
+        </div>
+        <div class="archive-card-meta">
+          <span class="card-assignee">@${esc(i.assignee)}</span>
+          ${priorityTag(i.priority)}
+          ${i.hours ? `<span class="card-hours">⏱ ${formatHours(i.hours)}</span>` : ''}
+          ${completedStr ? `<span class="card-due">✓ 结案 ${completedStr}</span>` : ''}
+        </div>
+        ${i.note ? `<div class="card-note"><span class="note-text">${esc(i.note)}</span></div>` : ''}
+        <div class="archive-card-foot">
+          <span class="archive-time">📦 归档于 ${archivedStr}</span>
+          <div class="card-actions" style="margin-top:0;">
+            <button onclick="openEdit('${i.id}')">✏ 编辑</button>
+            <button onclick="restoreItem('${i.id}')">↩ 取消归档</button>
+            <button class="del" onclick="deleteItem('${i.id}')">🗑 删除</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
 }
 
 // ===== Overdue Banner =====
@@ -2275,7 +2356,7 @@ function renderOverdueBanner() {
 let calCurrentDate = new Date();
 
 function renderCalendar() {
-  const items = cloudData.items || [];
+  const items = (cloudData.items || []).filter(i => !i.archived);
   const year = calCurrentDate.getFullYear();
   const month = calCurrentDate.getMonth();
   const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
@@ -2365,7 +2446,7 @@ function calGoToday() { calCurrentDate = new Date(); render(); }
 
 function openCalDayDetail(dateStr) {
   const items = (cloudData.items || []).filter(i => {
-    if (!i.dueDate) return false;
+    if (!i.dueDate || i.archived) return false;
     return new Date(i.dueDate).toISOString().slice(0, 10) === dateStr;
   });
   const d = new Date(dateStr);
@@ -2399,6 +2480,7 @@ function openCalDayDetail(dateStr) {
         ${i.status === '进行中' ? `<button class="review-btn" onclick="submitForReview('${i.id}')">🔍 提交复核</button>` : ''}
         ${i.status === '需复核' ? `<button class="approve-btn" onclick="approveReview('${i.id}')">✓ 复核定稿</button>` : ''}
         ${i.status !== '已完成' ? `<button onclick="updateStatus('${i.id}','已完成')">✓ 完成</button>` : ''}
+        ${i.status === '已完成' && !i.archived ? `<button class="archive-btn" onclick="archiveItem('${i.id}')">📦 归档</button>` : ''}
         <button class="del" onclick="deleteItem('${i.id}')">🗑 删除</button>
       </div>
     </div>`;
@@ -2806,6 +2888,37 @@ async function deleteItem(id) {
   try {
     await cloudWrite(cloudData);
     showToast('已删除');
+    refreshUI();
+  } catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
+}
+
+// ===== 归档 / 取消归档 =====
+// 归档：将已完成事项标记为已归档，默认从常规看板/列表/成员视图中隐藏（仅在"归档"视图可见）
+async function archiveItem(id) {
+  const item = cloudData.items.find(i => i.id === id);
+  if (!item) return;
+  if (item.status !== '已完成') { showToast('仅已完成的事项可归档'); return; }
+  if (!confirm('确认归档此事项？归档后将移入「归档」区，常规视图不再显示。')) return;
+  item.archived = true;
+  item.archivedAt = new Date().toISOString();
+  setSyncStatus('syncing', '归档中...');
+  try {
+    await cloudWrite(cloudData);
+    showToast('已归档');
+    refreshUI();
+  } catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
+}
+
+// 取消归档：恢复到"已完成"列
+async function restoreItem(id) {
+  const item = cloudData.items.find(i => i.id === id);
+  if (!item) return;
+  item.archived = false;
+  item.archivedAt = null;
+  setSyncStatus('syncing', '恢复中...');
+  try {
+    await cloudWrite(cloudData);
+    showToast('已取消归档');
     refreshUI();
   } catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
 }
