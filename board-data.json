@@ -288,7 +288,9 @@
       "reviewedAt": "2026-08-10T03:35:22.118Z",
       "reviewedBy": "未知",
       "submitComment": "潘奥星复核",
-      "reviewComment": "我已完成复核"
+      "reviewComment": "我已完成复核",
+      "archived": true,
+      "archivedAt": "2026-08-12T12:08:27.756Z"
     },
     {
       "id": "item-1786194271870-mntgig",
@@ -460,7 +462,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-12T09:45:34.297Z",
+  "lastUpdate": "2026-08-12T12:08:27.756Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
