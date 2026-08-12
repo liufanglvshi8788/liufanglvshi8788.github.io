@@ -213,7 +213,7 @@
     },
     {
       "id": "item-1786192020436-8dse0c",
-      "title": "行政案件SKill制作",
+      "title": "行政执法权限SKill制作",
       "assignee": "刘芳律师",
       "priority": "普通",
       "caseType": "",
@@ -428,7 +428,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-12T06:18:52.982Z",
+  "lastUpdate": "2026-08-12T06:28:36.269Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
