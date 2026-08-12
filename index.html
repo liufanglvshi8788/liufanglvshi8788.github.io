@@ -226,6 +226,7 @@ body {
   box-shadow: -4px 0 28px rgba(26,29,41,0.04);
   backdrop-filter: blur(16px) saturate(1.3);
   transition: width 0.32s cubic-bezier(0.4,0,0.2,1), min-width 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+  display: none;
 }
 .panel-section { padding: 15px 14px 12px; border-bottom: 1px solid var(--border-soft); }
 .panel-section-header {
@@ -1085,7 +1086,6 @@ body {
     <span class="sync-status" id="syncStatus">同步中...</span>
     <span id="lastUpdate">加载中...</span>
     <button class="refresh-btn" onclick="loadData()">↻ 刷新</button>
-    <button class="panel-toggle-btn" id="panelToggleBtn" onclick="toggleRightPanel()" title="收起/展开日程面板">📅 收起</button>
     <button class="settings-btn" onclick="openChangePwd()" title="修改访问密码">🔑 改密码</button>
     <button class="refresh-btn" onclick="doLogout()" title="退出登录">退出</button>
   </div>
@@ -1214,8 +1214,8 @@ body {
   </div>
 </aside>
 
-<!-- 折叠状态下浮在右边缘的"展开"标签 -->
-<button class="panel-reopen-tab" id="panelReopenTab" onclick="toggleRightPanel()" title="展开日程面板">📅 日程</button>
+<!-- 折叠状态下浮在右边缘的"展开"标签（已隐藏） -->
+<button class="panel-reopen-tab" id="panelReopenTab" onclick="toggleRightPanel()" title="展开日程面板" style="display:none;">📅 日程</button>
 
 <!-- 移动端抽屉遮罩 -->
 <div class="panel-backdrop" id="panelBackdrop" onclick="closeMobilePanel()"></div>
@@ -2134,7 +2134,7 @@ function renderCard(item, hideAssignee) {
 }
 
 function renderBoard(items) {
-  const cols = [{key:'待办',cls:'todo'},{key:'持续跟进',cls:'followup'},{key:'进行中',cls:'progress'},{key:'需复核',cls:'review'},{key:'已完成',cls:'done'}];
+  const cols = [{key:'持续跟进',cls:'followup'},{key:'待办',cls:'todo'},{key:'进行中',cls:'progress'},{key:'需复核',cls:'review'},{key:'已完成',cls:'done'}];
   return `<div class="board-view">${cols.map(c => {
     const colItems = items.filter(i => i.status === c.key);
     // 按负责人分组
