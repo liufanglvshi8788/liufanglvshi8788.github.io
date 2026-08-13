@@ -382,13 +382,14 @@
       "dueDate": "2026-08-11T20:48:00",
       "createdAt": "2026-08-09T12:49:03.566Z",
       "completedAt": null,
-      "note": "按照合同台账，梳理已交付的合同文件，并对合同甲方乙方名称、银行账户进行脱敏后装入文件夹(文件夹里面包含修订版本的合同+对应法律意见书)，合同和法律意见书对街道名称进行脱敏\n8.11待曾律下载发给潘奥星",
+      "note": "按照合同台账，梳理已交付的合同文件，并对合同甲方乙方名称、银行账户进行脱敏后装入文件夹(文件夹里面包含修订版本的合同+对应法律意见书)，合同和法律意见书对街道名称进行脱敏\n",
       "recorder": "",
       "hours": 0,
       "submittedForReviewAt": "2026-08-13T01:17:52.712Z",
       "submittedBy": "潘奥星律师",
       "reviewedAt": null,
-      "reviewedBy": null
+      "reviewedBy": null,
+      "type": "每日日程"
     },
     {
       "id": "item-1786327704501-vw5y4k",
@@ -490,7 +491,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-13T07:01:30.113Z",
+  "lastUpdate": "2026-08-13T07:01:57.731Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
