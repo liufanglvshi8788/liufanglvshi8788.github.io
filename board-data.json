@@ -467,10 +467,28 @@
       "content": "针对曾梓涵审核的服务外包合作合同，作为团队负责人，未对团队律师的交付的工作进行充分审核发送客户，导致法律依据适用的根本性错误，应予以反省。",
       "createdAt": "2026-08-13T02:18:52.472Z",
       "updatedAt": "2026-08-13T02:21:49.168Z"
+    },
+    {
+      "id": "grow-1786589120049-a6ovym",
+      "type": "growth",
+      "targetMember": "潘奥星律师",
+      "recorder": "未知",
+      "date": "2026-08-13",
+      "category": "其他成长",
+      "behavior": "成功调解案件，沟通协调能力值得表扬",
+      "result": "",
+      "impact": "",
+      "suggestion": "",
+      "score": 2,
+      "relatedItem": null,
+      "repeatCount": 1,
+      "daysSinceLast": null,
+      "createdAt": "2026-08-13T02:45:20.049Z",
+      "updatedAt": null
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-13T02:22:13.751Z",
+  "lastUpdate": "2026-08-13T02:45:20.050Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
