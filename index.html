@@ -555,45 +555,183 @@ body {
 .archive-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 10px; padding-top: 9px; border-top: 1px dashed var(--border-soft); }
 .archive-time { font-size: 11.5px; color: var(--text-light); }
 
-/* ===== Review View (每日复盘) ===== */
-.review-view { padding: 0 24px 24px; }
-.review-date-group { margin-bottom: 28px; }
-.review-date-header {
-  font-size: 17px; font-weight: 700; padding: 10px 0; margin-bottom: 10px;
-  border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px; color: var(--text);
+/* ===== Growth Pool View (进步池) ===== */
+.growth-pool { padding: 0 20px 28px; max-width: 1100px; margin: 0 auto; }
+
+/* ---- 顶部概览区 ---- */
+.growth-overview { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; margin-bottom: 24px; }
+@media(max-width:768px){ .growth-overview{grid-template-columns:1fr;} }
+.gp-score-card {
+  background: linear-gradient(135deg,#f0fdf4 0%,#dcfce7 50%,#bbf7d0 100%);
+  border-radius: 14px; padding: 22px 24px; border: 1.5px solid #86efac;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  box-shadow: 0 4px 16px rgba(34,197,94,0.12);
 }
-.review-date-header .date-count { font-size: 13px; font-weight: 400; color: var(--text-light); }
-.review-card {
-  background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow-xs);
-  padding: 18px 20px; margin-bottom: 12px; border-left: 4px solid #8b5cf6; transition: all 0.2s;
+.gp-score-label { font-size: 13px; color: #166534; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px; }
+.gp-score-value { font-size: 42px; font-weight: 800; color: #15803d; line-height: 1; }
+.gp-score-sub { font-size: 12px; color: #22c55e; margin-top: 4px; font-weight: 500; }
+.gp-trend-card {
+  background: var(--card-bg); border-radius: 14px; padding: 18px 20px;
+  border: 1.5px solid var(--border); box-shadow: var(--shadow-xs);
 }
-.review-card:hover { box-shadow: var(--shadow-md); }
-.review-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-.review-author { font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 7px; color: var(--text); }
-.review-author .avatar {
-  width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #8b5cf6, #a855f7); color: white;
-  display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
-  box-shadow: var(--shadow-xs);
+.gp-trend-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.gp-trend-title { font-size:14px; font-weight:700; color:var(--text); }
+.gp-trend-tabs { display:flex; gap:4px; }
+.gp-trend-tab {
+  padding:3px 10px; border-radius:12px; font-size:11px; cursor:pointer; border:1px solid var(--border);
+  background:var(--card-bg); color:var(--text-light); transition:all 0.15s; font-weight:500;
 }
-.review-time { font-size: 12px; color: var(--text-light); }
-.review-mood { font-size: 12px; padding: 3px 10px; border-radius: 12px; font-weight: 600; }
-.review-mood.good { background: #f0fdf4; color: #15803d; }
-.review-mood.normal { background: var(--card-bg-soft); color: var(--text-light); }
-.review-mood.bad { background: #fef2f2; color: #dc2626; }
-.review-content { font-size: 14px; line-height: 1.8; white-space: pre-wrap; word-break: break-word; color: var(--text); }
-.review-actions { display: flex; gap: 6px; margin-top: 12px; }
-.review-actions button {
-  padding: 4px 10px; border: 1px solid var(--border); border-radius: 7px; background: var(--card-bg);
-  font-size: 12px; cursor: pointer; color: var(--text-mid); transition: all 0.15s; font-weight: 500;
+.gp-trend-tab.active { background:var(--primary); color:white; border-color:var(--primary); }
+.gp-chart-area { height:140px; position:relative; }
+.gp-chart-svg { width:100%; height:100%; }
+.gp-hint-bar {
+  background: linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);
+  border: 1.5px solid #fcd34d; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;
+  font-size: 13px; color: #92400e; line-height: 1.6;
 }
-.review-actions button:hover { background: var(--card-bg-soft); color: var(--text); }
-.review-actions button.del:hover { background: #fef2f2; color: var(--urgent); border-color: var(--urgent); }
-.review-add-btn {
-  padding: 10px 24px; background: linear-gradient(135deg, #8b5cf6, #a855f7); color: white; border: none; border-radius: 10px;
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 4px 12px -2px rgba(139, 92, 246, 0.4);
+.gp-hint-bar strong { color: #b45309; }
+
+/* ---- 个人成长卡片 ---- */
+.gp-members-section { margin-bottom: 24px; }
+.gp-section-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.gp-member-card {
+  background: var(--card-bg); border-radius: 14px; padding: 20px; margin-bottom: 16px;
+  border: 1.5px solid var(--border); box-shadow: var(--shadow-xs); transition: box-shadow 0.2s;
 }
-.review-add-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px -2px rgba(139, 92, 246, 0.5); }
+.gp-member-card:hover { box-shadow: var(--shadow-md); }
+.gp-member-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.gp-avatar {
+  width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,var(--primary),#a78bfa);
+  color:white; display:inline-flex; align-items:center; justify-content:center; font-size:16px; font-weight:700;
+  flex-shrink:0;
+}
+.gp-member-name { font-size:16px; font-weight:700; color:var(--text); }
+.gp-net-score { font-size:15px; font-weight:700; margin-left:auto; }
+.gp-net-pos { color:#16a34a; }
+.gp-net-zero { color:var(--text-light); }
+.gp-net-neg { color:#dc2626; }
+.gp-net-trend { font-size:11px; font-weight:500; margin-left:4px; }
+
+.gp-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:520px){ .gp-zones{grid-template-columns:1fr;} }
+.gp-zone {
+  border-radius: 10px; padding: 14px 16px;
+}
+.gp-zone-growth {
+  background: linear-gradient(135deg,#f0fdf4 0%,#ecfdf5 100%); border: 1.5px solid #a7f3d0;
+}
+.gp-zone-improve {
+  background: linear-gradient(135deg,#fffbeb 0%,#fefce8 100%); border: 1.5px solid #fde68a;
+}
+.gp-zone-title { font-size: 12px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
+.gp-zone-title .gicon { font-size: 14px; }
+.gp-zone-growth .gp-zone-title { color: #15803d; }
+.gp-zone-improve .gp-zone-title { color: #a16207; }
+
+.gp-entry { padding: 8px 0; border-bottom: 1px dashed rgba(0,0,0,0.07); font-size: 13px; line-height: 1.55; }
+.gp-entry:last-child { border-bottom: none; padding-bottom: 0; }
+.gp-entry-head { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 3px; }
+.gp-entry-cat { font-size: 10px; padding: 1px 7px; border-radius: 8px; font-weight: 600; white-space: nowrap; flex-shrink:0; margin-top:2px; }
+.gp-entry-cat.grow { background:#dcfce7; color:#166534; }
+.gp-entry-cat.imp { background:#fef3c7; color:#92400e; }
+.gp-entry-text { color: var(--text); }
+.gp-entry-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-light); margin-top: 4px; }
+.gp-entry-score { font-weight: 700; }
+.gp-entry-score.pos { color: #16a34a; }
+.gp-entry-score.neg { color: #dc2626; }
+.gp-entry-recorder { font-style: italic; opacity: 0.75; }
+.gp-repeat-tag {
+  font-size: 10px; padding: 1px 7px; border-radius: 8px; background: #fee2e2; color: #991b1b; font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---- 团队知识库 ---- */
+.gp-knowledge { margin-top: 24px; }
+.gp-kb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.gp-kb-item {
+  background: linear-gradient(135deg,#faf5ff 0%,#f3e8ff 100%);
+  border: 1.5px solid #ddd6fe; border-radius: 10px; padding: 14px 16px;
+  transition: all 0.2s;
+}
+.gp-kb-item:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.gp-kb-item.solved { background: linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%); border-color: #86efac; }
+.gp-kb-type { font-size: 13px; font-weight: 700; color: #7c3aed; margin-bottom: 4px; }
+.gp-kb-item.solved .gp-kb-type { color: #166534; }
+.gp-kb-stats { font-size: 11px; color: var(--text-light); margin-bottom: 4px; }
+.gp-kb-solution { font-size: 12px; color: #6b21a8; line-height: 1.5; }
+.gp-kb-item.solved .gp-kb-solution { color: #166534; }
+.gp-kb-badge { display: inline-block; font-size: 10px; padding: 1px 8px; border-radius: 8px; font-weight: 700; margin-left: 6px; }
+.gp-kb-badge.solved { background: #bbf7d0; color: #166534; }
+.gp-kb-badge.active { background: #e9d5ff; color: #7c3aed; }
+
+/* ---- 排行榜 ---- */
+.gp-leaderboard { margin-top: 20px; }
+.gp-lb-row { display: flex; align-items: center; padding: 8px 12px; border-radius: 8px; margin-bottom: 4px; }
+.gp-lb-row:nth-child(odd) { background: var(--card-bg-soft); }
+.gp-lb-rank { width:26px; font-size:15px; font-weight:800; color:var(--text-light); text-align:center; }
+.gp-lb-rank.top1 { color:#f59e0b; }
+.gp-lb-rank.top2 { color:#94a3b8; }
+.gp-lb-rank.top3 { color:#d97706; }
+.gp-lb-name { flex:1; font-size:13px; font-weight:600; color:var(--text); }
+.gp-lb-val { font-size:14px; font-weight:700; color:#16a34a; }
+
+/* ---- 操作按钮 ---- */
+.gp-actions-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.gp-btn {
+  padding: 9px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.gp-btn-primary { background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: white; box-shadow: 0 4px 12px -2px rgba(139,92,246,0.4); }
+.gp-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px -2px rgba(139,92,246,0.5); }
+.gp-btn-secondary { background: var(--card-bg); color: var(--text); border: 1.5px solid var(--border); }
+.gp-btn-secondary:hover { background: var(--card-bg-soft); }
+
+/* ---- 复盘弹窗(新版结构化表单) ---- */
+.grow-modal-field { margin-bottom: 14px; }
+.grow-modal-field label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+.grow-modal-field select,
+.grow-modal-field input,
+.grow-modal-field textarea {
+  width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 13px; background: var(--card-bg); color: var(--text); box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.grow-modal-field select:focus,
+.grow-modal-field input:focus,
+.grow-modal-field textarea:focus { outline: none; border-color: var(--primary); }
+.grow-modal-field .hint { font-size: 11px; color: var(--text-light); margin-top: 3px; }
+.grow-type-toggle { display: flex; gap: 10px; margin-bottom: 16px; }
+.grow-type-option {
+  flex: 1; padding: 14px 12px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer;
+  text-align: center; transition: all 0.2s; background: var(--card-bg);
+}
+.grow-type-option.selected-growth { border-color: #22c55e; background: #f0fdf4; }
+.grow-type-option.selected-improve { border-color: #f59e0b; background: #fffbeb; }
+.grow-type-icon { font-size: 28px; display: block; margin-bottom: 4px; }
+.grow-type-label { font-size: 14px; font-weight: 700; color: var(--text); }
+.grow-type-desc { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+.grow-score-range { display: flex; gap: 6px; flex-wrap: wrap; }
+.grow-score-opt {
+  width:44px; height:36px; border:1.5px solid var(--border); border-radius:8px; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; font-size:14px; font-weight:700;
+  background:var(--card-bg); transition:all 0.15s;
+}
+.grow-score-opt.selected { border-color:var(--primary); background:var(--primary); color:white; }
+.grow-repeat-alert {
+  background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 8px; padding: 10px 14px;
+  font-size: 12px; color: #92400e; margin-bottom: 12px; display: none;
+}
+.grow-repeat-alert.show { display: block; }
+
+/* ---- 雷达图容器 ---- */
+.gp-radar-wrap { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 16px; margin-top: 16px; }
+.gp-radar-title { font-size: 13px; font-weight: 700; color: var(--text); text-align: center; margin-bottom: 8px; }
+
+/* ---- 旧数据兼容提示 ---- */
+.gp-legacy-note {
+  background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px 18px;
+  margin-bottom: 20px; font-size: 13px; color: #475569; line-height: 1.6;
+}
 
 /* ===== Back to Home Button ===== */
 .back-home-bar { padding: 10px 28px 0; }
@@ -1319,36 +1457,85 @@ body {
   </div>
 </div>
 
-<!-- Review Modal (每日复盘) -->
+<!-- Growth Pool Modal (进步池记录) -->
 <div class="modal-overlay" id="reviewModal">
-  <div class="modal" style="max-width:560px;">
-    <h2>📝 每日复盘</h2>
-    <div class="modal-field">
-      <label>复盘人</label>
-      <select id="reviewAuthor" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;"></select>
-    </div>
-    <div class="modal-field" style="display:flex;gap:12px;">
-      <div style="flex:1;">
-        <label>日期</label>
-        <input type="date" id="reviewDate" style="width:100%;">
+  <div class="modal" style="max-width:600px; max-height:90vh; overflow-y:auto;">
+    <h2 id="growModalTitle">🌱 记录成长</h2>
+
+    <!-- 类型切换 -->
+    <div class="grow-type-toggle">
+      <div class="grow-type-option selected-growth" id="growTypeGrowth" onclick="setGrowType('growth')">
+        <span class="grow-type-icon">🌟</span>
+        <div class="grow-type-label">成长亮点</div>
+        <div class="grow-type-desc">加分项 · 记录优秀表现</div>
       </div>
-      <div style="flex:1;">
-        <label>今日状态</label>
-        <select id="reviewMood" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;">
-          <option value="good">😊 顺利/有收获</option>
-          <option value="normal">😐 一般</option>
-          <option value="bad">😣 遇到困难</option>
-        </select>
+      <div class="grow-type-option" id="growTypeImprove" onclick="setGrowType('improvement')">
+        <span class="grow-type-icon">🔧</span>
+        <div class="grow-type-label">改进机会</div>
+        <div class="grow-type-desc">扣分项 · 客观记录改进点</div>
       </div>
     </div>
-    <div class="modal-field">
-      <label>今日复盘内容</label>
-      <textarea id="reviewContent" rows="6" placeholder="今天做了什么？有什么收获？遇到什么问题？明天计划做什么？&#10;&#10;例如：&#10;1. 完成了XX合同的初审，发现3个风险条款&#10;2. 和客户沟通了变更方案，客户同意修改&#10;3. 明天需要跟进法院立案材料..."></textarea>
-      <div class="hint">支持多行文字。记录每日工作回顾，便于团队互相了解进度和经验积累。</div>
+    <input type="hidden" id="growType" value="growth">
+
+    <!-- 重复检测提示 -->
+    <div class="grow-repeat-alert" id="growRepeatAlert"></div>
+
+    <div class="grow-modal-field">
+      <label>被记录人 <span style="color:var(--urgent)">*</span></label>
+      <select id="growTargetMember"><option value="">请选择成员</option></select>
     </div>
+
+    <div class="grow-modal-field">
+      <label>关联案件/任务（可选）</label>
+      <select id="growRelatedItem"><option value="">不关联</option></select>
+    </div>
+
+    <div class="grow-modal-field">
+      <label>行为分类 <span style="color:var(--urgent)">*</span></label>
+      <select id="growCategory">
+        <option value="">请选择分类</option>
+        <optgroup label="✨ 成长亮点类" id="growCatGroupGrowth">
+          <option value="合同审查">合同审查</option>
+          <option value="客户沟通">客户沟通</option>
+          <option value="文书撰写">文书撰写</option>
+          <option value="知识分享">知识分享</option>
+          <option value="团队协作">团队协作</option>
+          <option value="其他成长">其他成长</option>
+        </optgroup>
+        <optgroup label="🔧 改进机会类" id="growCatGroupImprove">
+          <option value="条款遗漏">条款遗漏</option>
+          <option value="引用错误">引用错误</option>
+          <option value="时间节点延误">时间节点延误</option>
+          <option value="沟通边界">沟通边界</option>
+          <option value="格式规范">格式规范</option>
+          <option value="其他改进">其他改进</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="grow-modal-field" id="growBehaviorField">
+      <label id="growBehaviorLabel">具体行为与成果 <span style="color:var(--urgent)">*</span></label>
+      <textarea id="growBehavior" rows="2" placeholder="做了什么？产生了什么可验证的结果？&#10;例：完成了XX合同风险条款补充建议，避免潜在违约风险"></textarea>
+    </div>
+
+    <div class="grow-modal-field" id="growImpactField" style="display:none;">
+      <label>客观影响</label>
+      <textarea id="growImpact" rows="2" placeholder="具体造成了什么影响？（客观描述，不带情绪）&#10;例：客户退回修改1次 / 导致立案材料补交一次"></textarea>
+    </div>
+
+    <div class="grow-modal-field" id="growSuggestionField" style="display:none;">
+      <label>改进措施</label>
+      <textarea id="growSuggestion" rows="2" placeholder="下次如何避免？给出具体行动方案&#10;例：使用终稿检查清单 / 提前1天确认截止日期"></textarea>
+    </div>
+
+    <div class="grow-modal-field">
+      <label>分值评定 <span style="color:var(--urgent)">*</span></label>
+      <div class="grow-score-range" id="growScoreRange"></div>
+    </div>
+
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeReview()">取消</button>
-      <button class="btn-save" onclick="saveReview()">保存复盘</button>
+      <button class="btn-save" onclick="saveGrowthEntry()">保存记录</button>
     </div>
   </div>
 </div>
@@ -2401,110 +2588,498 @@ function closeCalDayDetail() {
   document.getElementById('calDayDetail').classList.remove('show');
 }
 let editingReviewId = null;
-const MOOD_MAP = { good: {label:'😊 顺利/有收获', cls:'good'}, normal: {label:'😐 一般', cls:'normal'}, bad: {label:'😣 遇到困难', cls:'bad'} };
+let currentGrowType = 'growth'; // 'growth' | 'improvement'
+let selectedScore = 3;
 
+// ===== 进步池分类预设 =====
+const GROWTH_CATEGORIES = ['合同审查','客户沟通','文书撰写','知识分享','团队协作','其他成长'];
+const IMPROVE_CATEGORIES = ['条款遗漏','引用错误','时间节点延误','沟通边界','格式规范','其他改进'];
+const SCORE_OPTIONS = { growth: [1,2,3,4,5], improvement: [-1,-2,-3] };
+
+// ===== 维度映射（雷达图）=====
+const DIMENSION_MAP = {
+  '合同审查':'文书质量', '文书撰写':'文书质量', '条款遗漏':'文书质量', '引用错误':'文书质量', '格式规范':'文书质量',
+  '客户沟通':'客户沟通', '沟通边界':'客户沟通',
+  '知识分享':'法律知识', '引用错误':'法律知识',
+  '时间节点延误':'时间管理',
+  '团队协作':'团队协作',
+  '其他成长':'团队协作', '其他改进':'团队协作',
+};
+
+// ===== 进步池主渲染 =====
 function renderReview() {
-  const reviews = cloudData.reviews || [];
-  if (reviews.length === 0) {
-    return `<div class="empty-state"><div class="big-icon">📝</div><p>暂无复盘记录</p><p class="hint">点击下方按钮，记录第一条每日复盘</p><div style="margin-top:20px;"><button class="review-add-btn" onclick="openReview()">+ 写今日复盘</button></div></div>`;
+  const entries = (cloudData.reviews || []).filter(r => r.type === 'growth' || r.type === 'improvement');
+  const legacyReviews = (cloudData.reviews || []).filter(r => !r.type || (r.type !== 'growth' && r.type !== 'improvement'));
+  const members = getMemberNames();
+  const today = new Date().toISOString().slice(0, 10);
+
+  if (entries.length === 0 && legacyReviews.length === 0) {
+    return `<div class="growth-pool">
+      <div class="empty-state"><div class="big-icon">🌱</div><p>进步池尚未开启</p>
+      <p class="hint">记录团队成员的成长亮点和改进机会，用数据驱动正向成长</p>
+      <div style="margin-top:20px;"><button class="gp-btn gp-btn-primary" onclick="openReview()">+ 写第一条记录</button></div></div></div>`;
   }
-  // 按日期分组，日期倒序
-  const groups = {};
-  reviews.forEach(r => {
-    const key = r.date || '未填日期';
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(r);
+
+  // ---- 分析数据 ----
+  const analytics = buildGrowthAnalytics(entries, members);
+  const todayEntries = entries.filter(e => e.date === today);
+  const todayScore = todayEntries.reduce((s, e) => s + (e.score || 0), 0);
+
+  let html = `<div class="growth-pool">`;
+
+  // 操作按钮行
+  html += `<div class="gp-actions-row">
+    <button class="gp-btn gp-btn-primary" onclick="openReview()">🌟 记录成长亮点</button>
+    <button class="gp-btn gp-btn-secondary" onclick="openReview('improve')">🔧 记录改进机会</button>
+  </div>`;
+
+  // ---- 顶部概览区 ----
+  html += renderGrowthOverview(analytics, todayScore, members);
+
+  // ---- 高频改进提醒 ----
+  const hint = buildHighFreqHint(entries);
+  if (hint) html += `<div class="gp-hint-bar">${hint}</div>`;
+
+  // ---- 个人成长卡片（按成员分组）----
+  html += `<div class="gp-members-section"><div class="gp-section-title">👥 个人成长卡片</div>`;
+  members.forEach(m => {
+    const memberEntries = entries.filter(e => e.targetMember === m).sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+    if (memberEntries.length === 0) return;
+    html += renderGrowthMemberCard(m, memberEntries, analytics.memberStats[m] || {growth:0, improve:0, net:0});
   });
-  const sortedKeys = Object.keys(groups).sort((a, b) => b.localeCompare(a));
-  return `<div class="review-view">
-    <div style="margin-bottom:16px;"><button class="review-add-btn" onclick="openReview()">+ 写今日复盘</button></div>
-    ${sortedKeys.map(key => {
-      const groupReviews = groups[key].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
-      let header = key;
-      if (key !== '未填日期') {
-        const d = new Date(key);
-        const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const diffDays = Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - today) / 86400000);
-        if (diffDays === 0) header = '今天';
-        else if (diffDays === -1) header = '昨天';
-        else if (diffDays === -2) header = '前天';
-        else header = `${d.getMonth()+1}月${d.getDate()}日`;
-      }
-      return `<div class="review-date-group">
-        <div class="review-date-header">📅 ${header} <span class="date-count">${groupReviews.length} 篇</span></div>
-        ${groupReviews.map(r => {
-          const mood = MOOD_MAP[r.mood] || MOOD_MAP.normal;
-          return `<div class="review-card">
-            <div class="review-card-header">
-              <span class="review-author"><span class="avatar">${esc((r.author||'?').charAt(0))}</span>${esc(r.author||'未知')}</span>
-              <span class="review-mood ${mood.cls}">${mood.label}</span>
-              <span class="review-time">${r.createdAt ? new Date(r.createdAt).toLocaleString('zh-CN', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : ''}</span>
-            </div>
-            <div class="review-content">${esc(r.content||'')}</div>
-            <div class="review-actions">
-              <button onclick="openReview('${r.id}')">✏ 编辑</button>
-              <button class="del" onclick="deleteReview('${r.id}')">🗑 删除</button>
-            </div>
-          </div>`;
-        }).join('')}
+  html += `</div>`;
+
+  // ---- 排行榜（仅加分TOP）----
+  html += renderGrowthLeaderboard(analytics);
+
+  // ---- 团队知识库 ----
+  const kb = buildKnowledgeBase(entries);
+  if (kb.length > 0) {
+    html += `<div class="gp-knowledge"><div class="gp-section-title">📚 团队避坑清单</div><div class="gp-kb-grid">`;
+    kb.forEach(k => {
+      const solvedCls = k.solved ? 'solved' : '';
+      const badge = k.solved ? '<span class="gp-kb-badge solved">✅ 已攻克</span>' : '<span class="gp-kb-badge active">进行中</span>';
+      html += `<div class="gp-kb-item ${solvedCls}">
+        <div>${esc(k.type)} ${badge}</div>
+        <div class="gp-kb-stats">出现${k.count}次 · 已改进${k.fixedCount}次</div>
+        <div class="gp-kb-solution">${esc(k.solution) || '待补充标准化方案'}</div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  }
+
+  // ---- 旧数据兼容展示 ----
+  if (legacyReviews.length > 0) {
+    html += `<div class="gp-legacy-note">
+      <strong>📋 历史复盘记录（旧格式，可编辑迁移为新结构）</strong>
+      <p style="margin-top:6px;">共有 ${legacyReviews.length} 条旧格式复盘记录。这些记录使用的是自由文本格式，建议逐步迁移为结构化的「成长亮点」或「改进机会」。</p>
+    </div>`;
+    legacyReviews.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||'')).forEach(r => {
+      const mood = {good:'😊',normal:'😐',bad:'😣'}[r.mood] || '📝';
+      html += `<div class="review-card" style="margin-bottom:10px; opacity:0.85;">
+        <div class="review-card-header">
+          <span class="review-author"><span class="avatar">${esc((r.author||'?').charAt(0))}</span>${esc(r.author||'')}</span>
+          <span>${mood}</span>
+          <span class="review-time">${r.date || ''}</span>
+        </div>
+        <div class="review-content" style="font-size:13px;">${esc(r.content||'')}</div>
+        <div class="review-actions">
+          <button onclick="deleteReview('${r.id}')">删除旧记录</button>
+        </div>
+      </div>`;
+    });
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+// ===== 构建分析数据 =====
+function buildGrowthAnalytics(entries, members) {
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  const weekAgo = new Date(now - 7 * 86400000).toISOString().slice(0, 10);
+
+  const memberStats = {};
+  members.forEach(m => memberStats[m] = {growth:0, improve:0, net:0, growthList:[], improveList:[]});
+
+  // 每日净进步值（用于趋势图）
+  const dailyNet = {};
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now - i * 86400000).toISOString().slice(0, 10);
+    dailyNet[d] = 0;
+  }
+
+  entries.forEach(e => {
+    const m = e.targetMember;
+    if (!memberStats[m]) memberStats[m] = {growth:0, improve:0, net:0, growthList:[], improveList:[]};
+    const s = e.score || 0;
+    if (e.type === 'growth') { memberStats[m].growth += s; memberStats[m].growthList.push(e); }
+    else { memberStats[m].improve += s; memberStats[m].improveList.push(e); }
+    memberStats[m].net += s;
+    if (dailyNet[e.date] !== undefined) dailyNet[e.date] += s;
+  });
+
+  return { memberStats, dailyNet, weekAgo, todayStr };
+}
+
+// ===== 渲染顶部概览 =====
+function renderGrowthOverview(analytics, todayScore, members) {
+  const { dailyNet } = analytics;
+  const days = Object.keys(dailyNet).sort();
+  const values = days.map(d => dailyNet[d]);
+  const maxVal = Math.max(...values.map(Math.abs), 5);
+  const minVal = Math.min(...values, 0);
+
+  // SVG 折线图
+  const W = 520, H = 130, padL = 32, padR = 16, padT = 12, padB = 24;
+  const chartW = W - padL - padR, chartH = H - padT - padB;
+  const pts = values.map((v, i) => {
+    const x = padL + (i / Math.max(days.length - 1, 1)) * chartW;
+    const y = padT + chartH - ((v - minVal) / (maxVal - minVal || 1)) * chartH;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+
+  // 零线
+  const zeroY = maxVal !== minVal ? (padT + chartH - ((0 - minVal) / (maxVal - minVal)) * chartH) : (padT + chartH / 2);
+
+  const polyline = pts.join(' ');
+  const dots = values.map((v, i) => {
+    const x = padL + (i / Math.max(days.length - 1, 1)) * chartW;
+    const y = padT + chartH - ((v - minVal) / (maxVal - minVal || 1)) * chartH;
+    const color = v >= 0 ? '#22c55e' : '#f59e0b';
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${color}" stroke="white" stroke-width="1.5"/>`;
+  }).join('');
+  const labels = days.map((d, i) => {
+    const x = padL + (i / Math.max(days.length - 1, 1)) * chartW;
+    const md = d.slice(5);
+    return `<text x="${x.toFixed(1)}" y="${H - 4}" text-anchor="middle" font-size="10" fill="#94a3b8">${md}</text>`;
+  }).join('');
+
+  const scoreLabel = todayScore > 0 ? `+${todayScore}` : (todayScore < 0 ? String(todayScore) : '0');
+  const scoreColor = todayScore > 0 ? '#16a34a' : (todayScore < 0 ? '#dc2626' : '#94a3b8');
+
+  return `<div class="growth-overview">
+    <div class="gp-score-card">
+      <div class="gp-score-label">今日进步池总分</div>
+      <div class="gp-score-value" style="color:${scoreLabel}">${scoreLabel}</div>
+      <div class="gp-score-sub">${members.length} 位成员 · 本周累计正向成长中</div>
+    </div>
+    <div class="gp-trend-card">
+      <div class="gp-trend-header">
+        <span class="gp-trend-title">📈 本周净进步趋势</span>
+      </div>
+      <div class="gp-chart-area">
+        <svg class="gp-chart-svg" viewBox="0 0 ${W} ${H}">
+          <!-- 网格线 -->
+          <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}" stroke="#e2e8f0" stroke-width="1"/>
+          <line x1="${padL}" y1="${zeroY}" x2="${W-padR}" y2="${zeroY}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#e2e8f0" stroke-width="1"/>
+          <!-- 折线 -->
+          <polyline fill="none" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${polyline}"/>
+          ${dots}
+          ${labels}
+          <!-- Y轴标签 -->
+          <text x="${padL-4}" y="${padT+4}" text-anchor="end" font-size="9" fill="#94a3b8">${maxVal}</text>
+          <text x="${padL-4}" y="${H-padB+3}" text-anchor="end" font-size="9" fill="#94a3b8">${minVal}</text>
+        </svg>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ===== 高频改进提醒 =====
+function buildHighFreqHint(entries) {
+  const now = new Date();
+  const sevenDaysAgo = new Date(now - 7 * 86400000);
+  const recentImprove = entries.filter(e =>
+    e.type === 'improvement' && e.createdAt && new Date(e.createdAt) > sevenDaysAgo
+  );
+  if (recentImprove.length < 2) return '';
+
+  // 按分类统计
+  const catCount = {};
+  recentImprove.forEach(e => { catCount[e.category] = (catCount[e.category]||0) + 1; });
+  const freqCats = Object.entries(catCount).filter(([,c]) => c >= 2).sort((a,b) => b[1]-a[1]);
+  if (freqCats.length === 0) return '';
+
+  const top = freqCats[0];
+  const suggestions = {
+    '条款遗漏': '建议团队统一使用终稿检查清单',
+    '引用错误': '建议建立法规引用模板库',
+    '时间节点延误': '建议提前设置日历提醒',
+    '沟通边界': '建议明确对外沟通的授权范围',
+    '格式规范': '建议统一文书排版模板',
+  };
+  const suggestion = suggestions[top[0]] || '建议制定标准化流程';
+
+  return `💡 <strong>本周改进提醒：</strong>「${top[0]}」出现了 <strong>${top[1]} 次</strong>。${suggestion}`;
+}
+
+// ===== 个人成长卡片 =====
+function renderGrowthMemberCard(member, entries, stats) {
+  const net = stats.net || 0;
+  const netCls = net > 0 ? 'gp-net-pos' : (net < 0 ? 'gp-net-neg' : 'gp-net-zero');
+  const netIcon = net > 0 ? '↑' : (net < 0 ? '↓' : '→');
+  const netLabel = net > 0 ? `+${net}` : String(net);
+
+  const growEntries = entries.filter(e => e.type === 'growth');
+  const impEntries = entries.filter(e => e.type === 'improvement');
+
+  return `<div class="gp-member-card">
+    <div class="gp-member-header">
+      <div class="gp-avatar">${esc(member.charAt(0))}</div>
+      <div>
+        <div class="gp-member-name">${esc(member)}</div>
+      </div>
+      <div class="gp-net-score ${netCls}">${netLabel}<span class="gp-net-trend">${netIcon}</span></div>
+    </div>
+    <div class="gp-zones">
+      <div class="gp-zone gp-zone-growth">
+        <div class="gp-zone-title"><span class="gicon">🌟</span> 成长亮点 (${growEntries.length})</div>
+        ${growEntries.length > 0 ? growEntries.map(e => renderGrowEntry(e, true)).join('')
+          : '<div style="font-size:12px;color:#166534;padding:8px 0;opacity:0.65;">暂无记录，继续保持！</div>'}
+      </div>
+      <div class="gp-zone gp-zone-improve">
+        <div class="gp-zone-title"><span class="gicon">🔧</span> 改进机会 (${impEntries.length})</div>
+        ${impEntries.length > 0 ? impEntries.map(e => renderGrowEntry(e, false)).join('')
+          : '<div style="font-size:12px;color:#a16207;padding:8px 0;opacity:0.65;">干得漂亮！暂无改进项</div>'}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ===== 单条记录渲染 =====
+function renderGrowEntry(e, isGrowth) {
+  const catCls = isGrowth ? 'grow' : 'imp';
+  const scoreCls = (e.score || 0) >= 0 ? 'pos' : 'neg';
+  const scoreLabel = (e.score || 0) > 0 ? `+${e.score}` : String(e.score || 0);
+  const dateStr = e.date ? new Date(e.date).toLocaleDateString('zh-CN',{month:'short',day:'numeric'}) : '';
+  const recorder = e.recorder ? `· ${esc(e.recorder)}` : '';
+
+  // 重复检测显示
+  let repeatTag = '';
+  if (e.repeatCount > 1) {
+    repeatTag = `<span class="gp-repeat-tag">第${e.repeatCount}次 · 间隔${e.daysSinceLast || '?'}天</span>`;
+  }
+
+  const behaviorText = isGrowth
+    ? `${esc(e.behavior || '')}${e.result ? ` → <strong>${esc(e.result)}</strong>` : ''}`
+    : `${esc(e.behavior || '')}${e.impact ? `（影响：${esc(e.impact)}）` : ''}`;
+
+  return `<div class="gp-entry">
+    <div class="gp-entry-head">
+      <span class="gp-entry-cat ${catCls}">${isGrowth ? '↑' : '→'} ${esc(e.category || '')}</span>
+      <span class="gp-entry-text">${behaviorText}</span>
+    </div>
+    ${e.suggestion && !isGrowth ? `<div style="font-size:11.5px;color:#b45309;margin-top:3px;padding-left:4px;border-left:2px solid #fcd34d;">💡 建议：${esc(e.suggestion)}</div>` : ''}
+    <div class="gp-entry-meta">
+      <span class="gp-entry-score ${scoreCls}">${scoreLabel}分</span>
+      <span>${dateStr}</span>
+      <span class="gp-entry-recorder">${recorder}</span>
+      ${repeatTag}
+      <span style="margin-left:auto;cursor:pointer;font-size:11px;color:var(--text-light);" onclick="deleteReview('${e.id}')" title="删除此记录">✕</span>
+    </div>
+  </div>`;
+}
+
+// ===== 排行榜（仅加分TOP）=====
+function renderGrowthLeaderboard(analytics) {
+  const sorted = Object.entries(analytics.memberStats)
+    .map(([m, s]) => ({name:m, growth:s.growth}))
+    .filter(s => s.growth > 0)
+    .sort((a, b) => b.growth - a.growth);
+  if (sorted.length === 0) return '';
+
+  return `<div class="gp-leaderboard">
+    <div class="gp-section-title">🏆 成长排行榜（本周加分TOP）</div>
+    ${sorted.slice(0, 8).map((row, i) => {
+      const rankCls = i === 0 ? 'top1' : (i === 1 ? 'top2' : (i === 2 ? 'top3' : ''));
+      const medals = ['🥇','🥈','🥉'];
+      return `<div class="gp-lb-row">
+        <span class="gp-lb-rank ${rankCls}">${i < 3 ? medals[i] : (i+1)}</span>
+        <span class="gp-lb-name">${esc(row.name)}</span>
+        <span class="gp-lb-val">+${row.growth}分</span>
       </div>`;
     }).join('')}
   </div>`;
 }
 
-function openReview(id) {
-  editingReviewId = id || null;
+// ===== 团队知识库 =====
+function buildKnowledgeBase(entries) {
+  const improveOnly = entries.filter(e => e.type === 'improvement');
+  if (improveOnly.length === 0) return [];
+
+  const catMap = {};
+  improveOnly.forEach(e => {
+    const key = e.category || '其他';
+    if (!catMap[key]) catMap[key] = {type:key, count:0, fixedCount:0, lastSeen:null, solution:e.suggestion||'', dates:[]};
+    catMap[key].count++;
+    catMap[key].dates.push(e.date);
+    if (e.suggestion) catMap[key].solution = e.suggestion;
+    if (e.date && (!catMap[key].lastSeen || e.date > catMap[key].lastSeen)) catMap[key].lastSeen = e.date;
+  });
+
+  // 判断是否已攻克：连续7天未再出现
+  const now = new Date();
+  const solvedThreshold = new Date(now - 7 * 86400000).toISOString().slice(0, 10);
+
+  return Object.values(catMap).map(k => ({
+    ...k,
+    solved: k.lastSeen && k.lastSeen < solvedThreshold,
+    fixedCount: Math.max(0, k.count - (k.lastSeen && k.lastSeen >= solvedThreshold ? 1 : 0)),
+  })).sort((a, b) => b.count - a.count);
+}
+
+// ===== 打开记录弹窗 =====
+function openReview(forceType) {
+  editingReviewId = null;
+  currentGrowType = forceType || 'growth';
+  selectedScore = currentGrowType === 'growth' ? 3 : -1;
+
   const names = getMemberNames();
-  const authorSel = document.getElementById('reviewAuthor');
-  authorSel.innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join('');
-  // 默认今天
-  const today = new Date().toISOString().slice(0, 10);
-  document.getElementById('reviewDate').value = today;
-  document.getElementById('reviewMood').value = 'normal';
-  document.getElementById('reviewContent').value = '';
-  // 自动填当前用户
-  if (currentUser) authorSel.value = currentUser;
-  if (id) {
-    const r = (cloudData.reviews || []).find(x => x.id === id);
-    if (r) {
-      authorSel.value = r.author || '';
-      document.getElementById('reviewDate').value = r.date || today;
-      document.getElementById('reviewMood').value = r.mood || 'normal';
-      document.getElementById('reviewContent').value = r.content || '';
-    }
-  }
+  document.getElementById('growTargetMember').innerHTML = '<option value="">请选择成员</option>' +
+    names.map(n => `<option value="${n}">${n}</option>`).join('');
+
+  // 关联事项下拉
+  const items = (cloudData.items || []).filter(i => !i.archived);
+  document.getElementById('growRelatedItem').innerHTML = '<option value="">不关联</option>' +
+    items.map(i => `<option value="${i.id}">${esc(i.title)} (@${esc(i.assignee)})</option>`).join('');
+
+  // 初始化表单
+  setGrowType(currentGrowType);
+  document.getElementById('growBehavior').value = '';
+  document.getElementById('growImpact').value = '';
+  document.getElementById('growSuggestion').value = '';
+  document.getElementById('growRepeatAlert').className = 'grow-repeat-alert';
+
+  // 自动填当前用户为被记录人
+  if (currentUser) document.getElementById('growTargetMember').value = currentUser;
+
   document.getElementById('reviewModal').classList.add('show');
 }
-function closeReview() { document.getElementById('reviewModal').classList.remove('show'); editingReviewId = null; }
-async function saveReview() {
-  const author = document.getElementById('reviewAuthor').value;
-  const date = document.getElementById('reviewDate').value;
-  const mood = document.getElementById('reviewMood').value;
-  const content = document.getElementById('reviewContent').value.trim();
-  if (!author) { showToast('请选择复盘人'); return; }
-  if (!content) { showToast('请填写复盘内容'); return; }
+
+// ===== 类型切换 =====
+function setGrowType(type) {
+  currentGrowType = type;
+  document.getElementById('growType').value = type;
+
+  const btnG = document.getElementById('growTypeGrowth');
+  const btnI = document.getElementById('growTypeImprove');
+  btnG.className = 'grow-type-option' + (type === 'growth' ? ' selected-growth' : '');
+  btnI.className = 'grow-type-option' + (type === 'improvement' ? ' selected-improve' : '');
+
+  // 显示/隐藏字段
+  document.getElementById('growImpactField').style.display = type === 'improvement' ? '' : 'none';
+  document.getElementById('growSuggestionField').style.display = type === 'improvement' ? '' : 'none';
+  document.getElementById('growBehaviorLabel').innerHTML =
+    type === 'growth' ? '具体行为与成果 <span style="color:var(--urgent)">*</span>' : '具体事项 <span style="color:var(--urgent)">*</span>';
+  document.getElementById('growBehavior').placeholder =
+    type === 'growth'
+      ? '做了什么？产生了什么可验证的结果？\n例：完成了XX合同风险条款补充建议，避免潜在违约风险'
+      : '具体发生了什么？（客观描述）\n例：XX合同法律依据引用版本号标注不清';
+  document.getElementById('growModalTitle').textContent =
+    type === 'growth' ? '🌟 记录成长亮点' : '🔧 记录改进机会';
+
+  // 分值选项
+  renderScoreOptions(type);
+}
+
+// ===== 分值选项渲染 =====
+function renderScoreOptions(type) {
+  const opts = SCORE_OPTIONS[type];
+  selectedScore = opts[Math.floor(opts.length / 2)];
+  const container = document.getElementById('growScoreRange');
+  container.innerHTML = opts.map(v => {
+    const cls = v === selectedScore ? 'selected' : '';
+    const label = v > 0 ? `+${v}` : v;
+    return `<button type="button" class="grow-score-opt ${cls}" onclick="selectScore(${v},this)">${label}</button>`;
+  }).join('');
+}
+
+function selectScore(val, el) {
+  selectedScore = val;
+  document.querySelectorAll('.grow-score-opt').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ===== 保存成长记录 =====
+async function saveGrowthEntry() {
+  const targetMember = document.getElementById('growTargetMember').value;
+  const category = document.getElementById('growCategory').value;
+  const behavior = document.getElementById('growBehavior').value.trim();
+  const impact = document.getElementById('growImpact').value.trim();
+  const suggestion = document.getElementById('growSuggestion').value.trim();
+  const relatedItem = document.getElementById('growRelatedItem').value;
+
+  if (!targetMember) { showToast('请选择被记录人'); return; }
+  if (!category) { showToast('请选择行为分类'); return; }
+  if (!behavior) { showToast(currentGrowType === 'growth' ? '请填写具体行为与成果' : '请填写具体事项'); return; }
+
+  // 重复检测
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
+  const sameCategory = (cloudData.reviews || []).filter(e =>
+    e.type === currentGrowType &&
+    e.targetMember === targetMember &&
+    e.category === category &&
+    e.date &&
+    e.date >= thirtyDaysAgo &&
+    e.id !== editingReviewId
+  );
+
+  const entry = {
+    id: editingReviewId || ('grow-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6)),
+    type: currentGrowType,
+    targetMember,
+    recorder: currentUser || '未知',
+    date: new Date().toISOString().slice(0, 10),
+    category,
+    behavior,
+    result: currentGrowType === 'growth' ? (behavior.includes('→') ? '' : '') : '',
+    impact: currentGrowType === 'improvement' ? impact : '',
+    suggestion: currentGrowType === 'improvement' ? suggestion : '',
+    score: selectedScore,
+    relatedItem: relatedItem || null,
+    repeatCount: sameCategory.length + 1,
+    daysSinceLast: sameCategory.length > 0 ? calcDaysSinceLast(sameCategory) : null,
+    createdAt: new Date().toISOString(),
+    updatedAt: null,
+  };
+
   setSyncStatus('syncing', '保存中...');
   try {
     if (editingReviewId) {
-      const r = cloudData.reviews.find(x => x.id === editingReviewId);
-      if (r) { r.author = author; r.date = date; r.mood = mood; r.content = content; r.updatedAt = new Date().toISOString(); }
+      const idx = (cloudData.reviews || []).findIndex(x => x.id === editingReviewId);
+      if (idx >= 0) cloudData.reviews[idx] = { ...cloudData.reviews[idx], ...entry, updatedAt: new Date().toISOString() };
     } else {
-      cloudData.reviews.push({
-        id: 'rev-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6),
-        author, date, mood, content,
-        createdAt: new Date().toISOString(),
-        updatedAt: null,
-      });
+      if (!cloudData.reviews) cloudData.reviews = [];
+      cloudData.reviews.push(entry);
     }
     await cloudWrite(cloudData);
     closeReview();
-    showToast('复盘已保存');
+    showToast(currentGrowType === 'growth' ? '✨ 成长亮点已记录！' : '🔧 改进机会已记录');
     refreshUI();
-  } catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
+  } catch(e) {
+    showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败');
+    setSyncStatus('error', '同步失败');
+  }
 }
+
+function calcDaysSinceLast(sameList) {
+  if (sameList.length === 0) return null;
+  const last = sameList.reduce((a, b) => ((a.date || '') > (b.date || '') ? a : b));
+  if (!last.date) return null;
+  return Math.round((Date.now() - new Date(last.date).getTime()) / 86400000);
+}
+
+function closeReview() {
+  document.getElementById('reviewModal').classList.remove('show');
+  editingReviewId = null;
+}
+
+// ===== 删除记录 =====
 async function deleteReview(id) {
-  if (!confirm('确认删除此复盘记录？')) return;
+  if (!confirm('确认删除此记录？')) return;
   cloudData.reviews = (cloudData.reviews || []).filter(r => r.id !== id);
   setSyncStatus('syncing', '删除中...');
   try { await cloudWrite(cloudData); showToast('已删除'); refreshUI(); }
