@@ -420,21 +420,6 @@
       "note": "",
       "recorder": "潘奥星律师",
       "hours": 0
-    },
-    {
-      "id": "item-1786527934296-7vunuy",
-      "title": "开会",
-      "assignee": "刘芳律师",
-      "priority": "普通",
-      "type": "每日日程",
-      "caseType": "",
-      "status": "待办",
-      "dueDate": "2026-08-14T17:45:00",
-      "createdAt": "2026-08-12T09:45:34.296Z",
-      "completedAt": null,
-      "note": "",
-      "recorder": "",
-      "hours": 0
     }
   ],
   "reviews": [
@@ -476,7 +461,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-13T01:19:47.765Z",
+  "lastUpdate": "2026-08-13T01:21:18.388Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
