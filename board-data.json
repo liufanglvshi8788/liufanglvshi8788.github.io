@@ -200,14 +200,16 @@
       "assignee": "曾梓涵律师",
       "priority": "重要",
       "caseType": "",
-      "status": "持续跟进",
+      "status": "已完成",
       "dueDate": "2026-08-12T19:27:00",
       "createdAt": "2026-08-08T11:27:53.638Z",
-      "completedAt": null,
+      "completedAt": "2026-08-13T03:52:45.853Z",
       "note": "1、8月12日，无人接听电话。8月13日再打。\n2、8月13日已经完成跟进，告知还在审限期内，预估一个月后出判决。我说对方当事人在转移财产，希望尽快判决好申请执行，回复会尽快处理。",
       "recorder": "",
       "hours": 0,
-      "type": "持续跟进"
+      "type": "持续跟进",
+      "submittedForReviewAt": null,
+      "submittedBy": null
     },
     {
       "id": "item-1786188516999-v93df0",
@@ -488,7 +490,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-13T03:52:41.464Z",
+  "lastUpdate": "2026-08-13T03:52:45.853Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
