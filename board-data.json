@@ -304,7 +304,7 @@
       "dueDate": null,
       "createdAt": "2026-08-08T13:04:31.870Z",
       "completedAt": null,
-      "note": "当事人需要做一个法律研究，关于夫妻期间，未起诉曾秀娟，仅起诉朱强的债务，是否存在风险",
+      "note": "",
       "recorder": "",
       "hours": 0,
       "type": "持续跟进"
@@ -492,7 +492,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-13T07:02:12.988Z",
+  "lastUpdate": "2026-08-13T07:10:56.920Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
