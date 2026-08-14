@@ -392,15 +392,15 @@
       "assignee": "潘奥星律师",
       "priority": "普通",
       "caseType": "非诉业务",
-      "status": "进行中",
+      "status": "需复核",
       "dueDate": "2026-08-11T20:48:00",
       "createdAt": "2026-08-09T12:49:03.566Z",
       "completedAt": null,
       "note": "按照合同台账，梳理已交付的合同文件，并对合同甲方乙方名称、银行账户进行脱敏后装入文件夹(文件夹里面包含修订版本的合同+对应法律意见书)，合同和法律意见书对街道名称进行脱敏\n",
       "recorder": "",
       "hours": 0,
-      "submittedForReviewAt": null,
-      "submittedBy": null,
+      "submittedForReviewAt": "2026-08-14T15:07:55.257Z",
+      "submittedBy": "刘芳律师",
       "reviewedAt": null,
       "reviewedBy": null,
       "type": "每日日程",
@@ -507,7 +507,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-14T15:07:20.594Z",
+  "lastUpdate": "2026-08-14T15:07:55.257Z",
   "updatedBy": "刘芳律师",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
