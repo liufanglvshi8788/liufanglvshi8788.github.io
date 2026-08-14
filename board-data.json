@@ -421,12 +421,13 @@
       "priority": "普通",
       "caseType": "诉讼案件",
       "status": "待办",
-      "dueDate": null,
+      "dueDate": "2026-08-21T08:20:00",
       "createdAt": "2026-08-10T03:41:06.031Z",
       "completedAt": null,
       "note": "",
       "recorder": "潘奥星律师",
-      "hours": 0
+      "hours": 0,
+      "type": "每日日程"
     }
   ],
   "reviews": [
@@ -495,7 +496,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-14T00:18:56.430Z",
+  "lastUpdate": "2026-08-14T00:20:13.655Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
