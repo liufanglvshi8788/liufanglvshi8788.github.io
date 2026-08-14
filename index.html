@@ -733,6 +733,60 @@ body {
   margin-bottom: 20px; font-size: 13px; color: #475569; line-height: 1.6;
 }
 
+/* ===== 进度池录入增强（差异化标准 + 计件） ===== */
+.grow-input { width: 100%; box-sizing: border-box; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 9px; font-size: 13.5px; font-family: inherit; background: var(--card-bg); color: var(--text); }
+.grow-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(91,95,199,0.12); }
+.grow-standard-hint { background: linear-gradient(135deg,#faf5ff 0%,#f3e8ff 100%); border: 1.5px solid #d8b4fe; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; }
+.gsh-title { font-size: 12.5px; font-weight: 700; color: #7c3aed; margin-bottom: 8px; }
+.gsh-note { font-size: 12px; color: #6b21a8; }
+.gsh-list { display: flex; flex-direction: column; gap: 4px; }
+.gsh-item { display: flex; gap: 8px; align-items: flex-start; padding: 5px 8px; border-radius: 7px; font-size: 12px; line-height: 1.45; }
+.gsh-item.selected { background: #ede9fe; box-shadow: inset 0 0 0 1.5px #a78bfa; }
+.gsh-score { flex-shrink: 0; font-weight: 800; color: #6d28d9; min-width: 40px; }
+.gsh-item.selected .gsh-score { color: #7c3aed; }
+.gsh-note { color: #4c1d95; }
+.grow-piece-readout { font-size: 12px; color: #15803d; font-weight: 600; margin-top: 4px; }
+.grow-piece-readout.neg { color: #dc2626; }
+
+/* 查看模式提示 */
+.gp-viewonly-bar { background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #1d4ed8; display: flex; align-items: center; gap: 8px; }
+.gp-viewonly-bar .vicon { font-size: 16px; }
+
+/* 记录卡片内新增标签 */
+.gp-entry-piece { font-weight: 700; }
+.gp-entry-piece.pos { color: #16a34a; }
+.gp-entry-piece.neg { color: #dc2626; }
+.gp-entry-standard { font-size: 11px; color: #7c3aed; margin-top: 3px; padding-left: 4px; border-left: 2px solid #e9d5ff; }
+.gp-entry-caseref { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+.gp-coeffcap-tag { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 8px; font-weight: 700; background: #fee2e2; color: #b91c1c; margin-left: 6px; }
+
+/* ===== 月度考核 / 周汇总 报告 ===== */
+.gp-report-month { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.gp-report-month label { font-size: 13px; font-weight: 600; color: var(--text); }
+.gp-report-month input[type=month] { padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 13px; }
+.gp-report-card { border: 1.5px solid var(--border); border-radius: 14px; padding: 18px 20px; margin-bottom: 16px; background: var(--card-bg); }
+.gp-report-card h3 { margin: 0 0 4px; font-size: 17px; color: var(--text); }
+.gp-report-sub { font-size: 12px; color: var(--text-light); margin-bottom: 14px; }
+.gp-report-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+@media(max-width: 640px){ .gp-report-grid{ grid-template-columns: repeat(2,1fr);} }
+.gp-rc { background: var(--card-bg-soft); border-radius: 10px; padding: 10px 12px; text-align: center; }
+.gp-rc .k { font-size: 11px; color: var(--text-light); margin-bottom: 4px; }
+.gp-rc .v { font-size: 19px; font-weight: 800; color: var(--text); }
+.gp-rc .v.good { color: #16a34a; } .gp-rc .v.bad { color: #dc2626; } .gp-rc .v.prime { color: #7c3aed; }
+.gp-salary-box { background: linear-gradient(135deg,#ecfdf5 0%,#d1fae5 100%); border: 1.5px solid #6ee7b7; border-radius: 12px; padding: 16px 18px; margin: 6px 0 14px; }
+.gp-salary-box .amt { font-size: 30px; font-weight: 800; color: #047857; }
+.gp-salary-box .lbl { font-size: 12px; color: #065f46; }
+.gp-piece-list { font-size: 12px; color: var(--text-mid); line-height: 1.7; max-height: 160px; overflow-y: auto; }
+.gp-piece-list .pl-row { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; border-bottom: 1px dashed rgba(0,0,0,0.06); }
+.gp-piece-list .pl-amt { font-weight: 700; } .gp-piece-list .pl-amt.pos{color:#16a34a;} .gp-piece-list .pl-amt.neg{color:#dc2626;}
+.gp-report-note { font-size: 11.5px; color: var(--text-light); background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 10px 12px; line-height: 1.6; margin-top: 8px; }
+.gp-weekly-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 9px; margin-bottom: 6px; border: 1px solid var(--border-soft); }
+.gp-weekly-row:nth-child(odd){ background: var(--card-bg-soft); }
+.gp-weekly-name { font-weight: 700; min-width: 84px; color: var(--text); }
+.gp-weekly-meta { font-size: 12px; color: var(--text-light); }
+.gp-weekly-score { margin-left: auto; font-weight: 800; }
+.gp-weekly-score.pos { color:#16a34a; } .gp-weekly-score.neg { color:#dc2626; }
+
 /* ===== Back to Home Button ===== */
 .back-home-bar { padding: 10px 28px 0; }
 .back-home-btn { 
@@ -1481,50 +1535,34 @@ body {
     <div class="grow-repeat-alert" id="growRepeatAlert"></div>
 
     <div class="grow-modal-field">
-      <label>被记录人 <span style="color:var(--urgent)">*</span></label>
-      <select id="growTargetMember"><option value="">请选择成员</option></select>
+      <label>被记录人（被考核人） <span style="color:var(--urgent)">*</span></label>
+      <select id="growTargetMember" onchange="onGrowMemberChange()"><option value="">请选择成员</option></select>
     </div>
 
     <div class="grow-modal-field">
-      <label>关联案件/任务（可选）</label>
-      <select id="growRelatedItem"><option value="">不关联</option></select>
+      <label>关联案件/任务 <span style="color:var(--text-light);font-weight:400">（案号或任务名称，不关联填"不关联"）</span></label>
+      <input type="text" id="growCaseRef" class="grow-input" placeholder="例：(2026)渝01民初123号 / 驻点日常工作" />
     </div>
 
     <div class="grow-modal-field">
       <label>行为分类 <span style="color:var(--urgent)">*</span></label>
-      <select id="growCategory">
-        <option value="">请选择分类</option>
-        <optgroup label="✨ 成长亮点类" id="growCatGroupGrowth">
-          <option value="合同审查">合同审查</option>
-          <option value="客户沟通">客户沟通</option>
-          <option value="文书撰写">文书撰写</option>
-          <option value="知识分享">知识分享</option>
-          <option value="团队协作">团队协作</option>
-          <option value="其他成长">其他成长</option>
-        </optgroup>
-        <optgroup label="🔧 改进机会类" id="growCatGroupImprove">
-          <option value="条款遗漏">条款遗漏</option>
-          <option value="引用错误">引用错误</option>
-          <option value="时间节点延误">时间节点延误</option>
-          <option value="沟通边界">沟通边界</option>
-          <option value="格式规范">格式规范</option>
-          <option value="其他改进">其他改进</option>
-        </optgroup>
-      </select>
+      <select id="growCategory" onchange="updateStandardHint()"><option value="">请先选择被记录人</option></select>
     </div>
+
+    <div class="grow-standard-hint" id="growStandardHint"></div>
 
     <div class="grow-modal-field" id="growBehaviorField">
       <label id="growBehaviorLabel">具体行为与成果 <span style="color:var(--urgent)">*</span></label>
-      <textarea id="growBehavior" rows="2" placeholder="做了什么？产生了什么可验证的结果？&#10;例：完成了XX合同风险条款补充建议，避免潜在违约风险"></textarea>
+      <textarea id="growBehavior" rows="2" placeholder="做了什么？产生了什么可验证的结果？&#10;例：完成XX租赁合同初审，识别3处违约风险并标注修改建议，经复核仅需调整1处措辞"></textarea>
     </div>
 
     <div class="grow-modal-field" id="growImpactField" style="display:none;">
-      <label>客观影响</label>
-      <textarea id="growImpact" rows="2" placeholder="具体造成了什么影响？（客观描述，不带情绪）&#10;例：客户退回修改1次 / 导致立案材料补交一次"></textarea>
+      <label>客观影响 <span style="color:var(--urgent)">*</span></label>
+      <textarea id="growImpact" rows="2" placeholder="具体造成的时间/成本/客户体验/程序风险影响（客观描述）&#10;例：法院退回补正1次，延误立案3天"></textarea>
     </div>
 
     <div class="grow-modal-field" id="growSuggestionField" style="display:none;">
-      <label>改进措施</label>
+      <label>改进措施 <span style="color:var(--urgent)">*</span></label>
       <textarea id="growSuggestion" rows="2" placeholder="下次如何避免？给出具体行动方案&#10;例：使用终稿检查清单 / 提前1天确认截止日期"></textarea>
     </div>
 
@@ -1533,9 +1571,42 @@ body {
       <div class="grow-score-range" id="growScoreRange"></div>
     </div>
 
+    <div class="grow-modal-field">
+      <label>计件金额（元） <span style="color:var(--text-light);font-weight:400">（按标准自动带出，可修改；负数为扣罚）</span></label>
+      <input type="number" id="growPieceAmount" class="grow-input" placeholder="0" step="1" />
+    </div>
+
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeReview()">取消</button>
       <button class="btn-save" onclick="saveGrowthEntry()">保存记录</button>
+    </div>
+  </div>
+</div>
+
+<!-- 月度考核报告 Modal -->
+<div class="modal-overlay" id="reportModal">
+  <div class="modal" style="max-width:760px; max-height:92vh; overflow-y:auto;">
+    <h2>📊 月度考核与薪酬核算报告</h2>
+    <div class="gp-report-month">
+      <label>考核月份</label>
+      <input type="month" id="reportMonth" onchange="renderReportBody()" />
+      <span style="font-size:12px;color:var(--text-light);">每月 5 日前核算 · 8 日前确认签字 · 10 日前发放</span>
+    </div>
+    <div id="reportBody"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeReport()">关闭</button>
+      <button class="btn-save" onclick="window.print()">打印 / 导出 PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- 周汇总 Modal -->
+<div class="modal-overlay" id="weeklyModal">
+  <div class="modal" style="max-width:680px; max-height:92vh; overflow-y:auto;">
+    <h2>📅 本周成长汇总</h2>
+    <div id="weeklyBody"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeWeekly()">关闭</button>
     </div>
   </div>
 </div>
@@ -2594,7 +2665,113 @@ let selectedScore = 3;
 // ===== 进步池分类预设 =====
 const GROWTH_CATEGORIES = ['合同审查','客户沟通','文书撰写','知识分享','团队协作','其他成长'];
 const IMPROVE_CATEGORIES = ['条款遗漏','引用错误','时间节点延误','沟通边界','格式规范','其他改进'];
-const SCORE_OPTIONS = { growth: [1,2,3,4,5], improvement: [-1,-2,-3] };
+const SCORE_OPTIONS = { growth: [1,2,3,4,5], improvement: [-1,-2,-3,-4,-5] };
+
+/* ===== 差异化评分与计件标准数据层（《刘芳律师团队月度考核与浮动薪酬管理办法（试行）》） ===== */
+// 仅曾梓涵律师、潘奥星律师为可考核计件对象；刘芳律师为管理律师（仅其可录入）
+const BEHAVIOR_CATS = {
+  '曾梓涵律师': ['驻点服务', '调解工作', '非诉初审', '案源线索', '学习成长'],
+  '潘奥星律师': ['出庭辅助', '文书质量', '案件推进', '学习复盘', '团队协作'],
+};
+// 计薪基数：底薪 + 驻点补贴（曾梓涵）/ 0（潘奥星）+ 1500×绩效系数 + Σ计件
+const SALARY_BASE = {
+  '曾梓涵律师': { base: 5000, allowance: 500 },
+  '潘奥星律师': { base: 5000, allowance: 0 },
+};
+// 评分标准：member → category → type(growth/improvement) → score → {note, piece, cap}
+// piece：本记录触发的计件金额（元，负数为扣罚）；cap：当月绩效系数封顶值（无则 null）
+const SCORE_STANDARDS = {
+  '曾梓涵律师': {
+    '驻点服务': {
+      growth: { 2: { note: '全勤且周报按时提交，内容完整', piece: 0 },
+                3: { note: '获政府端口头表扬，或主动发现重要信息', piece: 300 } },
+      improvement: { '-1': { note: '周报延迟或内容敷衍', piece: 0, cap: null },
+                 '-2': { note: '驻点缺勤无报备（驻点补贴按天扣减）', piece: 0, cap: null },
+                 '-3': { note: '政府端投诉或工作失误', piece: 0, cap: 0.5 } }
+    },
+    '调解工作': {
+      growth: { 3: { note: '成功调解 1 起并签署协议', piece: 500 },
+                4: { note: '调解复杂纠纷或连续超额完成', piece: 500 } },
+      improvement: { '-2': { note: '本月调解 0 件（首月可豁免一次）', piece: 0, cap: null },
+                 '-3': { note: '调解协议出现法律漏洞', piece: 0, cap: 0.5 } }
+    },
+    '非诉初审': {
+      growth: { 2: { note: '初审合格（A级0处/B级≤1处/C级≤3处）', piece: 50 },
+                3: { note: '初审优秀（A/B级0处/C级≤2处）', piece: 100 } },
+      improvement: { '-2': { note: '出现 B 级错误（该份计件 0 元）', piece: 0, cap: null },
+                 '-4': { note: '出现 A 级错误（该份计件 0 元）', piece: 0, cap: 0.8 } }
+    },
+    '案源线索': {
+      growth: { 3: { note: '提供有效线索（有联系人+纠纷事实），记录存档', piece: 0 },
+                4: { note: '线索成功转化签约（案源线索奖=签约金额×2%，回款当月兑现）', piece: 0 } },
+      improvement: { '-1': { note: '提供无效/虚假线索', piece: 0, cap: null } }
+    },
+    '学习成长': {
+      growth: { 2: { note: '按时提交案例复盘或学习笔记', piece: 0 },
+                3: { note: '复盘质量高，对团队有参考价值', piece: 0 } },
+      improvement: { '-1': { note: '未按时提交', piece: 0, cap: null },
+                 '-2': { note: '连续缺交（当月绩效系数封顶 0.8）', piece: 0, cap: 0.8 } }
+    }
+  },
+  '潘奥星律师': {
+    '出庭辅助': {
+      growth: { 2: { note: '按时提交庭审提纲，出庭表现合格', piece: 200 },
+                3: { note: '庭审提纲质量高，纪要完整准确', piece: 200 },
+                4: { note: '出庭中出色临场发挥，获客户认可', piece: 200 } },
+      improvement: { '-2': { note: '未按时提交庭审提纲（取消当次出庭津贴）', piece: 0, cap: null },
+                 '-3': { note: '出庭出现明显失误（取消津贴+系数封顶0.5）', piece: 0, cap: 0.5 },
+                 '-4': { note: '未经审核擅自出庭或法律适用错误', piece: 0, cap: 0.5 } }
+    },
+    '文书质量': {
+      growth: { 2: { note: '文书一次性通过（仅改措辞），质量奖 50 元/份', piece: 50 },
+                3: { note: '文书质量优秀，可直接发出，质量奖 50 元/份', piece: 50 } },
+      improvement: { '-1': { note: '出现 C 级错误（错别字/格式，累计3处=1个B级），该份计件0元', piece: 0, cap: null },
+                 '-2': { note: '出现 B 级错误（逻辑漏洞/遗漏请求），该份计件0元', piece: 0, cap: null },
+                 '-4': { note: '出现 A 级错误（法条/当事人/金额错误），该份计件0元', piece: 0, cap: 0.8 } }
+    },
+    '案件推进': {
+      growth: { 2: { note: '节点准时，每周按时更新进度表（已含在案件提成10%）', piece: 0 },
+                3: { note: '提前完成或主动优化流程', piece: 0 } },
+      improvement: { '-2': { note: '节点延误 1 次', piece: 0, cap: null },
+                 '-3': { note: '节点延误导致客户投诉或程序风险', piece: 0, cap: 0.5 } }
+    },
+    '学习复盘': {
+      growth: { 2: { note: '按时提交类案检索/案例复盘', piece: 0 },
+                3: { note: '复盘质量高，对办案有参考价值', piece: 0 } },
+      improvement: { '-1': { note: '未按时提交', piece: 0, cap: null },
+                 '-2': { note: '连续缺交（当月绩效系数封顶 0.8）', piece: 0, cap: 0.8 } }
+    },
+    '团队协作': {
+      growth: { 2: { note: '按时完成曾梓涵初审文书的复核', piece: 0 },
+                3: { note: '复核中发现关键错误并修正，或主动带教分享', piece: 0 } },
+      improvement: { '-1': { note: '复核延迟或敷衍', piece: 0, cap: null },
+                 '-2': { note: '复核未发现明显错误导致对外发出（系数封顶0.8）', piece: 0, cap: 0.8 } }
+    }
+  }
+};
+
+// 是否管理律师（刘芳律师）：唯一可录入/修改考核记录的角色
+function isManager() {
+  return !!currentUser && (currentUser || '').trim() === (cloudData.manager || '').trim();
+}
+
+// 月度考核分 → 等级 / 绩效系数
+function gradeOf(score) {
+  if (score >= 90) return { grade: '优秀', coeff: 1.2 };
+  if (score >= 80) return { grade: '良好', coeff: 1.0 };
+  if (score >= 70) return { grade: '合格', coeff: 0.8 };
+  if (score >= 60) return { grade: '待改进', coeff: 0.5 };
+  return { grade: '不合格', coeff: 0.0 };
+}
+
+// 取某条改进记录的绩效系数封顶值（来自标准，或按通用规则推导）
+function coeffCapOf(member, category, type, score) {
+  const std = SCORE_STANDARDS[member] && SCORE_STANDARDS[member][category] && SCORE_STANDARDS[member][category][type] && SCORE_STANDARDS[member][category][type][score];
+  if (std && std.cap !== undefined && std.cap !== null) return std.cap;
+  if (score <= -5) return 0;
+  if (score <= -4) return 0.5;
+  return null;
+}
 
 // ===== 维度映射（雷达图）=====
 const DIMENSION_MAP = {
@@ -2614,10 +2791,13 @@ function renderReview() {
   const today = new Date().toISOString().slice(0, 10);
 
   if (entries.length === 0 && legacyReviews.length === 0) {
+    const emptyAction = isManager()
+      ? `<div style="margin-top:20px;"><button class="gp-btn gp-btn-primary" onclick="openReview()">+ 写第一条记录</button></div>`
+      : `<div class="gp-viewonly-bar" style="margin-top:20px;"><span class="vicon">👁</span><span>查看模式：仅刘芳律师可录入考核记录。</span></div>`;
     return `<div class="growth-pool">
       <div class="empty-state"><div class="big-icon">🌱</div><p>进步池尚未开启</p>
       <p class="hint">记录团队成员的成长亮点和改进机会，用数据驱动正向成长</p>
-      <div style="margin-top:20px;"><button class="gp-btn gp-btn-primary" onclick="openReview()">+ 写第一条记录</button></div></div></div>`;
+      ${emptyAction}</div></div>`;
   }
 
   // ---- 分析数据 ----
@@ -2627,7 +2807,21 @@ function renderReview() {
 
   let html = `<div class="growth-pool">`;
 
-  // 操作按钮行
+  // 操作按钮行 / 查看模式提示
+  if (isManager()) {
+    html += `<div class="gp-actions-row">
+      <button class="gp-btn gp-btn-primary" onclick="openReview()">🌟 记录成长亮点</button>
+      <button class="gp-btn gp-btn-secondary" onclick="openReview('improve')">🔧 记录改进机会</button>
+      <button class="gp-btn gp-btn-secondary" onclick="openReport()">📊 月度考核报告</button>
+      <button class="gp-btn gp-btn-secondary" onclick="openWeekly()">📅 周汇总</button>
+    </div>`;
+  } else {
+    html += `<div class="gp-viewonly-bar"><span class="vicon">👁</span><span>当前为<strong>查看模式</strong>：仅刘芳律师（管理律师）可录入与修改考核记录，您可查看全部成长数据与月度考核报告。</span></div>
+    <div class="gp-actions-row">
+      <button class="gp-btn gp-btn-secondary" onclick="openReport()">📊 月度考核报告</button>
+      <button class="gp-btn gp-btn-secondary" onclick="openWeekly()">📅 周汇总</button>
+    </div>`;
+  }
   html += `<div class="gp-actions-row">
     <button class="gp-btn gp-btn-primary" onclick="openReview()">🌟 记录成长亮点</button>
     <button class="gp-btn gp-btn-secondary" onclick="openReview('improve')">🔧 记录改进机会</button>
@@ -2684,7 +2878,7 @@ function renderReview() {
         </div>
         <div class="review-content" style="font-size:13px;">${esc(r.content||'')}</div>
         <div class="review-actions">
-          <button onclick="deleteReview('${r.id}')">删除旧记录</button>
+          ${isManager() ? `<button onclick="deleteReview('${r.id}')">删除旧记录</button>` : ''}
         </div>
       </div>`;
     });
@@ -2867,18 +3061,27 @@ function renderGrowEntry(e, isGrowth) {
     ? `${esc(e.behavior || '')}${e.result ? ` → <strong>${esc(e.result)}</strong>` : ''}`
     : `${esc(e.behavior || '')}${e.impact ? `（影响：${esc(e.impact)}）` : ''}`;
 
+  const pieceHtml = (e.pieceAmount && e.pieceAmount !== 0)
+    ? `<span class="gp-entry-piece ${e.pieceAmount > 0 ? 'pos' : 'neg'}">${e.pieceAmount > 0 ? '💰+' + e.pieceAmount : '💰' + e.pieceAmount}元</span>` : '';
+  const capTag = (e.coeffCap !== undefined && e.coeffCap !== null) ? `<span class="gp-coeffcap-tag">系数封顶${e.coeffCap}</span>` : '';
+  const caseRefHtml = (e.caseRef && e.caseRef !== '不关联') ? `<div class="gp-entry-caseref">🔗 ${esc(e.caseRef)}</div>` : '';
+  const standardHtml = e.standardNote ? `<div class="gp-entry-standard">标准：${esc(e.standardNote)}</div>` : '';
+  const delBtn = isManager() ? `<span style="margin-left:auto;cursor:pointer;font-size:11px;color:var(--text-light);" onclick="deleteReview('${e.id}')" title="删除此记录">✕</span>` : '';
+
   return `<div class="gp-entry">
     <div class="gp-entry-head">
       <span class="gp-entry-cat ${catCls}">${isGrowth ? '↑' : '→'} ${esc(e.category || '')}</span>
       <span class="gp-entry-text">${behaviorText}</span>
     </div>
     ${e.suggestion && !isGrowth ? `<div style="font-size:11.5px;color:#b45309;margin-top:3px;padding-left:4px;border-left:2px solid #fcd34d;">💡 建议：${esc(e.suggestion)}</div>` : ''}
+    ${standardHtml}${caseRefHtml}
     <div class="gp-entry-meta">
       <span class="gp-entry-score ${scoreCls}">${scoreLabel}分</span>
+      ${pieceHtml}${capTag}
       <span>${dateStr}</span>
       <span class="gp-entry-recorder">${recorder}</span>
       ${repeatTag}
-      <span style="margin-left:auto;cursor:pointer;font-size:11px;color:var(--text-light);" onclick="deleteReview('${e.id}')" title="删除此记录">✕</span>
+      ${delBtn}
     </div>
   </div>`;
 }
@@ -2933,18 +3136,18 @@ function buildKnowledgeBase(entries) {
 
 // ===== 打开记录弹窗 =====
 function openReview(forceType) {
+  if (!isManager()) { showToast('仅刘芳律师可录入考核记录'); return; }
   editingReviewId = null;
   currentGrowType = forceType || 'growth';
   selectedScore = currentGrowType === 'growth' ? 3 : -1;
 
-  const names = getMemberNames();
+  const names = Object.keys(BEHAVIOR_CATS);
   document.getElementById('growTargetMember').innerHTML = '<option value="">请选择成员</option>' +
     names.map(n => `<option value="${n}">${n}</option>`).join('');
-
-  // 关联事项下拉
-  const items = (cloudData.items || []).filter(i => !i.archived);
-  document.getElementById('growRelatedItem').innerHTML = '<option value="">不关联</option>' +
-    items.map(i => `<option value="${i.id}">${esc(i.title)} (@${esc(i.assignee)})</option>`).join('');
+  document.getElementById('growCategory').innerHTML = '<option value="">请先选择被记录人</option>';
+  document.getElementById('growCaseRef').value = '';
+  document.getElementById('growPieceAmount').value = '';
+  document.getElementById('growStandardHint').innerHTML = '';
 
   // 初始化表单
   setGrowType(currentGrowType);
@@ -2952,9 +3155,6 @@ function openReview(forceType) {
   document.getElementById('growImpact').value = '';
   document.getElementById('growSuggestion').value = '';
   document.getElementById('growRepeatAlert').className = 'grow-repeat-alert';
-
-  // 自动填当前用户为被记录人
-  if (currentUser) document.getElementById('growTargetMember').value = currentUser;
 
   document.getElementById('reviewModal').classList.add('show');
 }
@@ -2983,6 +3183,55 @@ function setGrowType(type) {
 
   // 分值选项
   renderScoreOptions(type);
+  updateStandardHint();
+}
+
+// ===== 被记录人切换：动态填充行为分类 =====
+function onGrowMemberChange() {
+  const m = document.getElementById('growTargetMember').value;
+  const cat = document.getElementById('growCategory');
+  if (m && BEHAVIOR_CATS[m]) {
+    cat.innerHTML = '<option value="">请选择分类</option>' +
+      BEHAVIOR_CATS[m].map(c => `<option value="${c}">${c}</option>`).join('');
+  } else {
+    cat.innerHTML = '<option value="">请先选择被记录人</option>';
+  }
+  document.getElementById('growStandardHint').innerHTML = '';
+  document.getElementById('growPieceAmount').value = '';
+}
+
+// ===== 评分标准提示（随被记录人/分类/类型/分值联动） =====
+function updateStandardHint() {
+  const m = document.getElementById('growTargetMember').value;
+  const cat = document.getElementById('growCategory').value;
+  const hint = document.getElementById('growStandardHint');
+  const pieceEl = document.getElementById('growPieceAmount');
+  if (!m || !cat || !SCORE_STANDARDS[m] || !SCORE_STANDARDS[m][cat]) {
+    hint.innerHTML = ''; pieceEl.value = ''; return;
+  }
+  const type = currentGrowType;
+  const rules = SCORE_STANDARDS[m][cat][type] || {};
+  let html = `<div class="gsh-title">📋 评分标准 · ${esc(m)} · ${esc(cat)}（${type === 'growth' ? '成长亮点' : '改进机会'}）</div>`;
+  const scores = Object.keys(rules).map(Number).sort((a, b) => a - b);
+  if (scores.length === 0) {
+    html += `<div class="gsh-note">该分类暂未配置标准，请按实际成果自定义分值与计件金额。</div>`;
+  } else {
+    html += '<div class="gsh-list">';
+    scores.forEach(s => {
+      const r = rules[s];
+      const sel = s === selectedScore ? ' selected' : '';
+      const sign = s > 0 ? `+${s}` : `${s}`;
+      const pieceTxt = r.piece > 0 ? ` · 计件 +${r.piece}元` : (r.piece < 0 ? ` · 计件 ${r.piece}元` : '');
+      const capTxt = r.cap ? ` · 系数封顶${r.cap}` : '';
+      html += `<div class="gsh-item${sel}"><span class="gsh-score">${sign}分</span><span class="gsh-note">${esc(r.note)}${pieceTxt}${capTxt}</span></div>`;
+    });
+    html += '</div>';
+  }
+  hint.innerHTML = html;
+  const sel = rules[selectedScore];
+  if (sel && (pieceEl.value === '' || pieceEl.value === undefined)) {
+    pieceEl.value = sel.piece || 0;
+  }
 }
 
 // ===== 分值选项渲染 =====
@@ -3001,6 +3250,7 @@ function selectScore(val, el) {
   selectedScore = val;
   document.querySelectorAll('.grow-score-opt').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
+  updateStandardHint();
 }
 
 // ===== 保存成长记录 =====
@@ -3010,11 +3260,18 @@ async function saveGrowthEntry() {
   const behavior = document.getElementById('growBehavior').value.trim();
   const impact = document.getElementById('growImpact').value.trim();
   const suggestion = document.getElementById('growSuggestion').value.trim();
-  const relatedItem = document.getElementById('growRelatedItem').value;
+  const caseRef = document.getElementById('growCaseRef').value.trim();
+  let pieceAmount = parseFloat(document.getElementById('growPieceAmount').value);
+  if (isNaN(pieceAmount)) pieceAmount = 0;
+  pieceAmount = Math.round(pieceAmount);
 
   if (!targetMember) { showToast('请选择被记录人'); return; }
   if (!category) { showToast('请选择行为分类'); return; }
   if (!behavior) { showToast(currentGrowType === 'growth' ? '请填写具体行为与成果' : '请填写具体事项'); return; }
+  if (currentGrowType === 'improvement') {
+    if (!impact) { showToast('改进机会必须填写客观影响'); return; }
+    if (!suggestion) { showToast('改进机会必须填写改进措施'); return; }
+  }
 
   // 重复检测
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
@@ -3027,19 +3284,29 @@ async function saveGrowthEntry() {
     e.id !== editingReviewId
   );
 
+  const std = SCORE_STANDARDS[targetMember] && SCORE_STANDARDS[targetMember][category] &&
+    SCORE_STANDARDS[targetMember][category][currentGrowType] &&
+    SCORE_STANDARDS[targetMember][category][currentGrowType][selectedScore];
+  const standardNote = std ? std.note : '';
+  const coeffCap = coeffCapOf(targetMember, category, currentGrowType, selectedScore);
+
   const entry = {
     id: editingReviewId || ('grow-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6)),
     type: currentGrowType,
     targetMember,
-    recorder: currentUser || '未知',
+    recorder: currentUser || '刘芳律师',
     date: new Date().toISOString().slice(0, 10),
     category,
+    caseRef: caseRef || '不关联',
     behavior,
     result: currentGrowType === 'growth' ? (behavior.includes('→') ? '' : '') : '',
     impact: currentGrowType === 'improvement' ? impact : '',
     suggestion: currentGrowType === 'improvement' ? suggestion : '',
     score: selectedScore,
-    relatedItem: relatedItem || null,
+    pieceAmount,
+    coeffCap,
+    standardNote,
+    relatedItem: null,
     repeatCount: sameCategory.length + 1,
     daysSinceLast: sameCategory.length > 0 ? calcDaysSinceLast(sameCategory) : null,
     createdAt: new Date().toISOString(),
@@ -3057,7 +3324,9 @@ async function saveGrowthEntry() {
     }
     await cloudWrite(cloudData);
     closeReview();
-    showToast(currentGrowType === 'growth' ? '✨ 成长亮点已记录！' : '🔧 改进机会已记录');
+    const sign = selectedScore > 0 ? `+${selectedScore}` : `${selectedScore}`;
+    const pieceTxt = pieceAmount !== 0 ? (pieceAmount > 0 ? ` · 计件 +${pieceAmount}元` : ` · 计件 ${pieceAmount}元`) : '';
+    showToast(`已记录：${targetMember} · ${category} ${sign}分${pieceTxt}`);
     refreshUI();
   } catch(e) {
     showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败');
@@ -3079,11 +3348,112 @@ function closeReview() {
 
 // ===== 删除记录 =====
 async function deleteReview(id) {
+  if (!isManager()) { showToast('仅刘芳律师可删除记录'); return; }
   if (!confirm('确认删除此记录？')) return;
   cloudData.reviews = (cloudData.reviews || []).filter(r => r.id !== id);
   setSyncStatus('syncing', '删除中...');
   try { await cloudWrite(cloudData); showToast('已删除'); refreshUI(); }
   catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
+}
+
+// ===== 月度考核与薪酬核算报告 =====
+function openReport() {
+  const el = document.getElementById('reportMonth');
+  if (!el.value) el.value = new Date().toISOString().slice(0, 7);
+  renderReportBody();
+  document.getElementById('reportModal').classList.add('show');
+}
+function closeReport() { document.getElementById('reportModal').classList.remove('show'); }
+
+function renderReportBody() {
+  const month = document.getElementById('reportMonth').value || new Date().toISOString().slice(0, 7);
+  const entries = (cloudData.reviews || []).filter(r =>
+    (r.type === 'growth' || r.type === 'improvement') && (r.date || '').slice(0, 7) === month);
+  const members = Object.keys(BEHAVIOR_CATS);
+  let html = '';
+  members.forEach(m => {
+    const me = entries.filter(e => e.targetMember === m);
+    const growthSum = me.filter(e => e.type === 'growth').reduce((s, e) => s + (e.score || 0), 0);
+    const improveSum = me.filter(e => e.type === 'improvement').reduce((s, e) => s + (e.score || 0), 0);
+    const monthlyScore = Math.max(0, Math.min(100, 100 + growthSum + improveSum));
+    const g = gradeOf(monthlyScore);
+    // 系数封顶（取最严格的惩罚）
+    let penCap = null;
+    me.filter(e => e.type === 'improvement').forEach(e => {
+      const cap = (e.coeffCap !== undefined && e.coeffCap !== null) ? e.coeffCap : coeffCapOf(m, e.category, 'improvement', e.score);
+      if (cap !== null) penCap = (penCap === null) ? cap : Math.min(penCap, cap);
+    });
+    const effCoeff = penCap !== null ? Math.min(g.coeff, penCap) : g.coeff;
+    const pieceTotal = me.reduce((s, e) => s + (e.pieceAmount || 0), 0);
+    const sb = SALARY_BASE[m];
+    const salary = sb.base + sb.allowance + 1500 * effCoeff + pieceTotal;
+    const capNote = penCap !== null ? `（受改进惩罚影响，系数封顶 ${penCap}）` : '';
+
+    const pl = me.filter(e => (e.pieceAmount || 0) !== 0);
+    let pieceList = '';
+    if (pl.length) {
+      pieceList = '<div class="gp-piece-list">' + pl.map(e => {
+        const a = e.pieceAmount;
+        return `<div class="pl-row"><span>${esc(e.date)} · ${esc(e.category)} ${a > 0 ? '+' : ''}${a}元</span><span class="pl-amt ${a > 0 ? 'pos' : 'neg'}">${a > 0 ? '+' : ''}${a}</span></div>`;
+      }).join('') + '</div>';
+    }
+
+    html += `<div class="gp-report-card">
+      <h3>${esc(m)}</h3>
+      <div class="gp-report-sub">考核月份：${month} · 本月记录 ${me.length} 条</div>
+      <div class="gp-report-grid">
+        <div class="gp-rc"><div class="k">成长亮点合计</div><div class="v good">+${growthSum}</div></div>
+        <div class="gp-rc"><div class="k">改进机会合计</div><div class="v bad">${improveSum}</div></div>
+        <div class="gp-rc"><div class="k">月度考核分</div><div class="v prime">${monthlyScore}</div></div>
+        <div class="gp-rc"><div class="k">等级 / 系数</div><div class="v">${g.grade}<br><span style="font-size:13px;color:#7c3aed;">${effCoeff.toFixed(2)}</span></div></div>
+      </div>
+      <div class="gp-salary-box">
+        <div class="lbl">应发月薪（可直接用于发薪核对）</div>
+        <div class="amt">¥ ${salary.toLocaleString('zh-CN')}</div>
+        <div class="lbl" style="margin-top:6px;">${sb.base} 底薪${sb.allowance ? ' + ' + sb.allowance + ' 驻点补贴' : ''} + 1500×${effCoeff.toFixed(2)} 绩效系数 + 计件 ${pieceTotal >= 0 ? '+' : ''}${pieceTotal}元 ${capNote}</div>
+      </div>
+      ${pieceList || '<div class="gp-report-sub">本月无计件金额记录</div>'}
+    </div>`;
+  });
+  html += `<div class="gp-report-note">⚠️ 核算说明：① 月度考核分 = 100 + Σ成长亮点 − Σ改进机会，封顶 100、保底 0；② 案源线索奖（签约金额×2%）、案件提成（回款×10%）等需按实际回款在「计件金额」中据实填写；③ 含系数封顶惩罚的月份已在系数中体现；④ 本表为考核数据，最终以双方签字确认为准。</div>`;
+  document.getElementById('reportBody').innerHTML = html;
+}
+
+// ===== 周汇总 =====
+function openWeekly() { renderWeeklyBody(); document.getElementById('weeklyModal').classList.add('show'); }
+function closeWeekly() { document.getElementById('weeklyModal').classList.remove('show'); }
+function renderWeeklyBody() {
+  const now = new Date();
+  const day = (now.getDay() + 6) % 7;
+  const monday = new Date(now); monday.setDate(now.getDate() - day);
+  const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+  const fmt = d => d.toISOString().slice(0, 10);
+  const start = fmt(monday), end = fmt(sunday);
+  const entries = (cloudData.reviews || []).filter(r =>
+    (r.type === 'growth' || r.type === 'improvement') && (r.date || '') >= start && (r.date || '') <= end);
+  const members = Object.keys(BEHAVIOR_CATS);
+  let html = `<div class="gp-report-sub">统计区间：${start}（周一） ~ ${end}（周日） · 共 ${entries.length} 条记录</div>`;
+  members.forEach(m => {
+    const me = entries.filter(e => e.targetMember === m);
+    const g = me.filter(e => e.type === 'growth').reduce((s, e) => s + (e.score || 0), 0);
+    const im = me.filter(e => e.type === 'improvement').reduce((s, e) => s + (e.score || 0), 0);
+    const net = g + im;
+    const piece = me.reduce((s, e) => s + (e.pieceAmount || 0), 0);
+    const detail = me.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+      .map(e => {
+        const s = e.score > 0 ? `+${e.score}` : `${e.score}`;
+        const b = (e.behavior || '').slice(0, 18);
+        return `<div class="gp-weekly-row"><span class="gp-weekly-name">${esc(e.category)}</span><span class="gp-weekly-meta">${esc(e.date)} ${s}分 ${esc(b)}${e.behavior && e.behavior.length > 18 ? '…' : ''}</span><span class="gp-weekly-score ${e.score >= 0 ? 'pos' : 'neg'}">${s}</span></div>`;
+      }).join('');
+    html += `<div class="gp-report-card"><h3>${esc(m)}</h3>
+      <div class="gp-report-grid">
+        <div class="gp-rc"><div class="k">成长</div><div class="v good">+${g}</div></div>
+        <div class="gp-rc"><div class="k">改进</div><div class="v bad">${im}</div></div>
+        <div class="gp-rc"><div class="k">净分</div><div class="v prime">${net > 0 ? '+' : ''}${net}</div></div>
+        <div class="gp-rc"><div class="k">计件</div><div class="v">${piece >= 0 ? '+' : ''}${piece}</div></div>
+      </div>${detail || '<div class="gp-report-sub">本周暂无记录</div>'}</div>`;
+  });
+  document.getElementById('weeklyBody').innerHTML = html;
 }
 
 // ===== Actions =====
