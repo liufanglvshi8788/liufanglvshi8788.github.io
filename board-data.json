@@ -43,7 +43,9 @@
       "reviewedAt": "2026-08-12T06:18:52.982Z",
       "reviewedBy": "未知",
       "hours": 0,
-      "reviewComment": ""
+      "reviewComment": "",
+      "archived": true,
+      "archivedAt": "2026-08-14T15:05:59.053Z"
     },
     {
       "id": "item-1786188123216-h1a9id",
@@ -499,7 +501,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-14T15:01:05.573Z",
+  "lastUpdate": "2026-08-14T15:05:59.054Z",
   "updatedBy": "刘芳律师",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
