@@ -161,12 +161,13 @@
       "priority": "重要",
       "caseType": "",
       "status": "持续跟进",
-      "dueDate": "2026-08-10T19:25:00",
+      "dueDate": null,
       "createdAt": "2026-08-08T11:25:49.590Z",
       "completedAt": null,
       "note": "",
       "recorder": "",
-      "type": "持续跟进"
+      "type": "持续跟进",
+      "hours": 0
     },
     {
       "id": "item-1786188383373-nuxnfe",
@@ -494,7 +495,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-14T00:17:40.497Z",
+  "lastUpdate": "2026-08-14T00:18:29.853Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
