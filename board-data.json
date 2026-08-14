@@ -424,7 +424,7 @@
       "dueDate": "2026-08-21T08:20:00",
       "createdAt": "2026-08-10T03:41:06.031Z",
       "completedAt": null,
-      "note": "对罗祥红上诉状、证据梳理、新证据一并发我",
+      "note": "对罗祥红上诉状、证据梳理、新证据及证据清单一并发我",
       "recorder": "潘奥星律师",
       "hours": 0,
       "type": "每日日程"
@@ -496,7 +496,7 @@
     }
   ],
   "errors": [],
-  "lastUpdate": "2026-08-14T00:20:48.527Z",
+  "lastUpdate": "2026-08-14T00:21:02.257Z",
   "updatedBy": "未知用户",
   "config": {
     "loginHash": "a75463f27244fc9b065d3c68a3af00c22f789b22e984f3ee4a5e6b49d54a987a"
