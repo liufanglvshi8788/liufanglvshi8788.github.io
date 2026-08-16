@@ -1192,6 +1192,24 @@ body {
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 .login-modal-card h3 { font-size: 17px; margin-bottom: 18px; color: #1c1f2e; }
 .login-modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+/* ===== 律师手记 ===== */
+.notes-view { padding: 0 20px 28px; max-width: 1100px; margin: 0 auto; }
+.notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 16px; }
+.review-card { background: #fff; border: 1px solid #f0e6f7; border-radius: 14px; padding: 14px 16px; }
+.review-card-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.review-author { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; color: #4c1d95; }
+.review-author .avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #a855f7, #ec4899); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+.review-time { font-size: 12px; color: #94a3b8; }
+.review-content { font-size: 13px; color: #374151; line-height: 1.6; }
+.review-actions { margin-top: 8px; text-align: right; }
+.review-actions button { font-size: 12px; color: #ef4444; background: none; border: 1px solid #fecaca; border-radius: 8px; padding: 3px 10px; cursor: pointer; }
+.review-actions button:hover { background: #fef2f2; }
+.note-card { box-shadow: 0 6px 20px -10px rgba(168, 85, 247, 0.25); transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.note-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -12px rgba(168, 85, 247, 0.35); }
+.note-title { font-size: 15px; font-weight: 700; color: #4c1d95; margin: 6px 0 4px; line-height: 1.4; }
+.note-linked { display: inline-block; font-size: 12px; color: #a855f7; background: #faf5ff; border: 1px solid #f3e8ff; border-radius: 8px; padding: 2px 8px; margin-bottom: 6px; }
+.note-content { font-size: 13.5px; color: #374151; line-height: 1.65; white-space: pre-wrap; word-break: break-word; margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -1310,7 +1328,10 @@ body {
     </button>
     <div class="nav-divider"></div>
     <button class="nav-item" data-view="review" onclick="switchView('review')">
-      <span class="nav-icon">📊</span><span>每日复盘</span>
+      <span class="nav-icon">📊</span><span>律师考核</span>
+    </button>
+    <button class="nav-item" data-view="notes" onclick="switchView('notes')">
+      <span class="nav-icon">📓</span><span>律师手记</span>
     </button>
     <div class="nav-divider"></div>
     <button class="nav-item" onclick="openSettings()">
@@ -1399,7 +1420,7 @@ body {
     <button class="tab" onclick="switchView('calendar')">日历视图</button>
     <button class="tab" onclick="switchView('list')">列表视图</button>
     <button class="tab" onclick="switchView('member')">成员视图</button>
-    <button class="tab" onclick="switchView('review')">每日复盘</button>
+    <button class="tab" onclick="switchView('review')">律师考核</button>
   </div>
   <div class="filters">
     <select id="filterPriority" onchange="render()">
@@ -1486,7 +1507,10 @@ body {
     <span class="mni-icon">👥</span><span class="mni-label">成员</span>
   </button>
   <button class="mobile-nav-item" data-view="review" onclick="switchView('review')">
-    <span class="mni-icon">📊</span><span class="mni-label">复盘</span>
+    <span class="mni-icon">📊</span><span class="mni-label">律师考核</span>
+  </button>
+  <button class="mobile-nav-item" data-view="notes" onclick="switchView('notes')">
+    <span class="mni-icon">📓</span><span class="mni-label">手记</span>
   </button>
   <button class="mobile-nav-item" data-view="archive" onclick="switchView('archive')">
     <span class="mni-icon">📦</span><span class="mni-label">归档</span>
@@ -1714,6 +1738,43 @@ body {
   </div>
 </div>
 
+<!-- 律师手记 Modal -->
+<div class="modal-overlay" id="noteModal">
+  <div class="modal" style="max-width:640px; max-height:90vh; overflow-y:auto;">
+    <h2 id="noteModalTitle">📓 写律师手记</h2>
+
+    <div class="grow-modal-field">
+      <label>记录人 <span style="color:var(--urgent)">*</span></label>
+      <select id="noteAuthor" class="grow-input"></select>
+    </div>
+
+    <div class="grow-modal-field">
+      <label>日期</label>
+      <input type="date" id="noteDate" class="grow-input" />
+    </div>
+
+    <div class="grow-modal-field">
+      <label>标题</label>
+      <input type="text" id="noteTitle" class="grow-input" placeholder="一句话概括本次复盘，如：本周办案复盘与心得" />
+    </div>
+
+    <div class="grow-modal-field">
+      <label>关联案件/事项 <span style="color:var(--text-light);font-weight:400">（选填，案号或任务名称）</span></label>
+      <input type="text" id="noteLinkedCase" class="grow-input" placeholder="例：(2026)渝01民初123号 / 驻点日常" />
+    </div>
+
+    <div class="grow-modal-field">
+      <label>手记内容 <span style="color:var(--urgent)">*</span></label>
+      <textarea id="noteContent" rows="8" placeholder="记录你的复盘与思考：&#10;· 本周/今日做了什么、结果如何&#10;· 遇到的难点与解决思路&#10;· 经验沉淀与待改进点"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeNote()">取消</button>
+      <button class="btn-save" onclick="saveNote()">保存手记</button>
+    </div>
+  </div>
+</div>
+
 <!-- 月度考核报告 Modal -->
 <div class="modal-overlay" id="reportModal">
   <div class="modal" style="max-width:760px; max-height:92vh; overflow-y:auto;">
@@ -1927,7 +1988,7 @@ const GH_API_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents
 const GH_READ_URL = `https://${GH_REPO}/${GH_DATA_FILE}`;
 
 // ===== State =====
-let cloudData = { boardName: '团队日清看板', members: [], items: [], reviews: [], errors: [], lastUpdate: null, updatedBy: null };
+let cloudData = { boardName: '团队日清看板', members: [], items: [], reviews: [], notes: [], errors: [], lastUpdate: null, updatedBy: null };
 let currentView = 'board';
 let isSyncing = false;
 let currentUser = localStorage.getItem('board_current_user') || '';
@@ -2124,6 +2185,7 @@ async function loadData() {
       cloudData.manager = '刘芳律师';
       cloudData.items = [];
       cloudData.reviews = [];
+      cloudData.notes = [];
       cloudData.errors = [];
       cloudData.lastUpdate = new Date().toISOString();
       cloudData.updatedBy = '系统初始化';
@@ -2481,7 +2543,7 @@ function switchView(view) {
   // 切换视图时关闭手机端抽屉（若打开）
   if (document.body.classList.contains('mobile-panel-open')) closeMobilePanel();
   // 更新 tab 栏（隐藏的，保持兼容）
-  const allViews = ['board','calendar','list','member','archive','review'];
+  const allViews = ['board','calendar','list','member','archive','review','notes'];
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', allViews[i] === view);
   });
@@ -2490,7 +2552,7 @@ function switchView(view) {
   const filterToolbar = document.getElementById('filterToolbar');
   const statsBar = document.getElementById('statsBar');
   const overdueBanner = document.getElementById('overdueBanner');
-  if (view === 'review' || view === 'archive') {
+  if (view === 'review' || view === 'archive' || view === 'notes') {
     if (quickAdd) quickAdd.style.display = 'none';
     if (filterToolbar) filterToolbar.style.display = 'none';
     if (statsBar) statsBar.style.display = 'none';
@@ -2532,6 +2594,7 @@ function closeMobilePanel() {
 
 // ===== Render =====
 function render() {
+  if (!cloudData.notes) cloudData.notes = [];
   const content = document.getElementById('content');
   const backBtn = currentView !== 'board' 
     ? '<div class="back-home-bar"><button class="back-home-btn" onclick="switchView(\'board\')">← 返回看板主页</button></div>' 
@@ -2539,6 +2602,7 @@ function render() {
   let html = '';
   if (currentView === 'review') { html = renderReview(); }
   else if (currentView === 'archive') { html = renderArchive(); }
+  else if (currentView === 'notes') { html = renderNotes(); }
   else if (currentView === 'calendar') { html = renderCalendar(); }
   else {
     const items = getFilteredItems();
@@ -3149,7 +3213,7 @@ function renderReview() {
       ? `<div style="margin-top:20px;"><button class="gp-btn gp-btn-primary" onclick="openReview()">+ 写第一条记录</button></div>`
       : `<div class="gp-viewonly-bar" style="margin-top:20px;"><span class="vicon">👁</span><span>查看模式：仅刘芳律师可录入考核记录。</span></div>`;
     return `<div class="growth-pool">
-      <div class="empty-state"><div class="big-icon">🌱</div><p>进步池尚未开启</p>
+      <div class="empty-state"><div class="big-icon">🌱</div><p>律师考核尚未开启</p>
       <p class="hint">记录团队成员的成长亮点和改进机会，用数据驱动正向成长</p>
       ${emptyAction}</div></div>`;
   }
@@ -3311,7 +3375,7 @@ function renderGrowthOverview(analytics, todayScore, members) {
 
   return `<div class="growth-overview">
     <div class="gp-score-card">
-      <div class="gp-score-label">今日进步池总分</div>
+      <div class="gp-score-label">今日律师考核总分</div>
       <div class="gp-score-value" style="color:${scoreLabel}">${scoreLabel}</div>
       <div class="gp-score-sub">${members.length} 位成员 · 本周累计正向成长中</div>
     </div>
@@ -3758,6 +3822,109 @@ async function deleteReview(id) {
   setSyncStatus('syncing', '删除中...');
   try { await cloudWrite(cloudData); showToast('已删除'); refreshUI(); }
   catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
+}
+
+// ===== 律师手记 =====
+function renderNotes() {
+  if (!cloudData.notes) cloudData.notes = [];
+  const notes = cloudData.notes.slice().sort((a, b) =>
+    (b.date || '').localeCompare(a.date || '') ||
+    (b.createdAt || '').localeCompare(a.createdAt || ''));
+  let html = `<div class="notes-view">`;
+  html += `<div class="gp-actions-row">
+    <button class="gp-btn gp-btn-primary" onclick="openNote()">📓 写律师手记</button>
+  </div>`;
+  if (notes.length === 0) {
+    html += `<div class="empty-state"><div class="big-icon">📓</div><p>还没有律师手记</p>
+      <p class="hint">团队律师可在此记录办案复盘、经验沉淀与心得，所有人可见</p>
+      <div style="margin-top:16px;"><button class="gp-btn gp-btn-primary" onclick="openNote()">+ 写第一篇手记</button></div></div>`;
+  } else {
+    html += `<div class="notes-grid">`;
+    notes.forEach(n => {
+      const canDelete = isManager() || n.author === currentUser;
+      const linked = n.linkedCase ? `<span class="note-linked">🔗 ${esc(n.linkedCase)}</span>` : '';
+      const title = n.title ? esc(n.title) : '<span style="color:var(--text-light)">（无标题）</span>';
+      html += `<div class="review-card note-card">
+        <div class="review-card-header">
+          <span class="review-author"><span class="avatar">${esc((n.author || '?').charAt(0))}</span>${esc(n.author || '')}</span>
+          <span class="review-time">${esc(n.date || '')}</span>
+        </div>
+        <div class="note-title">${title}</div>
+        ${linked}
+        <div class="review-content note-content">${esc(n.content || '')}</div>
+        ${canDelete ? `<div class="review-actions"><button onclick="deleteNote('${n.id}')">删除</button></div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+let editingNoteId = null;
+function openNote() {
+  editingNoteId = null;
+  document.getElementById('noteModalTitle').textContent = '📓 写律师手记';
+  const sel = document.getElementById('noteAuthor');
+  const names = (cloudData.members && cloudData.members.length) ? cloudData.members : ['刘芳律师', '曾梓涵律师', '潘奥星律师'];
+  sel.innerHTML = names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+  sel.value = currentUser || names[0];
+  document.getElementById('noteDate').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('noteTitle').value = '';
+  document.getElementById('noteLinkedCase').value = '';
+  document.getElementById('noteContent').value = '';
+  document.getElementById('noteModal').classList.add('show');
+}
+
+function closeNote() {
+  document.getElementById('noteModal').classList.remove('show');
+  editingNoteId = null;
+}
+
+async function saveNote() {
+  const author = document.getElementById('noteAuthor').value;
+  const date = document.getElementById('noteDate').value || new Date().toISOString().slice(0, 10);
+  const title = document.getElementById('noteTitle').value.trim();
+  const linkedCase = document.getElementById('noteLinkedCase').value.trim();
+  const content = document.getElementById('noteContent').value.trim();
+  if (!author) { showToast('请选择记录人'); return; }
+  if (!content) { showToast('请填写手记内容'); return; }
+  const note = {
+    id: editingNoteId || ('note-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6)),
+    author,
+    date,
+    title,
+    linkedCase: linkedCase || '',
+    content,
+    createdAt: new Date().toISOString(),
+  };
+  setSyncStatus('syncing', '保存中...');
+  try {
+    if (!cloudData.notes) cloudData.notes = [];
+    if (editingNoteId) {
+      const idx = cloudData.notes.findIndex(x => x.id === editingNoteId);
+      if (idx >= 0) cloudData.notes[idx] = { ...cloudData.notes[idx], ...note };
+    } else {
+      cloudData.notes.push(note);
+    }
+    await cloudWrite(cloudData);
+    closeNote();
+    showToast(`已保存${author}的律师手记`);
+    refreshUI();
+  } catch (e) {
+    showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败');
+    setSyncStatus('error', '同步失败');
+  }
+}
+
+async function deleteNote(id) {
+  const note = (cloudData.notes || []).find(n => n.id === id);
+  if (note && note.author !== currentUser && !isManager()) { showToast('只能删除自己或管理员可删除'); return; }
+  if (!confirm('确认删除这篇手记？')) return;
+  cloudData.notes = (cloudData.notes || []).filter(n => n.id !== id);
+  setSyncStatus('syncing', '删除中...');
+  try { await cloudWrite(cloudData); showToast('已删除'); refreshUI(); }
+  catch (e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
 }
 
 // ===== 月度考核与薪酬核算报告 =====
