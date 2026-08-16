@@ -698,6 +698,8 @@ body {
 .gp-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px -2px rgba(139,92,246,0.5); }
 .gp-btn-secondary { background: var(--card-bg); color: var(--text); border: 1.5px solid var(--border); }
 .gp-btn-secondary:hover { background: var(--card-bg-soft); }
+.gp-btn-ghost { background: rgba(168,85,247,0.08); color: var(--primary-dark); border: 1.5px solid rgba(168,85,247,0.28); }
+.gp-btn-ghost:hover { background: rgba(168,85,247,0.16); }
 
 /* ---- 复盘弹窗(新版结构化表单) ---- */
 .grow-modal-field { margin-bottom: 14px; }
@@ -799,6 +801,24 @@ body {
 .gp-weekly-meta { font-size: 12px; color: var(--text-light); }
 .gp-weekly-score { margin-left: auto; font-weight: 800; }
 .gp-weekly-score.pos { color:#16a34a; } .gp-weekly-score.neg { color:#dc2626; }
+
+/* ===== 考核办法说明文档 ===== */
+.spec-doc { font-size: 13px; line-height: 1.78; color: var(--text-mid); }
+.spec-doc h3 { font-size: 16px; color: var(--text); margin: 24px 0 10px; padding-left: 11px; border-left: 3px solid var(--primary); font-weight: 800; letter-spacing: 0.2px; }
+.spec-doc h3:first-child { margin-top: 0; }
+.spec-doc h4 { font-size: 14px; color: var(--primary-dark); margin: 16px 0 7px; font-weight: 700; }
+.spec-doc p { margin: 8px 0; }
+.spec-doc ul, .spec-doc ol { margin: 8px 0; padding-left: 22px; }
+.spec-doc li { margin: 4px 0; }
+.spec-doc .spec-quote { background: var(--primary-subtle); border: 1px solid rgba(168,85,247,0.18); border-radius: 12px; padding: 12px 16px; margin: 12px 0; color: var(--text-mid); font-size: 12.5px; line-height: 1.7; }
+.spec-doc .spec-iron { background: linear-gradient(135deg, rgba(236,72,153,0.10), rgba(168,85,247,0.10)); border: 1px solid rgba(236,72,153,0.25); border-radius: 12px; padding: 12px 16px; margin: 12px 0; font-size: 12.5px; line-height: 1.75; }
+.spec-doc .spec-iron b { color: #db2777; }
+.spec-doc table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; background: var(--card-bg); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-xs); }
+.spec-doc th { background: linear-gradient(135deg, rgba(168,85,247,0.12), rgba(236,72,153,0.10)); color: var(--text); font-weight: 700; text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.spec-doc td { padding: 7px 10px; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
+.spec-doc tr:last-child td { border-bottom: none; }
+.spec-doc code { background: var(--card-bg-soft); border: 1px solid var(--border-soft); border-radius: 5px; padding: 1px 5px; font-size: 11.5px; color: var(--primary-dark); }
+.spec-doc .spec-tag { display: inline-block; background: var(--primary-subtle); color: var(--primary-dark); border-radius: 6px; padding: 1px 7px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 
 /* ===== 高级感 & 丝滑动画增强 ===== */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -1665,6 +1685,178 @@ body {
     <div id="weeklyBody"></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeWeekly()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 考核办法说明 Modal -->
+<div class="modal-overlay" id="specModal" onclick="if(event.target===this)closeSpec()">
+  <div class="modal" style="max-width:860px; max-height:92vh; overflow-y:auto;">
+    <h2>📋 考核管理嵌入每日复盘 · 需求规格说明</h2>
+    <div class="spec-doc">
+      <div class="spec-quote">
+        适用工具：WorkBuddy 看板系统（日程看板 · 每日复盘模块）<br/>
+        依据：《律师团队内部绩效管理与考核办法（最终版）》《考核嵌入每日复盘-方案分析与需求明确指南.md》
+      </div>
+      <div class="spec-iron">
+        <b>三条铁律：</b><br/>
+        ① 每日只记录、不计算；② 事件驱动、无事不记；③ 复盘记录是唯一台账源，月底不再手抄。
+      </div>
+
+      <h3>0. 关于 WorkBuddy 的假设（请先读）</h3>
+      <p>本规格按"看板系统通常具备的能力"编写（自定义字段、多视图、筛选、导出）。WorkBuddy 具体支持到什么程度，请对照<b>第 4 节能力核对表</b>逐项核实，再据实微调。两种情况都能落地：</p>
+      <ul>
+        <li><b>能力强</b>（支持字段公式/自动化/统计）→ 月底四件套可自动生成，规格按自动方案执行；</li>
+        <li><b>能力弱</b>（仅看板+文本）→ 月底走"导出 Excel 手工汇总"替代方案，依然满足 15 分钟目标。</li>
+      </ul>
+
+      <h3>1. 总体设计</h3>
+      <h4>1.1 嵌入形态（二选一）</h4>
+      <table>
+        <thead><tr><th>形态</th><th>做法</th><th>适用条件</th></tr></thead>
+        <tbody>
+          <tr><td><span class="spec-tag">A（推荐）</span></td><td>复盘本身就是结构化表单：每天一条"复盘记录"，字段含考核事件</td><td>WorkBuddy 复盘支持自定义字段（单选/日期/多行文本）</td></tr>
+          <tr><td><span class="spec-tag">B</span></td><td>复盘保持自由文本，另建一张"考核记录表"，复盘时顺手录入</td><td>复盘不支持自定义字段</td></tr>
+        </tbody>
+      </table>
+      <div class="spec-quote">判断方法：在 WorkBuddy 里看"每日复盘"能否添加自定义字段或子表。能 → A；不能 → B。两种形态下数据模型相同（见 1.2），只是录入入口不同。</div>
+
+      <h4>1.2 数据模型：一张表、四种记录类型</h4>
+      <p>为避免依赖"关联/子表"能力，采用<b>单表平铺</b>设计：每条记录 = 一个事件 或 一条复盘文本。同一天同一成员可以有多个事件行（如当天调解成功 1 件 + 1 个失误），月底汇总时按类型归集。</p>
+      <h4>主字段（所有记录共用）</h4>
+      <table>
+        <thead><tr><th>字段</th><th>类型</th><th>选项/格式</th><th>必填</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>日期</td><td>日期</td><td>YYYY-MM-DD</td><td>✔</td><td>记录日期</td></tr>
+          <tr><td>成员</td><td>单选</td><td>团队成员名单</td><td>✔</td><td>见第 6 节待确认清单</td></tr>
+          <tr><td>记录类型</td><td>单选</td><td>复盘 / 调解事件 / 失误事件 / 成长亮点</td><td>✔</td><td>一张表的四种记录</td></tr>
+          <tr><td>复盘正文</td><td>多行文本</td><td>—</td><td>仅"复盘"类型</td><td>今日完成事项，<b>不参与考核计算</b></td></tr>
+          <tr><td>备注</td><td>多行文本</td><td>—</td><td>否</td><td>抵扣申请、不可抗力说明、待办</td></tr>
+        </tbody>
+      </table>
+      <h4>调解事件字段组（记录类型=调解事件时填写）</h4>
+      <table>
+        <thead><tr><th>字段</th><th>类型</th><th>选项</th><th>必填</th><th>对应办法</th></tr></thead>
+        <tbody>
+          <tr><td>案件名称</td><td>文本</td><td>—</td><td>✔</td><td>第六条</td></tr>
+          <tr><td>级别</td><td>单选</td><td>口头(30) / 简单(80) / 一般(120) / 重大(200) / 疑难(500)</td><td>✔</td><td>分配时定级，就高不就低（第七条）</td></tr>
+          <tr><td>状态</td><td>单选</td><td>跟进中 / 成功</td><td>✔</td><td>—</td></tr>
+          <tr><td>成功日期</td><td>日期</td><td>—</td><td>状态=成功时</td><td><b>按成功日期归月计奖</b>（第八条：跨月案件成功当月计奖）</td></tr>
+          <tr><td>成功凭证</td><td>单选</td><td>调解协议书 / 确认笔录 / 支付记录等</td><td>状态=成功时</td><td>第九条</td></tr>
+        </tbody>
+      </table>
+      <h4>失误事件字段组（记录类型=失误事件时填写）</h4>
+      <table>
+        <thead><tr><th>字段</th><th>类型</th><th>选项</th><th>必填</th><th>对应办法</th></tr></thead>
+        <tbody>
+          <tr><td>领域</td><td>单选</td><td>诉讼 / 非诉调解 / 通用规范</td><td>✔</td><td>第十五条三张表</td></tr>
+          <tr><td>档次</td><td>单选</td><td>轻微(1分) / 一般(3分) / 重大(5分)</td><td>✔</td><td>重大→双倍计10分+取消当月评优+24小时面谈（第十六条）</td></tr>
+          <tr><td>情形编号</td><td>文本</td><td>如"诉讼-轻微-①"</td><td>✔</td><td>引用第十五条编号，保证可追溯</td></tr>
+          <tr><td>事实描述</td><td>多行文本</td><td>—</td><td>✔</td><td>同事项取最高档；不可抗力不记分需在此说明（第十五条）</td></tr>
+          <tr><td>依据说明</td><td>多行文本</td><td>—</td><td>未列明情形时</td><td>参照最相近情形并说明依据（第十五条）</td></tr>
+        </tbody>
+      </table>
+      <h4>成长亮点字段组（记录类型=成长亮点时填写）</h4>
+      <table>
+        <thead><tr><th>字段</th><th>类型</th><th>选项</th><th>必填</th><th>对应办法</th></tr></thead>
+        <tbody>
+          <tr><td>亮点类型</td><td>单选</td><td>调解成功 / 案件阶段成果 / 有效案源线索 / 优质普法产出</td><td>✔</td><td>第十二条</td></tr>
+          <tr><td>描述</td><td>文本</td><td>—</td><td>✔</td><td>用于月度/季度评优排名</td></tr>
+        </tbody>
+      </table>
+
+      <h4>1.3 月底输出四件套（负责人 15 分钟内完成）</h4>
+      <table>
+        <thead><tr><th>#</th><th>产出</th><th>生成方式</th><th>依据</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>月度计件台账</td><td>筛选"调解事件+成功"，按成功日期归月，按成员汇总金额</td><td>附件四模板</td></tr>
+          <tr><td>2</td><td>季度积分汇总表</td><td>失误事件按 领域×档次 汇总；重大×2；减抵扣（每季≤5分）</td><td>第十五、十六、十八条</td></tr>
+          <tr><td>3</td><td>阈值触发提示</td><td>季度累计 ≥10 提醒 / ≥18 改进计划 / ≥25 评估留用</td><td>第十七条</td></tr>
+          <tr><td>4</td><td>评优候选名单</td><td>月度：当月无积分+亮点排名前二（或客户表扬）；季度：亮点≥12+无重大+未触发18分</td><td>第十三、十四条</td></tr>
+        </tbody>
+      </table>
+
+      <h3>2. 功能需求明细</h3>
+      <p><b>FR-1 每日录入</b>（负责人操作，3-5 分钟/天）</p>
+      <ol>
+        <li>打开看板 → 新建记录：日期（默认今天）+ 成员 + 记录类型=复盘 + 复盘正文；</li>
+        <li>有考核事件则追加事件行（调解事件 / 失误事件 / 成长亮点，按字段组填写）；</li>
+        <li>无事发生的一天：只有一条"复盘"记录，无事件行。<b>禁止每日主观打分</b>。</li>
+      </ol>
+      <p><b>FR-2 重大失误即时动作</b></p>
+      <p>档次选择"重大(5分)"时，负责人须当天完成：</p>
+      <ul>
+        <li>记录里勾选/注明"重大"（自动标记双倍积分，月底计算时×2）；</li>
+        <li>24 小时内面谈复盘（如 WorkBuddy 支持自动化提醒，设置为事件行保存后立即提醒负责人；不支持则人工执行）。</li>
+      </ul>
+      <p><b>FR-3 查询视图</b>（至少三种）</p>
+      <table>
+        <thead><tr><th>视图</th><th>分组/筛选</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td>成员视图</td><td>按成员分组 + 当月</td><td>月度评优与积分核对</td></tr>
+          <tr><td>日历/日期视图</td><td>按日期</td><td>每日复盘入口</td></tr>
+          <tr><td>事件视图</td><td>记录类型=调解事件 / 失误事件 / 成长亮点</td><td>月底汇总取数</td></tr>
+        </tbody>
+      </table>
+      <p><b>FR-4 权限与可见性</b></p>
+      <ul>
+        <li>编辑权：仅团队负责人；</li>
+        <li>查看权：负责人 + 成员本人（建议开放，避免月底争议）；</li>
+        <li>金额/积分属团队内部管理数据，不对外。</li>
+      </ul>
+      <p><b>FR-5 数据导出</b></p>
+      <p>月度可导出 Excel（或 CSV）用于月底台账与存档；WorkBuddy 不支持导出时，用筛选视图 + 截图/复制替代（规格按"能导出"设计）。</p>
+
+      <h3>3. 月底 15 分钟操作手册（SOP）</h3>
+      <ol>
+        <li><b>筛选</b>：事件视图 → 调解事件 + 状态=成功 + 成功日期∈本月 → 导出/复制；</li>
+        <li><b>对账</b>：逐条核对成功凭证字段非空；跨月案件确认归入成功月（而不是分配月）；</li>
+        <li><b>计件台账</b>：按成员汇总金额 → 填入附件四模板（或直接以导出表为台账）；</li>
+        <li><b>积分表</b>：筛选失误事件 → 领域×档次汇总 → 重大×2 → 扣除备注中登记的抵扣（每季≤5分）→ 与季度累计数核对；</li>
+        <li><b>阈值与评优</b>：对照第 17 条阈值输出提示；按 13/14 条生成评优候选名单；</li>
+        <li><b>收尾</b>：检查本月记录完整性（无未填情形的失误行、无缺少成功日期的成功案件）。</li>
+      </ol>
+
+      <h3>4. WorkBuddy 能力核对表（请逐项核实）</h3>
+      <table>
+        <thead><tr><th>#</th><th>能力问题</th><th>支持？</th><th>支持时怎么做</th><th>不支持时替代方案</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>复盘/表单支持自定义字段（单选、日期、多行文本）</td><td>☐</td><td>形态A：复盘自带字段</td><td>形态B：另建考核记录表</td></tr>
+          <tr><td>2</td><td>支持按字段分组/筛选的视图</td><td>☐</td><td>建三种视图（FR-3）</td><td>单列表 + 按日期手动翻</td></tr>
+          <tr><td>3</td><td>支持字段公式/自动计算（积分、金额）</td><td>☐</td><td>月底四件套自动生成</td><td>导出 Excel 汇总</td></tr>
+          <tr><td>4</td><td>支持自动化提醒（事件后触发）</td><td>☐</td><td>重大失误/月底汇总提醒</td><td>人工执行（FR-2）</td></tr>
+          <tr><td>5</td><td>支持按人控制权限</td><td>☐</td><td>成员查看自己</td><td>导出后分发</td></tr>
+          <tr><td>6</td><td>支持导出 Excel/CSV</td><td>☐</td><td>月底台账直接导出</td><td>筛选视图复制粘贴</td></tr>
+          <tr><td>7</td><td>手机端可录入</td><td>☐</td><td>复盘时随手记录</td><td>固定时间电脑录入</td></tr>
+        </tbody>
+      </table>
+      <div class="spec-quote">核实结果请回填，我将据实把规格调整成"自动版"或"导出版"。</div>
+
+      <h3>5. 验收标准</h3>
+      <ol>
+        <li>任意抽查一个月：复盘记录汇总结果与附件四台账<b>完全一致</b>；</li>
+        <li>积分累计与第十五、十六、十七、十八条规则计算结果一致（含重大双倍、抵扣、季度清零）；</li>
+        <li>每日录入 ≤5 分钟；月底汇总 ≤15 分钟；</li>
+        <li>当月评优名单与 13/14 条规则一致；</li>
+        <li>重大失误（5分）记录均有面谈痕迹（记录或备注）。</li>
+      </ol>
+
+      <h3>6. 待你确认的决策点（回填后规格即定稿）</h3>
+      <table>
+        <thead><tr><th>#</th><th>决策点</th><th>建议默认值</th></tr></thead>
+        <tbody>
+          <tr><td>D1</td><td>成员名单（选项列表）</td><td>填写团队授薪律师名单</td></tr>
+          <tr><td>D2</td><td>成员能否查看自己的记录</td><td>可以</td></tr>
+          <tr><td>D3</td><td>客户书面表扬/锦旗是否单独记录（月度之星条件之一）</td><td>单独记一条"成长亮点"，备注标注"客户表扬"</td></tr>
+          <tr><td>D4</td><td>积分抵扣如何登记</td><td>在失误事件备注注明"抵扣：案例复盘1分"，月底统一扣除</td></tr>
+          <tr><td>D5</td><td>提成（5%-10%，限额2万）是否纳入本表</td><td>第一版不纳入，提成按回款另表管理（数据源不同）</td></tr>
+          <tr><td>D6</td><td>值班/咨询登记（第四条基础工作量）是否记录</td><td>只在复盘正文提及，不进考核字段</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSpec()">关闭</button>
+      <button class="btn-save" onclick="window.print()">打印 / 导出 PDF</button>
     </div>
   </div>
 </div>
@@ -2919,12 +3111,14 @@ function renderReview() {
       <button class="gp-btn gp-btn-secondary" onclick="openReview('improve')">🔧 记录改进机会</button>
       <button class="gp-btn gp-btn-secondary" onclick="openReport()">📊 月度考核报告</button>
       <button class="gp-btn gp-btn-secondary" onclick="openWeekly()">📅 周汇总</button>
+      <button class="gp-btn gp-btn-ghost" onclick="openSpec()">📋 考核办法说明</button>
     </div>`;
   } else {
     html += `<div class="gp-viewonly-bar"><span class="vicon">👁</span><span>当前为<strong>查看模式</strong>：仅刘芳律师（管理律师）可录入与修改考核记录，您可查看全部成长数据与月度考核报告。</span></div>
     <div class="gp-actions-row">
       <button class="gp-btn gp-btn-secondary" onclick="openReport()">📊 月度考核报告</button>
       <button class="gp-btn gp-btn-secondary" onclick="openWeekly()">📅 周汇总</button>
+      <button class="gp-btn gp-btn-ghost" onclick="openSpec()">📋 考核办法说明</button>
     </div>`;
   }
   html += `<div class="gp-actions-row">
@@ -3527,6 +3721,10 @@ function renderReportBody() {
 // ===== 周汇总 =====
 function openWeekly() { renderWeeklyBody(); document.getElementById('weeklyModal').classList.add('show'); }
 function closeWeekly() { document.getElementById('weeklyModal').classList.remove('show'); }
+
+// ===== 考核办法说明 =====
+function openSpec() { document.getElementById('specModal').classList.add('show'); }
+function closeSpec() { document.getElementById('specModal').classList.remove('show'); }
 function renderWeeklyBody() {
   const now = new Date();
   const day = (now.getDay() + 6) % 7;
