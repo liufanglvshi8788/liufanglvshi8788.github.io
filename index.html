@@ -2192,6 +2192,7 @@ function startRealtimeListener() {
       if (!cloudData.items) cloudData.items = [];
       if (!cloudData.members) cloudData.members = [];
       if (!cloudData.reviews) cloudData.reviews = [];
+      if (!cloudData.notes) cloudData.notes = [];
       if (!cloudData.errors) cloudData.errors = [];
       delete cloudData.auth;
       document.getElementById('boardTitle').textContent = cloudData.boardName || '团队日清看板';
@@ -3737,11 +3738,15 @@ function renderQuickPreview(result) {
 }
 
 function onQuickInput() {
-  const text = document.getElementById('quickEventText').value;
-  const result = parseEvent(text);
-  renderQuickPreview(result);
-  // 存储解析结果供保存时使用
-  window._lastParsedResult = result;
+  try {
+    const text = document.getElementById('quickEventText').value;
+    const result = parseEvent(text);
+    renderQuickPreview(result);
+    window._lastParsedResult = result;
+  } catch(e) {
+    console.warn('[onQuickInput]', e);
+    document.getElementById('quickPreview').innerHTML = '<div class="quick-no-match">⚠️ 识别异常，请切换到「详细录入」</div>';
+  }
 }
 
 function switchEntryMode(quick) {
@@ -3868,7 +3873,8 @@ function updateStandardHint() {
 
 // ===== 分值选项渲染 =====
 function renderScoreOptions(type) {
-  const opts = SCORE_OPTIONS[type];
+  const opts = SCORE_OPTIONS[type] || [];
+  if (!opts.length) { selectedScore = type === 'growth' ? 3 : -1; return; }
   selectedScore = opts[Math.floor(opts.length / 2)];
   const container = document.getElementById('growScoreRange');
   container.innerHTML = opts.map(v => {
