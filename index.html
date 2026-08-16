@@ -1232,6 +1232,7 @@ body {
 <div class="header">
   <h1><span class="icon">📋</span><span id="boardTitle">刘芳律师团队蒸蒸日上日程看板</span></h1>
   <div class="header-right">
+    <span class="sync-status" id="encBadge" style="display:none;color:#16a34a;font-weight:600;">🔒 数据已加密</span>
     <span class="sync-status" id="syncStatus">同步中...</span>
     <span id="lastUpdate">加载中...</span>
     <button class="refresh-btn" onclick="loadData()">↻ 刷新</button>
@@ -1656,27 +1657,47 @@ function showErrorBanner(show, text) {
 // ===== GitHub Cloud API =====
 async function cloudRead(forceApi = false) {
   // 如果 forceApi 为 true，跳过 GitHub Pages 缓存读取，直接使用 API 获取最新数据
+  let raw = null;
   if (!forceApi) {
     try {
       const res = await fetch(GH_READ_URL + '?t=' + Date.now(), { cache: 'no-store' });
-      if (res.ok) return await res.json();
+      if (res.ok) raw = await res.json();
     } catch(e) { /* fallback to API */ }
   }
   // 备选：通过 GitHub API 读取（绕过 CDN 缓存，获取最新数据）
-  try {
-    const resp = await fetch(GH_API_URL, {
-      headers: { 'Authorization': `token ${GH_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
-    });
-    if (resp.ok) {
-      const info = await resp.json();
-      const content = decodeURIComponent(escape(atob(info.content.replace(/\n/g, ''))));
-      return JSON.parse(content);
+  if (!raw) {
+    try {
+      const resp = await fetch(GH_API_URL, {
+        headers: { 'Authorization': `token ${GH_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (resp.ok) {
+        const info = await resp.json();
+        const content = decodeURIComponent(escape(atob(info.content.replace(/\n/g, ''))));
+        raw = JSON.parse(content);
+      }
+    } catch(e) { console.warn('GitHub API read failed', e); }
+  }
+  if (!raw) {
+    // 最后 fallback：本地 localStorage 备份
+    const local = loadLocal();
+    if (local) { console.log('Using localStorage backup'); _lastReadEncrypted = false; return local; }
+    throw new Error('读取失败: GitHub 连接失败且本地无备份');
+  }
+  // 密文文件：返回含 loginHash 的信封供登录校验；已登录则直接解密
+  if (raw && raw._enc === true) {
+    _lastReadEncrypted = true;
+    if (_encPwd && _encAvailable()) {
+      try {
+        return await _aesDecrypt(raw.data, _encPwd, _b64ToBytes(raw.salt), _b64ToBytes(raw.iv));
+      } catch(e) {
+        console.warn('解密失败，需重新登录', e);
+        return { _enc: true, config: { loginHash: raw.loginHash }, _envelope: raw };
+      }
     }
-  } catch(e) { console.warn('GitHub API read failed', e); }
-  // 最后 fallback：本地 localStorage 备份
-  const local = loadLocal();
-  if (local) { console.log('Using localStorage backup'); return local; }
-  throw new Error('读取失败: GitHub 连接失败且本地无备份');
+    return { _enc: true, config: { loginHash: raw.loginHash }, _envelope: raw };
+  }
+  _lastReadEncrypted = false;
+  return raw;
 }
 
 async function cloudWrite(data) {
@@ -1696,8 +1717,23 @@ async function cloudWrite(data) {
       sha = info.sha;
     }
   } catch(e) {}
-  // Base64 编码并上传
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  // Base64 编码并上传（已登录且浏览器支持加密时，先加密为密文信封）
+  let content;
+  if (_encPwd && _encAvailable()) {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const ct = await _aesEncrypt(data, _encPwd, salt, iv);
+    const envelope = {
+      _enc: true, v: 1,
+      salt: _bytesToB64(salt),
+      iv: _bytesToB64(iv),
+      loginHash: (data.config && data.config.loginHash) || '',
+      data: _bytesToB64(ct)
+    };
+    content = btoa(unescape(encodeURIComponent(JSON.stringify(envelope, null, 2))));
+  } else {
+    content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  }
   const resp = await fetch(GH_API_URL, {
     method: 'PUT',
     headers: {
@@ -1755,7 +1791,9 @@ function startRealtimeListener() {
       const updateTime = cloudData.lastUpdate ? new Date(cloudData.lastUpdate).toLocaleString('zh-CN') : '未知';
       const updateBy = cloudData.updatedBy || '';
       document.getElementById('lastUpdate').textContent = `更新于 ${updateTime}${updateBy ? ' by ' + updateBy : ''}`;
-      setSyncStatus('ok', '已同步 (远程)');
+      setSyncStatus('ok', '已同步 (远程)' + ((_encPwd && _encAvailable()) ? ' · 🔒加密' : ''));
+      const eb = document.getElementById('encBadge');
+      if (eb) eb.style.display = (_encPwd && _encAvailable()) ? '' : 'none';
     } catch(e) {
       // 静默失败，不打扰用户
     }
@@ -1768,6 +1806,8 @@ async function loadData() {
   let githubOk = false;
   try {
     const data = await cloudRead();
+    // 解密失败（密码不匹配 / 文件损坏）：退回登录界面重新认证
+    if (data && data._enc === true) { showLoginScreen(); return; }
     cloudData = data;
     if (!cloudData.items) cloudData.items = [];
     if (!cloudData.members) cloudData.members = [];
@@ -1789,6 +1829,10 @@ async function loadData() {
     }
     githubOk = true;
     showErrorBanner(false);
+    // 已登录且远程数据仍为明文旧格式：立即重写为密文，保护公开仓库中的敏感数据
+    if (_encPwd && _encAvailable() && !_lastReadEncrypted) {
+      try { await cloudWrite(cloudData); } catch(e) { console.warn('Re-encrypt failed', e); }
+    }
   } catch (e) {
     console.error('Load error:', e);
     // GitHub 失败时，尝试本地备份
@@ -1821,7 +1865,11 @@ async function loadData() {
   const updateTime = cloudData.lastUpdate ? new Date(cloudData.lastUpdate).toLocaleString('zh-CN') : '未知';
   const updateBy = cloudData.updatedBy || '';
   document.getElementById('lastUpdate').textContent = `更新于 ${updateTime}${updateBy ? ' by ' + updateBy : ''}`;
-  if (githubOk) setSyncStatus('ok', '已同步');
+  if (githubOk) {
+    setSyncStatus('ok', '已同步' + ((_encPwd && _encAvailable()) ? ' · 🔒加密' : ''));
+    const eb = document.getElementById('encBadge');
+    if (eb) eb.style.display = (_encPwd && _encAvailable()) ? '' : 'none';
+  }
 }
 
 // 操作成功后直接刷新 UI，不重新读取网络数据（避免缓存旧数据覆盖本地修改）
@@ -3714,6 +3762,35 @@ async function sha256(text) {
   return 'fb_' + h.toString(16);
 }
 
+// ===== AES 加密数据层 =====
+// 复用「访问密码」作为加密密钥：数据落盘到 GitHub 前加密，公开仓库中仅见密文。
+// 密文文件结构：{ _enc:true, v:1, salt, iv, loginHash(明文哈希，安全), data(密文) }
+let _encPwd = '';                  // 当前会话解密密码（登录后存入，关闭标签页清空）
+let _lastReadEncrypted = false;    // 最近一次 cloudRead 是否读取了密文文件
+
+function _encAvailable() { return !!(window.crypto && window.crypto.subtle); }
+function _bytesToB64(bytes) { return btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(bytes)))); }
+function _b64ToBytes(b64) { return Uint8Array.from(atob(b64), c => c.charCodeAt(0)); }
+
+async function _deriveKey(password, salt) {
+  const baseKey = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: salt, iterations: 100000, hash: 'SHA-256' },
+    baseKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+  );
+}
+async function _aesEncrypt(obj, password, salt, iv) {
+  const key = await _deriveKey(password, salt);
+  const pt = new TextEncoder().encode(JSON.stringify(obj));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, pt);
+  return new Uint8Array(ct);
+}
+async function _aesDecrypt(b64ct, password, salt, iv) {
+  const key = await _deriveKey(password, salt);
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, _b64ToBytes(b64ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+
 function showLoginScreen() {
   document.getElementById('loginForm').style.display = 'flex';
   document.getElementById('setPwdForm').style.display = 'none';
@@ -3751,6 +3828,7 @@ async function doSetPassword(e) {
     const data = await cloudRead();
     data.config = data.config || {};
     data.config.loginHash = await sha256(p1);
+    _encPwd = p1; sessionStorage.setItem('enc_pwd', p1); // 启用加密
     await cloudWrite(data);
     _loginHash = data.config.loginHash;
     sessionStorage.setItem('board_auth', '1');
@@ -3767,6 +3845,7 @@ async function doLogin(e) {
   const err = document.getElementById('loginError');
   if (await sha256(pwd) === _loginHash) {
     sessionStorage.setItem('board_auth', '1');
+    _encPwd = pwd; sessionStorage.setItem('enc_pwd', pwd); // 用于加解密数据
     enterApp();
   } else {
     err.textContent = '密码错误，请重试';
@@ -3818,6 +3897,7 @@ async function doChangePwd() {
   try {
     cloudData.config = cloudData.config || {};
     cloudData.config.loginHash = await sha256(n1);
+    _encPwd = n1; sessionStorage.setItem('enc_pwd', n1); // 用新密码重新加密
     await cloudWrite(cloudData);
     closeChangePwd();
     showToast('访问密码已更新');
@@ -3827,6 +3907,8 @@ async function doChangePwd() {
 }
 
 async function boot() {
+  // 恢复会话内已保存的加密密码（刷新不丢），用于读取/写入密文
+  _encPwd = sessionStorage.getItem('enc_pwd') || '';
   // 同一浏览器会话内已登录，直接进（刷新不丢登录态）
   if (sessionStorage.getItem('board_auth') === '1') { enterApp(); return; }
   // 读取配置，判断是否需要首次设置密码
