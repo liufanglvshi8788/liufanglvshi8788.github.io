@@ -1649,10 +1649,38 @@ body {
 
     <div class="grow-modal-field">
       <label>行为分类 <span style="color:var(--urgent)">*</span></label>
-      <select id="growCategory" onchange="updateStandardHint()"><option value="">请先选择被记录人</option></select>
+      <select id="growCategory" onchange="updateStandardHint(); updateGrowExtraFields();"><option value="">请先选择被记录人</option></select>
     </div>
 
     <div class="grow-standard-hint" id="growStandardHint"></div>
+
+    <!-- 调解级别（调解工作·成长亮点时显示，决定计件金额） -->
+    <div class="grow-modal-field" id="growMediateField" style="display:none;">
+      <label>调解级别 <span style="color:var(--text-light);font-weight:400">（决定计件金额）</span></label>
+      <select id="growMediateLevel" onchange="onMediateLevelChange()" class="grow-input">
+        <option value="">请选择级别</option>
+        <option value="口头">口头（计件 30 元）</option>
+        <option value="简单">简单（计件 80 元）</option>
+        <option value="一般">一般（计件 120 元）</option>
+        <option value="重大">重大（计件 200 元）</option>
+        <option value="疑难">疑难（计件 500 元）</option>
+      </select>
+    </div>
+
+    <!-- 失误档次（改进机会时显示，替代分值按钮） -->
+    <div class="grow-modal-field" id="growFaultField" style="display:none;">
+      <label>失误档次 <span style="color:var(--text-light);font-weight:400">（决定扣分值，重大双倍）</span></label>
+      <select id="growFaultGrade" onchange="onFaultGradeChange()" class="grow-input">
+        <option value="">请选择档次</option>
+        <option value="轻微">轻微（扣 1 分）</option>
+        <option value="一般">一般（扣 3 分）</option>
+        <option value="重大">重大（扣 5 分，双倍计 10 分）</option>
+      </select>
+      <label style="margin-top:6px;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--urgent);font-weight:500;">
+        <input type="checkbox" id="growFaultMajor" onchange="onFaultGradeChange()" /> 标记为重大失误（取消当月评优 + 24h 面谈）
+      </label>
+      <div id="growFaultScoreLabel" style="margin-top:4px;font-size:13px;color:var(--urgent);"></div>
+    </div>
 
     <div class="grow-modal-field" id="growBehaviorField">
       <label id="growBehaviorLabel">具体行为与成果 <span style="color:var(--urgent)">*</span></label>
@@ -1669,7 +1697,7 @@ body {
       <textarea id="growSuggestion" rows="2" placeholder="下次如何避免？给出具体行动方案&#10;例：使用终稿检查清单 / 提前1天确认截止日期"></textarea>
     </div>
 
-    <div class="grow-modal-field">
+    <div class="grow-modal-field" id="growScoreRangeField">
       <label>分值评定 <span style="color:var(--urgent)">*</span></label>
       <div class="grow-score-range" id="growScoreRange"></div>
     </div>
@@ -3072,6 +3100,10 @@ const SCORE_STANDARDS = {
   }
 };
 
+// 说明文档条款接入：调解级别计件金额、失误档次分值（录入时自动带出，并计入考核）
+const MEDIATE_LEVELS = { '口头': 30, '简单': 80, '一般': 120, '重大': 200, '疑难': 500 };
+const FAULT_GRADES = { '轻微': 1, '一般': 3, '重大': 5 }; // 重大双倍计 10 分
+
 // 是否管理律师（刘芳律师）：唯一可录入/修改考核记录的角色
 function isManager() {
   return !!currentUser && (currentUser || '').trim() === (cloudData.manager || '').trim();
@@ -3507,7 +3539,10 @@ function setGrowType(type) {
 
   // 分值选项
   renderScoreOptions(type);
+  // 改进机会用失误档次下拉替代分值按钮
+  document.getElementById('growScoreRangeField').style.display = (type === 'improvement') ? 'none' : '';
   updateStandardHint();
+  updateGrowExtraFields();
 }
 
 // ===== 被记录人切换：动态填充行为分类 =====
@@ -3522,6 +3557,7 @@ function onGrowMemberChange() {
   }
   document.getElementById('growStandardHint').innerHTML = '';
   document.getElementById('growPieceAmount').value = '';
+  updateGrowExtraFields();
 }
 
 // ===== 评分标准提示（随被记录人/分类/类型/分值联动） =====
@@ -3566,8 +3602,13 @@ function renderScoreOptions(type) {
   container.innerHTML = opts.map(v => {
     const cls = v === selectedScore ? 'selected' : '';
     const label = v > 0 ? `+${v}` : v;
-    return `<button type="button" class="grow-score-opt ${cls}" onclick="selectScore(${v},this)">${label}</button>`;
+    return `<button type="button" class="grow-score-opt ${cls}" data-score="${v}" onclick="selectScore(${v},this)">${label}</button>`;
   }).join('');
+}
+function syncScoreButtons() {
+  document.querySelectorAll('.grow-score-opt').forEach(b => {
+    b.classList.toggle('selected', Number(b.getAttribute('data-score')) === selectedScore);
+  });
 }
 
 function selectScore(val, el) {
@@ -3575,6 +3616,42 @@ function selectScore(val, el) {
   document.querySelectorAll('.grow-score-opt').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   updateStandardHint();
+}
+
+// ===== 调解级别 / 失误档次 联动（说明文档条款接入） =====
+function updateGrowExtraFields() {
+  const cat = document.getElementById('growCategory').value;
+  const showMediate = currentGrowType === 'growth' && cat === '调解工作';
+  const showFault = currentGrowType === 'improvement';
+  document.getElementById('growMediateField').style.display = showMediate ? '' : 'none';
+  document.getElementById('growFaultField').style.display = showFault ? '' : 'none';
+  if (!showMediate) document.getElementById('growMediateLevel').value = '';
+  if (!showFault) {
+    document.getElementById('growFaultGrade').value = '';
+    document.getElementById('growFaultMajor').checked = false;
+    document.getElementById('growFaultScoreLabel').textContent = '';
+  }
+}
+function onMediateLevelChange() {
+  const lv = document.getElementById('growMediateLevel').value;
+  const pieceEl = document.getElementById('growPieceAmount');
+  if (lv && MEDIATE_LEVELS[lv] !== undefined) {
+    pieceEl.value = MEDIATE_LEVELS[lv];
+    selectedScore = 3; syncScoreButtons(); // 成功调解默认记 +3
+  } else {
+    pieceEl.value = '';
+  }
+  updateStandardHint();
+}
+function onFaultGradeChange() {
+  const grade = document.getElementById('growFaultGrade').value;
+  const major = document.getElementById('growFaultMajor').checked;
+  const lbl = document.getElementById('growFaultScoreLabel');
+  if (!grade) { selectedScore = -1; lbl.textContent = ''; syncScoreButtons(); return; }
+  let penalty = FAULT_GRADES[grade] * (grade === '重大' ? 2 : 1);
+  if (major && grade !== '重大') penalty = FAULT_GRADES[grade] * 2;
+  selectedScore = -penalty;
+  lbl.textContent = `本次扣分：${penalty} 分` + (penalty >= 10 ? '（重大 · 双倍计入）' : '');
 }
 
 // ===== 保存成长记录 =====
@@ -3622,6 +3699,9 @@ async function saveGrowthEntry() {
     date: new Date().toISOString().slice(0, 10),
     category,
     caseRef: caseRef || '不关联',
+    mediateLevel: (document.getElementById('growMediateLevel') || {}).value || '',
+    faultGrade: (document.getElementById('growFaultGrade') || {}).value || '',
+    faultMajor: !!(document.getElementById('growFaultMajor') && document.getElementById('growFaultMajor').checked),
     behavior,
     result: currentGrowType === 'growth' ? (behavior.includes('→') ? '' : '') : '',
     impact: currentGrowType === 'improvement' ? impact : '',
@@ -3715,10 +3795,21 @@ function renderReportBody() {
 
     const pl = me.filter(e => (e.pieceAmount || 0) !== 0);
     let pieceList = '';
+    const faults = me.filter(e => e.type === 'improvement');
+    let faultList = '';
+    if (faults.length) {
+      faultList = '<div style="margin-top:10px;padding:8px 10px;background:rgba(185,28,28,.06);border:1px solid rgba(185,28,28,.18);border-radius:10px;"><div style="font-size:13px;font-weight:600;color:#b91c1c;margin-bottom:4px;">失误/改进记录（' + faults.length + ' 条）</div>' +
+        faults.map(e => {
+          const fg = e.faultGrade ? ` · 档次：${esc(e.faultGrade)}` : '';
+          const fm = e.faultMajor ? ' · <b style="color:#b91c1c;">⚠️重大（取消当月评优 + 24h 面谈）</b>' : '';
+          return `<div style="font-size:12.5px;color:#444;padding:2px 0;">${esc(e.date)} · ${esc(e.category)}${fg} · ${e.score} 分${fm}</div>`;
+        }).join('') + '</div>';
+    }
     if (pl.length) {
       pieceList = '<div class="gp-piece-list">' + pl.map(e => {
         const a = e.pieceAmount;
-        return `<div class="pl-row"><span>${esc(e.date)} · ${esc(e.category)} ${a > 0 ? '+' : ''}${a}元</span><span class="pl-amt ${a > 0 ? 'pos' : 'neg'}">${a > 0 ? '+' : ''}${a}</span></div>`;
+        const ml = e.mediateLevel ? ` · 调解级别：${esc(e.mediateLevel)}` : '';
+        return `<div class="pl-row"><span>${esc(e.date)} · ${esc(e.category)}${ml} ${a > 0 ? '+' : ''}${a}元</span><span class="pl-amt ${a > 0 ? 'pos' : 'neg'}">${a > 0 ? '+' : ''}${a}</span></div>`;
       }).join('') + '</div>';
     }
 
@@ -3737,6 +3828,7 @@ function renderReportBody() {
         <div class="lbl" style="margin-top:6px;">${sb.base} 底薪${sb.allowance ? ' + ' + sb.allowance + ' 驻点补贴' : ''} + 1500×${effCoeff.toFixed(2)} 绩效系数 + 计件 ${pieceTotal >= 0 ? '+' : ''}${pieceTotal}元 ${capNote}</div>
       </div>
       ${pieceList || '<div class="gp-report-sub">本月无计件金额记录</div>'}
+      ${faultList}
     </div>`;
   });
   html += `<div class="gp-report-note">⚠️ 核算说明：① 月度考核分 = 100 + Σ成长亮点 − Σ改进机会，封顶 100、保底 0；② 案源线索奖（签约金额×2%）、案件提成（回款×10%）等需按实际回款在「计件金额」中据实填写；③ 含系数封顶惩罚的月份已在系数中体现；④ 本表为考核数据，最终以双方签字确认为准。</div>`;
@@ -3771,7 +3863,9 @@ function renderWeeklyBody() {
       .map(e => {
         const s = e.score > 0 ? `+${e.score}` : `${e.score}`;
         const b = (e.behavior || '').slice(0, 18);
-        return `<div class="gp-weekly-row"><span class="gp-weekly-name">${esc(e.category)}</span><span class="gp-weekly-meta">${esc(e.date)} ${s}分 ${esc(b)}${e.behavior && e.behavior.length > 18 ? '…' : ''}</span><span class="gp-weekly-score ${e.score >= 0 ? 'pos' : 'neg'}">${s}</span></div>`;
+        const tag = e.mediateLevel ? `·调解:${e.mediateLevel}` : (e.faultGrade ? `·失误:${e.faultGrade}${e.faultMajor ? '(重大)' : ''}` : '');
+        const tagHtml = tag ? ` <span style="color:#b91c1c;font-size:11px;">${esc(tag)}</span>` : '';
+        return `<div class="gp-weekly-row"><span class="gp-weekly-name">${esc(e.category)}</span><span class="gp-weekly-meta">${esc(e.date)} ${s}分 ${esc(b)}${e.behavior && e.behavior.length > 18 ? '…' : ''}${tagHtml}</span><span class="gp-weekly-score ${e.score >= 0 ? 'pos' : 'neg'}">${s}</span></div>`;
       }).join('');
     html += `<div class="gp-report-card"><h3>${esc(m)}</h3>
       <div class="gp-report-grid">
