@@ -1210,6 +1210,28 @@ body {
 .note-title { font-size: 15px; font-weight: 700; color: #4c1d95; margin: 6px 0 4px; line-height: 1.4; }
 .note-linked { display: inline-block; font-size: 12px; color: #a855f7; background: #faf5ff; border: 1px solid #f3e8ff; border-radius: 8px; padding: 2px 8px; margin-bottom: 6px; }
 .note-content { font-size: 13.5px; color: #374151; line-height: 1.65; white-space: pre-wrap; word-break: break-word; margin-top: 6px; }
+
+/* ===== 快速录入模式 ===== */
+.quick-preview { margin: 10px 0; min-height: 40px; }
+.quick-placeholder { color: #94a3b8; font-size: 13px; padding: 12px; background: #f8f7ff; border-radius: 10px; border: 1px dashed #d8d0f0; text-align: center; }
+.quick-no-match { padding: 10px 12px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; color: #92400e; font-size: 13px; }
+.quick-has-match { }
+.quick-result { background: linear-gradient(135deg, #faf5ff, #f0e6ff); border: 1px solid #c4b5fd; border-radius: 12px; overflow: hidden; }
+.quick-result-header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: rgba(168,85,247,0.06); border-bottom: 1px solid #e9dff5; }
+.quick-type-icon { font-size: 18px; }
+.quick-type-label { font-weight: 700; font-size: 14px; color: #4c1d95; }
+.quick-cat { font-size: 12px; color: #7c3aed; background: #ede9fe; padding: 2px 8px; border-radius: 8px; }
+.quick-result-body { padding: 10px 14px; }
+.quick-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; font-size: 13px; }
+.quick-lbl { color: #6b7280; min-width: 56px; font-weight:500; }
+.quick-val { font-weight: 700; font-size: 15px; }
+.quick-val.pos { color: #059669; }
+.quick-val.neg { color: #dc2626; }
+.quick-hint { color: #6b7280; font-size: 12.5px; }
+.quick-tag { display: inline-block; font-size: 11.5px; color: #4c1d95; background: #ede9fe; border: 1px solid #ddd6fe; border-radius: 6px; padding: 2px 8px; margin-right: 6px; margin-top: 4px; }
+.quick-tag.tag-major { color: #991b1b; background: #fee2e2; border-color: #fecaca; font-weight: 600; }
+.quick-tag.tag-danger { color: #991b1b; background: #fef2f2; border-color: #fecaca; font-weight: 700; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
 </style>
 </head>
 <body>
@@ -1638,10 +1660,35 @@ body {
   </div>
 </div>
 
-<!-- Growth Pool Modal (进步池记录) -->
+<!-- Growth Pool Modal (律师考核记录) -->
 <div class="modal-overlay" id="reviewModal">
-  <div class="modal" style="max-width:600px; max-height:90vh; overflow-y:auto;">
-    <h2 id="growModalTitle">🌱 记录成长</h2>
+  <div class="modal" style="max-width:640px; max-height:92vh; overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <h2 id="growModalTitle" style="margin:0;">🌟 记录成长亮点</h2>
+      <button id="modeToggleBtn" class="gp-btn gp-btn-ghost" onclick="switchEntryMode(false)" style="font-size:12px;padding:4px10px;">📋 切换到详细录入</button>
+    </div>
+
+    <!-- 快速录入面板（默认显示） -->
+    <div id="quickEntryPanel">
+      <div class="grow-modal-field">
+        <label>被记录人（被考核人） <span style="color:var(--urgent)">*</span></label>
+        <select id="quickTargetMember" class="grow-input"><option value="">请选择成员</option></select>
+      </div>
+      <div class="grow-modal-field">
+        <label>事件描述 <span style="color:var(--urgent)">*</span></label>
+        <textarea id="quickEventText" rows="3" class="grow-input"
+          placeholder="输入事件，系统自动识别类型、分值和计件金额&#10;例：今日调解案件2人以上，调解成功&#10;例：合同审查法律依据援引错误&#10;例：完成立案，已提交法院"
+          oninput="onQuickInput()"></textarea>
+      </div>
+      <div id="quickPreview" class="quick-preview"><div class="quick-placeholder">✍️ 输入事件描述后自动识别考核项…</div></div>
+      <div class="grow-modal-field">
+        <label>关联案件/任务 <span style="color:var(--text-light);font-weight:400">（选填）</span></label>
+        <input type="text" id="quickCaseRef" class="grow-input" placeholder="案号或任务名称，不关联则留空" />
+      </div>
+    </div>
+
+    <!-- 详细录入面板（默认隐藏） -->
+    <div id="detailEntryPanel" style="display:none;">
 
     <!-- 类型切换 -->
     <div class="grow-type-toggle">
@@ -1730,6 +1777,8 @@ body {
       <label>计件金额（元） <span style="color:var(--text-light);font-weight:400">（按标准自动带出，可修改；负数为扣罚）</span></label>
       <input type="number" id="growPieceAmount" class="grow-input" placeholder="0" step="1" />
     </div>
+
+    </div><!-- /detailEntryPanel -->
 
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeReview()">取消</button>
@@ -3168,6 +3217,75 @@ const SCORE_STANDARDS = {
 const MEDIATE_LEVELS = { '口头': 30, '简单': 80, '一般': 120, '重大': 200, '疑难': 500 };
 const FAULT_GRADES = { '轻微': 1, '一般': 3, '重大': 5 }; // 重大双倍计 10 分
 
+// ===== 事件自动识别规则引擎 =====
+// 基于《律师团队内部绩效管理与考核办法（最终版）》全文提取
+const EVENT_RULES = [
+  // ── 成长亮点 · 调解成功（按级别自动带出计件）──
+  { kw:['调解成功','成功调解','调解达成','签署调解协议'], type:'growth', cat:'调解工作', sc:3, pc:0, ml:null, fg:null, h:'调解成功→+3分，请选级别定计件' },
+  { kw:['口头化解','当场履行','口头案件','现场口头'], type:'growth', cat:'调解工作', sc:3, pc:30, ml:'口头', fg:null, h:'口头调解成功→+3分+30元' },
+  { kw:['简单纠纷','小额矛盾','≤3人','≤5万','不超过3人','不超过5万'], type:'growth', cat:'调解工作', sc:3, pc:80, ml:'简单', fg:null, h:'简单纠纷调解成功→+3分+80元' },
+  { kw:['一般纠纷','常规纠纷','4-10人','5-50万'], type:'growth', cat:'调解工作', sc:3, pc:120, ml:'一般', fg:null, h:'一般纠纷调解成功→+3分+120元' },
+  { kw:['重大纠纷','案情复杂','专家参与','11-19人','50-200万'], type:'growth', cat:'调解工作', sc:3, pc:200, ml:'重大', fg:null, h:'重大纠纷调解成功→+3分+200元' },
+  { kw:['疑难纠纷','群体性事件','越级上访','民转刑','≥20人','≥200万'], type:'growth', cat:'调解工作', sc:3, pc:500, ml:'疑难', fg:null, h:'疑难纠纷调解成功→+3分+500元' },
+  // ── 成长亮点 · 案件阶段成果 ──
+  { kw:['立案','已立案','完成立案','提交立案'], type:'growth', cat:'驻点/案件推进', sc:3, pc:0, ml:null, fg:null, h:'完成立案阶段→+3分' },
+  { kw:['开庭','已开庭','庭审完成','出庭完成','庭审结束'], type:'growth', cat:'出庭辅助', sc:3, pc:0, ml:null, fg:null, h:'完成开庭阶段→+3分' },
+  { kw:['签约','已签约','合同签订','签约完成','签约成功'], type:'growth', cat:'案源开拓', sc:3, pc:0, ml:null, fg:null, h:'签约成功→+3分' },
+  { kw:['回款','已回款','款项到账','收到律师费','费用到账'], type:'growth', cat:'案源开拓', sc:3, pc:0, ml:null, fg:null, h:'回款到账→+3分' },
+  // ── 成长亮点 · 案源线索 ──
+  { kw:['案源线索','有效案源','提供线索','挖掘案源','客户推荐','转介绍'], type:'growth', cat:'案源开拓', sc:3, pc:0, ml:null, fg:null, h:'提供有效案源线索→+3分' },
+  // ── 成长亮点 · 普法/学习 ──
+  { kw:['普法文章','公众号文章','文章发表','发布文章','撰写文章'], type:'growth', cat:'学习复盘', sc:2, pc:0, ml:null, fg:null, h:'普法/公众号文章被采用→+2分' },
+  { kw:['视频号','拍摄剪辑','视频制作','普法视频','短视频'], type:'growth', cat:'学习复盘', sc:2, pc:0, ml:null, fg:null, h:'视频号文案/拍摄→+2分' },
+  { kw:['案例复盘','类案检索','学习笔记','复盘报告','分享会','主题分享'], type:'growth', cat:'学习复盘', sc:2, pc:0, ml:null, fg:null, h:'学习产出/分享→+2分' },
+  // ── 改进机会 · 诉讼类错误 ──
+  { kw:['错别字','页码错误','装订遗漏','格式不符','文书格式错误'], type:'improvement', cat:'文书质量', sc:-1, pc:0, ml:null, fg:'轻微', h:'诉讼轻微(格式/错字)→-1分' },
+  { kw:['反馈延迟','延迟反馈','未及时反馈','回复晚了'], type:'improvement', cat:'案件推进', sc:-1, pc:0, ml:null, fg:'轻微', h:'反馈延迟≤4h→-1分' },
+  { kw:['非关键证据未提交','遗漏非关键证据','证据补交'], type:'improvement', cat:'案件推进', sc:-3, pc:0, ml:null, fg:'一般', h:'非关键证据未提交→-3分' },
+  { kw:['庭审意见矛盾','庭审发言矛盾','与方案矛盾'], type:'improvement', cat:'出庭辅助', sc:-3, pc:0, ml:null, fg:'一般', h:'庭审意见与方案矛盾→-3分' },
+  { kw:['未提醒上诉期','未提醒再审期','未提醒期限','忘记提醒期限'], type:'improvement', cat:'案件推进', sc:-3, pc:0, ml:null, fg:'一般', h:'未及时提醒期限(未错过)→-3分' },
+  { kw:['证据目录不对应','证据材料不匹配','目录与证据不符'], type:'improvement', cat:'文书质量', sc:-3, pc:0, ml:null, fg:'一般', h:'证据目录不对应→-3分' },
+  { kw:['关键节点未告知','未告知当事人','未主动告知','忘了告知'], type:'improvement', cat:'案件推进', sc:-3, pc:0, ml:null, fg:'一般', h:'关键节点未告知当事人→-3分' },
+  { kw:['法律依据引用不当','引用失效法律','法条理解错误','引用条款不匹配','引用错误法律'], type:'improvement', cat:'文书质量', sc:-3, pc:0, ml:null, fg:'一般', h:'法律依据引用不当(未造成不利)→-3分' },
+  { kw:['错过上诉期','错过时效','除斥期间过期','申请执行期限过'], type:'improvement', cat:'案件推进', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 错过上诉期/时效→-5分(双倍-10)' },
+  { kw:['关键证据缺失','关键证据未收集','证据不足致败诉','败诉因证据'], type:'improvement', cat:'案件推进', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 关键证据缺失致败诉→-5分(双倍-10)' },
+  { kw:['无故未出庭','迟到超过','缺席庭审','未到庭','严重迟到'], type:'improvement', cat:'出庭辅助', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 无故未出庭/严重迟到→-5分(双倍-10)' },
+  { kw:['送达错误','送达对象错误','送达地址错误','邮寄错误'], type:'improvement', cat:'文书质量', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 文书送达错误→-5分(双倍-10)' },
+  { kw:['泄露策略','泄露证据','泄密','不当接触','私下会面对方'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 泄密/不当接触→-5分(双倍-10)' },
+  { kw:['关键法律依据引用错误','核心法条理解错误','应当适用的法律未适用','引用错误致败诉'], type:'improvement', cat:'文书质量', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 关键法律依据引用错误致败诉→-5分(双倍-10)' },
+  // ── 改进机会 · 非诉/调解类错误 ──
+  { kw:['笔录错别字','调解笔录错误','日期错误','页码遗漏','笔录有误'], type:'improvement', cat:'调解工作', sc:-1, pc:0, ml:null, fg:'轻微', h:'调解笔录格式错误→-1分' },
+  { kw:['回访延迟','延迟回访','补登回访','回访晚了'], type:'improvement', cat:'调解工作', sc:-1, pc:0, ml:null, fg:'轻微', h:'回访记录延迟→-1分' },
+  { kw:['信息登记不全','信息不全','电话缺','地址缺','当事人信息不全'], type:'improvement', cat:'调解工作', sc:-1, pc:0, ml:null, fg:'轻微', h:'当事人基本信息不全→-1分' },
+  { kw:['合同审查遗漏格式','标点符号错误','格式条款遗漏','非关键条款遗漏'], type:'improvement', cat:'非诉初审', sc:-1, pc:0, ml:null, fg:'轻微', h:'合同审查格式遗漏→-1分' },
+  { kw:['协议条款失衡','协议明显失衡','条款明显失衡','权利义务失衡'], type:'improvement', cat:'调解工作', sc:-3, pc:0, ml:null, fg:'一般', h:'调解协议条款失衡(未履行)→-3分' },
+  { kw:['应转介诉讼拖延','转介超时','应转诉讼未转','拖延转介'], type:'improvement', cat:'调解工作', sc:-3, pc:0, ml:null, fg:'一般', h:'应转介诉讼拖延>1天→-3分' },
+  { kw:['程序瑕疵','应回避未回避','未告知权利义务','程序违规'], type:'improvement', cat:'调解工作', sc:-3, pc:0, ml:null, fg:'一般', h:'调解程序瑕疵→-3分' },
+  { kw:['履行期限不明','期限约定不明','执行困难风险'], type:'improvement', cat:'调解工作', sc:-3, pc:0, ml:null, fg:'一般', h:'履行期限约定不明→-3分' },
+  { kw:['合同遗漏一般风险','遗漏B级风险','一般违约条款遗漏','主体资质一般瑕疵'], type:'improvement', cat:'非诉初审', sc:-3, pc:0, ml:null, fg:'一般', h:'合同遗漏一般风险点→-3分' },
+  { kw:['合同审查法律依据援引错误','非诉引用错误','引用失效法条(非诉)','适用错误(非诉)'], type:'improvement', cat:'非诉初审', sc:-3, pc:0, ml:null, fg:'一般', h:'非诉/调解法律依据引用不当→-3分' },
+  { kw:['协议条款违法','违反强制性规定','协议无效','部分无效'], type:'improvement', cat:'调解工作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 调解协议违法致无效→-5分(双倍-10)' },
+  { kw:['遗漏当事人','遗漏共有权人','遗漏继承人','遗漏连带责任人','必须参加的当事人遗漏'], type:'improvement', cat:'调解工作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 遗漏必须参加的当事人→-5分(双倍-10)' },
+  { kw:['遗失原件','遗失借条','遗失合同','遗失权属证书','原件丢失'], type:'improvement', cat:'调解工作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 遗失关键原始材料→-5分(双倍-10)' },
+  { kw:['合同遗漏致命风险','A级错误','关键主体资质瑕疵','无资质','越权处分','合同无效','被撤销'], type:'improvement', cat:'非诉初审', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 合同遗漏致命风险→-5分(双倍-10)' },
+  { kw:['关键法律依据引用错误(非诉)','核心法条错误(非诉)','引用错误致协议无效','引用错误致撤销'], type:'improvement', cat:'非诉初审', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 关键法律依据引用错误致协议无效→-5分(双倍-10)' },
+  // ── 改进机会 · 通用执业规范 ──
+  { kw:['着装不规范','着装不符合规范','未穿正装','形象不规范'], type:'improvement', cat:'驻点/案件推进', sc:-1, pc:0, ml:null, fg:'轻微', h:'着装不规范→-1分' },
+  { kw:['文件杂乱','办公杂乱','材料未入柜','桌面凌乱'], type:'improvement', cat:'驻点/案件推进', sc:-1, pc:0, ml:null, fg:'轻微', h:'办公区域文件杂乱→-1分' },
+  { kw:['未参加例会','缺席例会','无故缺席会议','没开例会'], type:'improvement', cat:'团队协作', sc:-1, pc:0, ml:null, fg:'轻微', h:'未按时参加团队例会→-1分' },
+  { kw:['台账延迟','台账晚交','录入延迟','登记延迟'], type:'improvement', cat:'团队协作', sc:-1, pc:0, ml:null, fg:'轻微', h:'台账延迟提交≤1天→-1分' },
+  { kw:['结案超30天未归档','归档延迟','逾期归档','未按时归档'], type:'improvement', cat:'文书质量', sc:-3, pc:0, ml:null, fg:'一般', h:'结案超30天未归档→-3分' },
+  { kw:['收费未走流程','未开票','未进公账','收费流程违规'], type:'improvement', cat:'团队协作', sc:-3, pc:0, ml:null, fg:'一般', h:'收费未按流程→-3分' },
+  { kw:['委托后未建档','3天未建档','未建立档案','档案建立延迟'], type:'improvement', cat:'文书质量', sc:-3, pc:0, ml:null, fg:'一般', h:'委托后3天未建档→-3分' },
+  { kw:['文件未审核发出','擅自发出','未经审核发出','发出前未审'], type:'improvement', cat:'文书质量', sc:-3, pc:0, ml:null, fg:'一般', h:'对外文件未经审核发出→-3分' },
+  { kw:['私自收费','私自接案','私自接受委托','未通过团队接案'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 私自收费/接案→-5分(双倍-10)+当月计件归零' },
+  { kw:['利益冲突未回避','利益冲突','应当回避未回避'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 利益冲突未回避→-5分(双倍-10)' },
+  { kw:['胜诉承诺','结果承诺','承诺胜诉','承诺结果','打包票'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 向当事人作出胜诉/结果承诺→-5分(双倍-10)' },
+  { kw:['社交媒体泄密','公开披露案件细节','朋友圈发案件','微博发案件','可识别当事人'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 社交媒体披露案件细节→-5分(双倍-10)' },
+  { kw:['客户投诉','正式投诉','书面投诉','客户举报'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 客户正式书面投诉→-5分(双倍-10)' },
+  { kw:['政府负面反馈','主管部门批评','点名批评','行政处罚'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'⚠️ 政府部门负面反馈→-5分(双倍-10)' },
+];
+
 // 是否管理律师（刘芳律师）：唯一可录入/修改考核记录的角色
 function isManager() {
   return !!currentUser && (currentUser || '').trim() === (cloudData.manager || '').trim();
@@ -3554,16 +3672,106 @@ function buildKnowledgeBase(entries) {
   })).sort((a, b) => b.count - a.count);
 }
 
+// ===== 事件自动识别引擎 =====
+let _quickMode = true; // 默认快速录入模式
+
+function parseEvent(text) {
+  if (!text || !text.trim()) return null;
+  const t = text.trim();
+  // 遍历规则，返回首个匹配（优先匹配更具体的规则靠前）
+  for (const rule of EVENT_RULES) {
+    for (const kw of rule.kw) {
+      if (t.includes(kw)) {
+        // 重大失误双倍计分
+        let finalScore = rule.sc;
+        let isMajor = false;
+        if (rule.fg === '重大') { finalScore = rule.sc * 2; isMajor = true; }
+        return {
+          type: rule.type,
+          category: rule.cat,
+          score: finalScore,
+          pieceAmount: rule.pc,
+          mediateLevel: rule.ml || '',
+          faultGrade: rule.fg || '',
+          isMajor,
+          behavior: t, // 原文作为行为描述
+          hint: rule.h,
+          matchedKw: kw,
+        };
+      }
+    }
+  }
+  return null; // 无匹配规则
+}
+
+function renderQuickPreview(result) {
+  const el = document.getElementById('quickPreview');
+  if (!result) {
+    el.innerHTML = '<div class="quick-no-match">⚠️ 未识别到匹配的考核事件，请使用「详细录入」或调整描述</div>';
+    el.className = 'quick-preview';
+    return;
+  }
+  const typeIcon = result.type === 'growth' ? '🌟' : '🔧';
+  const typeLabel = result.type === 'growth' ? '成长亮点' : '改进机会';
+  const scoreCls = result.score > 0 ? 'pos' : 'neg';
+  const scoreText = result.score > 0 ? `+${result.score}` : `${result.score}`;
+  const pieceText = result.pieceAmount > 0 ? ` · 计件 +${result.pieceAmount}元` : '';
+  const levelTag = result.mediateLevel ? `<span class="quick-tag">级别：${result.mediateLevel}</span>` : '';
+  const gradeTag = result.faultGrade ? `<span class="quick-tag ${result.faultGrade==='重大'?'tag-major':''}">档次：${result.faultGrade}${result.isMajor?'(双倍)':''}</span>` : '';
+  const majorTag = result.isMajor ? '<span class="quick-tag tag-danger">⚠️ 取消当月评优+24h面谈</span>' : '';
+
+  el.innerHTML = `
+    <div class="quick-result">
+      <div class="quick-result-header">
+        <span class="quick-type-icon">${typeIcon}</span>
+        <span class="quick-type-label">${typeLabel}</span>
+        <span class="quick-cat">${esc(result.category)}</span>
+      </div>
+      <div class="quick-result-body">
+        <div class="quick-row"><span class="quick-lbl">分值</span><span class="quick-val ${scoreCls}">${scoreText}分</span>${pieceText}</div>
+        ${levelTag}${gradeTag}${majorTag}
+        <div class="quick-row"><span class="quick-lbl">识别依据</span><span class="quick-hint">${esc(result.hint)}</span></div>
+      </div>
+    </div>`;
+  el.className = 'quick-preview quick-has-match';
+}
+
+function onQuickInput() {
+  const text = document.getElementById('quickEventText').value;
+  const result = parseEvent(text);
+  renderQuickPreview(result);
+  // 存储解析结果供保存时使用
+  window._lastParsedResult = result;
+}
+
+function switchEntryMode(quick) {
+  _quickMode = quick;
+  document.getElementById('quickEntryPanel').style.display = quick ? '' : 'none';
+  document.getElementById('detailEntryPanel').style.display = quick ? 'none' : '';
+  document.getElementById('modeToggleBtn').textContent = quick ? '📋 切换到详细录入' : '✨ 切换到快速录入';
+}
+
 // ===== 打开记录弹窗 =====
 function openReview(forceType) {
   if (!isManager()) { showToast('仅刘芳律师可录入考核记录'); return; }
   editingReviewId = null;
   currentGrowType = forceType || 'growth';
   selectedScore = currentGrowType === 'growth' ? 3 : -1;
+  _quickMode = true; // 默认快速录入模式
 
   const names = Object.keys(BEHAVIOR_CATS);
-  document.getElementById('growTargetMember').innerHTML = '<option value="">请选择成员</option>' +
-    names.map(n => `<option value="${n}">${n}</option>`).join('');
+  const memberOpts = '<option value="">请选择成员</option>' + names.map(n => `<option value="${n}">${n}</option>`).join('');
+
+  // 快速录入面板初始化
+  document.getElementById('quickTargetMember').innerHTML = memberOpts;
+  document.getElementById('quickEventText').value = '';
+  document.getElementById('quickCaseRef').value = '';
+  document.getElementById('quickPreview').innerHTML = '<div class="quick-placeholder">✍️ 输入事件描述后自动识别考核项…</div>';
+  document.getElementById('quickPreview').className = 'quick-preview';
+  window._lastParsedResult = null;
+
+  // 详细录入面板初始化（保持原有逻辑）
+  document.getElementById('growTargetMember').innerHTML = memberOpts;
   document.getElementById('growCategory').innerHTML = '<option value="">请先选择被记录人</option>';
   document.getElementById('growCaseRef').value = '';
   document.getElementById('growPieceAmount').value = '';
@@ -3720,6 +3928,36 @@ function onFaultGradeChange() {
 
 // ===== 保存成长记录 =====
 async function saveGrowthEntry() {
+  // ── 快速录入模式：从事件描述自动填充 ──
+  if (_quickMode) {
+    const targetMember = document.getElementById('quickTargetMember').value;
+    const eventText = document.getElementById('quickEventText').value.trim();
+    const caseRef = document.getElementById('quickCaseRef').value.trim();
+    if (!targetMember) { showToast('请选择被记录人'); return; }
+    if (!eventText) { showToast('请输入事件描述'); return; }
+    const parsed = window._lastParsedResult;
+    if (!parsed) { showToast('未识别到匹配的考核事件，请调整描述或切换到详细录入'); return; }
+
+    // 用解析结果构建 entry
+    currentGrowType = parsed.type;
+    selectedScore = parsed.score;
+    // 填充到详细字段以便保存逻辑复用
+    document.getElementById('growTargetMember').value = targetMember;
+    document.getElementById('growCategory').value = parsed.category;
+    document.getElementById('growBehavior').value = eventText;
+    document.getElementById('growCaseRef').value = caseRef || '不关联';
+    document.getElementById('growPieceAmount').value = String(parsed.pieceAmount);
+    if (parsed.mediateLevel) document.getElementById('growMediateLevel').value = parsed.mediateLevel;
+    if (parsed.faultGrade) document.getElementById('growFaultGrade').value = parsed.faultGrade;
+    if (parsed.isMajor && document.getElementById('growFaultMajor')) document.getElementById('growFaultMajor').checked = true;
+    // 改进机会的必填字段自动填充
+    if (parsed.type === 'improvement') {
+      document.getElementById('growImpact').value = parsed.hint;
+      document.getElementById('growSuggestion').value = '下次注意避免：' + parsed.matchedKw;
+    }
+  }
+
+  // ── 详细模式（或快速模式已填充后走通用保存）──
   const targetMember = document.getElementById('growTargetMember').value;
   const category = document.getElementById('growCategory').value;
   const behavior = document.getElementById('growBehavior').value.trim();
