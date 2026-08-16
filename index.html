@@ -1676,7 +1676,7 @@ body {
   <div class="modal" style="max-width:640px; max-height:92vh; overflow-y:auto;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
       <h2 id="growModalTitle" style="margin:0;">🌟 记录成长亮点</h2>
-      <button id="modeToggleBtn" class="gp-btn gp-btn-ghost" onclick="switchEntryMode(false)" style="font-size:12px;padding:4px10px;">📋 切换到详细录入</button>
+      <button id="modeToggleBtn" class="gp-btn gp-btn-ghost" onclick="switchEntryMode(false)" style="font-size:12px;padding:4px 10px;cursor:pointer;">📋 切换到详细录入</button>
     </div>
 
     <!-- 快速录入面板（默认显示） -->
@@ -3807,6 +3807,9 @@ function openReview(forceType) {
   document.getElementById('growImpact').value = '';
   document.getElementById('growSuggestion').value = '';
   document.getElementById('growRepeatAlert').className = 'grow-repeat-alert';
+
+  // 每次打开都重置为快速录入模式（确保面板可见性正确，避免切换按钮"点不动"）
+  switchEntryMode(true);
 
   document.getElementById('reviewModal').classList.add('show');
 }
