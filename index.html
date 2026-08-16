@@ -1232,6 +1232,17 @@ body {
 .quick-tag.tag-major { color: #991b1b; background: #fee2e2; border-color: #fecaca; font-weight: 600; }
 .quick-tag.tag-danger { color: #991b1b; background: #fef2f2; border-color: #fecaca; font-weight: 700; animation: pulse 1.5s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+/* ===== 触发条款参考面板 ===== */
+.trigger-clause-box { margin-top: 8px; }
+.trigger-clause-list { display: flex; flex-direction: column; gap: 10px; }
+.trigger-clause-group { background: #fafbfc; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; }
+.trigger-clause-cat { padding: 8px 12px; font-size: 13.5px; }
+.trigger-clause-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 12px 7px 12px; border-top: 1px solid #f0f0f0; font-size: 12.5px; line-height: 1.5; flex-wrap: wrap; }
+.trigger-grade { font-weight: 700; font-size: 11px; padding: 1px 7px; border-radius: 6px; white-space: nowrap; min-width: 36px; text-align: center; }
+.trigger-score { font-weight: 700; color: #dc2626; white-space: nowrap; min-width: 72px; font-size: 12px; }
+.trigger-examples { color: #4b5563; flex: 1; min-width: 200px; }
+.trigger-special { width: 100%; color: #dc2626; font-size: 11.5px; font-weight: 600; margin-top: 3px; padding: 3px 6px; background: #fef2f2; border-radius: 4px; }
 </style>
 </head>
 <body>
@@ -1751,6 +1762,17 @@ body {
         <input type="checkbox" id="growFaultMajor" onchange="onFaultGradeChange()" /> 标记为重大失误（取消当月评优 + 24h 面谈）
       </label>
       <div id="growFaultScoreLabel" style="margin-top:4px;font-size:13px;color:var(--urgent);"></div>
+    </div>
+
+    <!-- 改进机会 · 考核制度触发条款参考（仅改进机会时显示） -->
+    <div class="grow-modal-field" id="triggerClausePanel" style="display:none;">
+      <label style="display:flex;align-items:center;gap:6px;">
+        📋 <strong>考核制度触发条款</strong>
+        <span style="font-size:12px;color:var(--text-light);font-weight:400;">（点击展开查看对应分值标准）</span>
+      </label>
+      <div id="triggerClauseContent" class="trigger-clause-box">
+        <!-- 由 JS 动态渲染 -->
+      </div>
     </div>
 
     <div class="grow-modal-field" id="growBehaviorField">
@@ -3361,11 +3383,6 @@ function renderReview() {
       <button class="gp-btn gp-btn-ghost" onclick="openSpec()">📋 考核办法说明</button>
     </div>`;
   }
-  html += `<div class="gp-actions-row">
-    <button class="gp-btn gp-btn-primary" onclick="openReview()">🌟 记录成长亮点</button>
-    <button class="gp-btn gp-btn-secondary" onclick="openReview('improve')">🔧 记录改进机会</button>
-  </div>`;
-
   // ---- 顶部概览区 ----
   html += renderGrowthOverview(analytics, todayScore, members);
 
@@ -3720,6 +3737,7 @@ function renderQuickPreview(result) {
   const levelTag = result.mediateLevel ? `<span class="quick-tag">级别：${result.mediateLevel}</span>` : '';
   const gradeTag = result.faultGrade ? `<span class="quick-tag ${result.faultGrade==='重大'?'tag-major':''}">档次：${result.faultGrade}${result.isMajor?'(双倍)':''}</span>` : '';
   const majorTag = result.isMajor ? '<span class="quick-tag tag-danger">⚠️ 取消当月评优+24h面谈</span>' : '';
+  const clauseHint = result.type === 'improvement' ? '<div style="margin-top:6px;font-size:12px;color:#8b5cf6;cursor:pointer;" onclick="switchEntryMode(false);setTimeout(()=>setGrowType(\'improvement\'),100);">📋 点此切换到「详细录入」查看完整触发条款 →</div>' : '';
 
   el.innerHTML = `
     <div class="quick-result">
@@ -3732,6 +3750,7 @@ function renderQuickPreview(result) {
         <div class="quick-row"><span class="quick-lbl">分值</span><span class="quick-val ${scoreCls}">${scoreText}分</span>${pieceText}</div>
         ${levelTag}${gradeTag}${majorTag}
         <div class="quick-row"><span class="quick-lbl">识别依据</span><span class="quick-hint">${esc(result.hint)}</span></div>
+        ${clauseHint}
       </div>
     </div>`;
   el.className = 'quick-preview quick-has-match';
@@ -3903,6 +3922,9 @@ function updateGrowExtraFields() {
   const showFault = currentGrowType === 'improvement';
   document.getElementById('growMediateField').style.display = showMediate ? '' : 'none';
   document.getElementById('growFaultField').style.display = showFault ? '' : 'none';
+  // 触发条款面板：改进机会时始终显示
+  document.getElementById('triggerClausePanel').style.display = showFault ? '' : 'none';
+  if (showFault) renderTriggerClauses();
   if (!showMediate) document.getElementById('growMediateLevel').value = '';
   if (!showFault) {
     document.getElementById('growFaultGrade').value = '';
@@ -3910,6 +3932,57 @@ function updateGrowExtraFields() {
     document.getElementById('growFaultScoreLabel').textContent = '';
   }
 }
+// ===== 渲染考核制度触发条款参考面板 =====
+// 基于《律师团队内部绩效管理与考核办法（最终版）》改进机会三大类×三档
+function renderTriggerClauses() {
+  const container = document.getElementById('triggerClauseContent');
+  if (!container) return;
+  const clauses = [
+    {
+      category: '⚖️ 诉讼类失误',
+      color: '#ef4444',
+      items: [
+        { grade: '轻微', score: '-1', examples: '文书格式错误、错别字、页码/日期标注错误、签名位置不当' },
+        { grade: '一般', score: '-3', examples: '证据目录混乱、证据复印件不清、遗漏关键证据、法律引用版本过时' },
+        { grade: '重大', score: '-5 (双倍-10)', examples: '错过上诉期/举证期限、送达地址错误导致程序严重延误、民转刑风险未识别、管辖异议漏提', special: '取消当月评优资格 + 24h 内面谈' },
+      ]
+    },
+    {
+      category: '📋 非诉/调解类失误',
+      color: '#f59e0b',
+      items: [
+        { grade: '轻微', score: '-1', examples: '笔录格式不规范、调解笔录要素缺失、文书排版问题' },
+        { grade: '一般', score: '-3', examples: '合同审查法律依据援引错误、协议条款失衡（显失公平）、尽职调查遗漏重要事项' },
+        { grade: '重大', score: '-5 (双倍-10)', examples: '条款违法/无效未识别、协议整体无效风险、重大法律适用错误导致客户损失', special: '取消当月评优资格 + 24h 内面谈' },
+      ]
+    },
+    {
+      category: '📌 通用规范类失误',
+      color: '#8b5cf6',
+      items: [
+        { grade: '轻微', score: '-1', examples: '着装不符合律师出庭规范、迟到/早退、办公区域杂乱' },
+        { grade: '一般', score: '-3', examples: '案件材料未按规定归档、无故不参加例会/培训、工作交接不清' },
+        { grade: '重大', score: '-5 (双倍-10)', examples: '私自接案/收费、泄露客户隐私/商业秘密、对外发表不当言论损害律所声誉', special: '取消当月评优资格 + 24h 内面谈' },
+      ]
+    }
+  ];
+  container.innerHTML = `<div class="trigger-clause-list">${clauses.map(g => `
+    <div class="trigger-clause-group">
+      <div class="trigger-clause-cat" style="border-left:3px solid ${g.color};background:${g.color}10;">
+        <strong>${g.category}</strong>
+      </div>
+      ${g.items.map(it => `
+        <div class="trigger-clause-item">
+          <span class="trigger-grade" style="background:${g.color}15;color:${g.color};">${it.grade}</span>
+          <span class="trigger-score">${it.score}分</span>
+          <span class="trigger-examples">${it.examples}</span>
+          ${it.special ? `<span class="trigger-special">⚠️ ${it.special}</span>` : ''}
+        </div>
+      `).join('')}
+    </div>
+  `).join('')}</div>`;
+}
+
 function onMediateLevelChange() {
   const lv = document.getElementById('growMediateLevel').value;
   const pieceEl = document.getElementById('growPieceAmount');
