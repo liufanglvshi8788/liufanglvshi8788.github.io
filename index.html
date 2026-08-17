@@ -700,6 +700,14 @@ body {
 .gp-btn-secondary:hover { background: var(--card-bg-soft); }
 .gp-btn-ghost { background: rgba(168,85,247,0.08); color: var(--primary-dark); border: 1.5px solid rgba(168,85,247,0.28); }
 .gp-btn-ghost:hover { background: rgba(168,85,247,0.16); }
+.mode-toggle-big {
+  font-size: 13.5px !important; padding: 8px 16px !important;
+  min-height: 40px; border-radius: var(--radius-sm);
+  white-space: nowrap; touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(168,85,247,0.2);
+  transition: all 0.15s ease;
+}
+.mode-toggle-big:active { transform: scale(0.97); background: rgba(168,85,247,0.22) !important; }
 
 /* ---- 复盘弹窗(新版结构化表单) ---- */
 .grow-modal-field { margin-bottom: 14px; }
@@ -1233,6 +1241,17 @@ body {
 .quick-tag.tag-danger { color: #991b1b; background: #fef2f2; border-color: #fecaca; font-weight: 700; animation: pulse 1.5s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
 
+/* 快捷标签按钮（一键填入常用事件） */
+.quick-tag-btn {
+  display: inline-block; font-size: 12px; padding: 5px 10px;
+  border: 1.5px solid #c4b5fd; border-radius: 20px;
+  background: #faf5ff; color: #6d28d9; cursor: pointer;
+  white-space: nowrap; touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(109,40,217,0.15);
+  transition: all 0.12s ease; user-select: none;
+}
+.quick-tag-btn:active { transform: scale(0.95); background: #ede9fe; }
+
 /* ===== 触发条款参考面板 ===== */
 .trigger-clause-box { margin-top: 8px; }
 .trigger-clause-list { display: flex; flex-direction: column; gap: 10px; }
@@ -1683,9 +1702,9 @@ body {
 <!-- Growth Pool Modal (律师考核记录) -->
 <div class="modal-overlay" id="reviewModal">
   <div class="modal" style="max-width:640px; max-height:92vh; overflow-y:auto;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-      <h2 id="growModalTitle" style="margin:0;">🌟 记录成长亮点</h2>
-      <button id="modeToggleBtn" class="gp-btn gp-btn-ghost" onclick="switchEntryMode(false)" style="font-size:12px;padding:4px 10px;cursor:pointer;">📋 切换到详细录入</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px;">
+      <h2 id="growModalTitle" style="margin:0;font-size:18px;">🌟 记录成长亮点</h2>
+      <button id="modeToggleBtn" class="gp-btn gp-btn-ghost mode-toggle-big" onclick="switchEntryMode(false)">📋 切换到详细录入</button>
     </div>
 
     <!-- 快速录入面板（默认显示） -->
@@ -1701,6 +1720,18 @@ body {
           oninput="onQuickInput()"></textarea>
       </div>
       <div id="quickPreview" class="quick-preview"><div class="quick-placeholder">✍️ 输入事件描述后自动识别考核项…</div></div>
+      <!-- 常用快捷标签（点击自动填入事件描述并识别） -->
+      <div id="quickTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+        <span class="quick-tag-btn" onclick="fillQuickTag('调解成功')">🤝 调解成功</span>
+        <span class="quick-tag-btn" onclick="fillQuickTag('完成立案')">📂 完成立案</span>
+        <span class="quick-tag-btn" onclick="fillQuickTag('已开庭')">⚖️ 已开庭</span>
+        <span class="quick-tag-btn" onclick="fillQuickTag('接待咨询完成')">💬 接待咨询</span>
+        <span class="quick-tag-btn" onclick="fillQuickTag('撰写文书完成')">📝 文书编制</span>
+        <span class="quick-tag-btn" onclick="fillQuickTag('普法文章发表')">📢 普法文章</span>
+        <span class="quick-tag-btn" onclick="fillQuickTag('合同审查法律依据援引错误')" style="color:#dc2626;border-color:#fca5a5;background:#fef2f2;">🔧 引用错误</span>
+        <span class="quick-tag-btn" onclick="fillQuickTag('开庭迟到')" style="color:#dc2626;border-color:#fca5a5;background:#fef2f2;">⏰ 开庭迟到</span>
+        <span class="quick-tag-btn" onclick="fillQuickTag('反馈延迟未及时回复')" style="color:#d97706;border-color:#fcd34d;background:#fffbeb;">📨 反馈延迟</span>
+      </div>
       <div class="grow-modal-field">
         <label>关联案件/任务 <span style="color:var(--text-light);font-weight:400">（选填）</span></label>
         <input type="text" id="quickCaseRef" class="grow-input" placeholder="案号或任务名称，不关联则留空" />
@@ -3262,15 +3293,15 @@ const BOTTOM_LINE_RULES = '双人确认（团队负责人+律所主任）· 取�
 // 基于《律师团队内部绩效管理与考核办法（最终版）》全文提取
 const EVENT_RULES = [
   // ── 成长亮点 · 调解成功（按级别自动带出计件）──
-  { kw:['调解成功','成功调解','调解达成','签署调解协议'], type:'growth', cat:'调解工作', sc:3, pc:0, ml:null, fg:null, h:'调解成功→+3分，请选级别定计件' },
+  { kw:['调解成功','成功调解','调解达成','签署调解协议','调解好了','搞定调解','调解达成协议','双方同意调解','调解结案'], type:'growth', cat:'调解工作', sc:3, pc:0, ml:null, fg:null, h:'调解成功→+3分，请选级别定计件' },
   { kw:['口头化解','当场履行','口头案件','现场口头'], type:'growth', cat:'调解工作', sc:3, pc:30, ml:'口头', fg:null, h:'口头调解成功→+3分+30元' },
   { kw:['简单纠纷','小额矛盾','≤3人','≤5万','不超过3人','不超过5万'], type:'growth', cat:'调解工作', sc:3, pc:80, ml:'简单', fg:null, h:'简单纠纷调解成功→+3分+80元' },
   { kw:['一般纠纷','常规纠纷','4-10人','5-50万'], type:'growth', cat:'调解工作', sc:3, pc:120, ml:'一般', fg:null, h:'一般纠纷调解成功→+3分+120元' },
   { kw:['重大纠纷','案情复杂','专家参与','11-19人','50-200万'], type:'growth', cat:'调解工作', sc:3, pc:200, ml:'重大', fg:null, h:'重大纠纷调解成功→+3分+200元' },
   { kw:['疑难纠纷','群体性事件','越级上访','民转刑','≥20人','≥200万'], type:'growth', cat:'调解工作', sc:3, pc:500, ml:'疑难', fg:null, h:'疑难纠纷调解成功→+3分+500元' },
   // ── 成长亮点 · 案件阶段成果 ──
-  { kw:['立案','已立案','完成立案','提交立案'], type:'growth', cat:'驻点/案件推进', sc:3, pc:0, ml:null, fg:null, h:'完成立案阶段→+3分' },
-  { kw:['已开庭','庭审完成','出庭完成','庭审结束','开庭完毕'], type:'growth', cat:'出庭辅助', sc:3, pc:0, ml:null, fg:null, h:'完成开庭阶段→+3分' },
+  { kw:['立案','已立案','完成立案','提交立案','立好案了','立案搞定','交了立案材料','法院立案','立上案了'], type:'growth', cat:'驻点/案件推进', sc:3, pc:0, ml:null, fg:null, h:'完成立案阶段→+3分' },
+  { kw:['已开庭','庭审完成','出庭完成','庭审结束','开庭完毕','开完庭了','庭审搞完了','出庭回来','开完庭'], type:'growth', cat:'出庭辅助', sc:3, pc:0, ml:null, fg:null, h:'完成开庭阶段→+3分' },
   { kw:['签约','已签约','合同签订','签约完成','签约成功'], type:'growth', cat:'案源开拓', sc:3, pc:0, ml:null, fg:null, h:'签约成功→+3分' },
   { kw:['回款','已回款','款项到账','收到律师费','费用到账'], type:'growth', cat:'案源开拓', sc:3, pc:0, ml:null, fg:null, h:'回款到账→+3分' },
   // ── 成长亮点 · 咨询接待 / 文书编制 ──
@@ -3283,13 +3314,13 @@ const EVENT_RULES = [
   { kw:['视频号','拍摄剪辑','视频制作','普法视频','短视频'], type:'growth', cat:'学习复盘', sc:2, pc:0, ml:null, fg:null, h:'视频号文案/拍摄→+2分' },
   { kw:['案例复盘','类案检索','学习笔记','复盘报告','分享会','主题分享'], type:'growth', cat:'学习复盘', sc:2, pc:0, ml:null, fg:null, h:'学习产出/分享→+2分' },
   // ── 改进机会 · 诉讼类（含仲裁、执行）── 四档：轻微1/一般3/重大5/底线10
-  { kw:['错别字','页码错误','装订遗漏','格式不符','文书格式错误'], type:'improvement', cat:'文书质量', sc:-1, pc:0, ml:null, fg:'轻微', h:'诉讼轻微(文书格式/错字)→-1分' },
-  { kw:['反馈延迟','延迟反馈','未及时反馈','回复晚了','未回复询问'], type:'improvement', cat:'案件推进', sc:-1, pc:0, ml:null, fg:'轻微', h:'非紧急询问24h内未回复→-1分' },
-  { kw:['迟到几分钟','迟到片刻','迟到10分钟内','迟到≤10分钟','迟到五六分钟'], type:'improvement', cat:'出庭辅助', sc:-1, pc:0, ml:null, fg:'轻微', h:'开庭迟到≤10分钟未致不利后果→-1分（10-30分钟选一般、>30分钟选重大）' },
+  { kw:['错别字','页码错误','装订遗漏','格式不符','文书格式错误','写错字','打错字',' typo ','文字错误','排版错误'], type:'improvement', cat:'文书质量', sc:-1, pc:0, ml:null, fg:'轻微', h:'诉讼轻微(文书格式/错字)→-1分' },
+  { kw:['反馈延迟','延迟反馈','未及时反馈','回复晚了','未回复询问','回复慢了','没及时回','忘了回消息','没回信息'], type:'improvement', cat:'案件推进', sc:-1, pc:0, ml:null, fg:'轻微', h:'非紧急询问24h内未回复→-1分' },
+  { kw:['迟到几分钟','迟到片刻','迟到10分钟内','迟到≤10分钟','迟到五六分钟','稍微迟到','迟了一点'], type:'improvement', cat:'出庭辅助', sc:-1, pc:0, ml:null, fg:'轻微', h:'开庭迟到≤10分钟未致不利后果→-1分（10-30分钟选一般、>30分钟选重大）' },
   { kw:['非关键证据未提交','遗漏非关键证据','证据补交','证据逾期'], type:'improvement', cat:'案件推进', sc:-3, pc:0, ml:null, fg:'一般', h:'非关键证据逾期提交(未失权)→-3分' },
   { kw:['庭审意见矛盾','庭审发言矛盾','与方案矛盾','策略偏差'], type:'improvement', cat:'出庭辅助', sc:-3, pc:0, ml:null, fg:'一般', h:'庭审意见/策略偏差(未造成实质不利)→-3分' },
   { kw:['严重迟到','迟到30分钟','迟到超半小时','迟到半小时以上'], type:'improvement', cat:'出庭辅助', sc:-5, pc:0, ml:null, fg:'重大', h:'迟到30分钟以上未致不利后果→-5分（已补救无损失）' },
-  { kw:['开庭迟到','迟到','到庭晚'], type:'improvement', cat:'出庭辅助', sc:-3, pc:0, ml:null, fg:'一般', h:'开庭迟到10-30分钟未致不利后果→-3分（≤10分钟选轻微、>30分钟选重大）' },
+  { kw:['开庭迟到','迟到','到庭晚','迟到了','晚到了','没准时到','迟到开庭'], type:'improvement', cat:'出庭辅助', sc:-3, pc:0, ml:null, fg:'一般', h:'开庭迟到10-30分钟未致不利后果→-3分（≤10分钟选轻微、>30分钟选重大）' },
   { kw:['未提醒上诉期','未提醒再审期','未提醒期限','忘记提醒期限'], type:'improvement', cat:'案件推进', sc:-3, pc:0, ml:null, fg:'一般', h:'未及时提醒期限(未错过)→-3分' },
   { kw:['证据目录不对应','证据材料不匹配','目录与证据不符'], type:'improvement', cat:'文书质量', sc:-3, pc:0, ml:null, fg:'一般', h:'证据目录不对应→-3分' },
   { kw:['关键节点未告知','未告知当事人','未主动告知','忘了告知'], type:'improvement', cat:'案件推进', sc:-3, pc:0, ml:null, fg:'一般', h:'关键节点未告知当事人→-3分' },
@@ -3745,20 +3776,108 @@ function parseEvent(text) {
           behavior: t, // 原文作为行为描述
           hint: rule.h,
           matchedKw: kw,
+          suggestions: null, // 精确匹配，无建议
         };
       }
     }
   }
-  return null; // 无匹配规则
+  // ── 无精确匹配 → 模糊推荐：按关键词重叠度排序，返回最接近的3条 ──
+  const suggestions = fuzzyMatch(t);
+  return { type: null, score: 0, behavior: t, suggestions };
+}
+
+// 模糊匹配：计算输入文本与每条规则的关键词重叠度，返回 top 3
+function fuzzyMatch(text) {
+  const short = text.replace(/\s+/g, '');
+  const scored = [];
+  for (const rule of EVENT_RULES) {
+    let maxOverlap = 0;
+    let bestKw = '';
+    for (const kw of rule.kw) {
+      // 计算关键词中有多少字符出现在输入中（模糊度）
+      let overlap = 0;
+      for (const ch of kw) { if (short.includes(ch)) overlap++; }
+      const ratio = overlap / kw.length; // 重叠比例
+      if (ratio > maxOverlap) { maxOverlap = ratio; bestKw = kw; }
+    }
+    if (maxOverlap > 0.25) { // 至少25%字符重叠才推荐
+      scored.push({ rule, score: maxOverlap, kw: bestKw });
+    }
+  }
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, 3).map(s => ({
+    type: s.rule.type, cat: s.rule.category, sc: s.rule.score,
+    pc: s.rule.pieceAmount, ml: s.rule.ml || '', fg: s.rule.fg || '',
+    h: s.rule.h, kw: s.kw, confidence: s.score,
+  }));
 }
 
 function renderQuickPreview(result) {
   const el = document.getElementById('quickPreview');
   if (!result) {
-    el.innerHTML = '<div class="quick-no-match">⚠️ 未识别到匹配的考核事件，请使用「详细录入」或调整描述</div>';
+    el.innerHTML = '<div class="quick-placeholder">✍️ 输入事件描述后自动识别考核项…</div>';
     el.className = 'quick-preview';
     return;
   }
+  // ── 无精确匹配 → 显示智能推荐或手动录入 ──
+  if (!result.type && result.suggestions) {
+    const sugs = result.suggestions;
+    if (sugs.length > 0) {
+      let sugHtml = sugs.map((s, i) => {
+        const icon = s.type === 'growth' ? '🌟' : '🔧';
+        const lbl = s.type === 'growth' ? '成长亮点' : '改进机会';
+        const sc = s.sc > 0 ? `+${s.sc}` : `${s.sc}`;
+        const scCls = s.sc > 0 ? 'pos' : 'neg';
+        const fgTag = s.fg ? `<span class="quick-tag ${s.fg==='底线'?'tag-danger':(s.fg==='重大'?'tag-major':'')}">${s.fg}</span>` : '';
+        const mlTag = s.ml ? `<span class="quick-tag">级别:${s.ml}</span>` : '';
+        return `<div class="fuzzy-sug-item" onclick="applySuggestion(${i})" style="cursor:pointer;padding:8px 10px;margin:4px 0;border:1.5px solid #e9dff5;border-radius:10px;background:linear-gradient(135deg,#faf5ff,#fff);transition:all 0.15s;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+            <span>${icon}</span><span style="font-weight:600;font-size:13px;color:#4c1d95;">${lbl}</span>
+            <span style="font-size:11px;color:#7c3aed;background:#ede9fe;padding:1px 6px;border-radius:6px;">${esc(s.cat)}</span>
+            <span style="font-weight:700;font-size:14px;color:${s.sc>0?'#059669':'#dc2626'};">${sc}分</span>
+            ${fgTag}${mlTag}
+          </div>
+          <div style="font-size:12px;color:#6b7280;">💡 ${esc(s.h)} · 匹配关键词「${esc(s.kw)}」</div>
+        </div>`;
+      }).join('');
+      el.innerHTML = `<div style="padding:4px 0;">
+        <div style="font-size:12.5px;color:#92400e;margin-bottom:6px;display:flex;align-items:center;gap:4px;">🔍 未精确匹配，系统推荐以下最接近的考核项（点击选用）：</div>
+        ${sugHtml}
+        <div style="margin-top:8px;text-align:center;">
+          <span style="font-size:12px;color:#94a3b8;cursor:pointer;text-decoration:underline;" onclick="switchEntryMode(false)">或切换到「详细录入」手动填写 →</span>
+        </div>
+      </div>`;
+    } else {
+      // 完全无匹配 → 显示手动分值选择
+      el.innerHTML = `<div style="padding:6px 0;">
+        <div class="quick-no-match" style="margin-bottom:8px;">⚠️ 未识别到匹配项，可手动选择分值后保存</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+          <span style="font-size:12.5px;font-weight:600;color:#374151;">手动选分值：</span>
+          <select id="manualScoreSelect" onchange="window._manualScore=this.value" style="padding:5px 8px;border:1.5px solid #c4b5fd;border-radius:8px;font-size:13px;background:#fff;">
+            <option value="">请选择</option>
+            <optgroup label="🌟 成长亮点">
+              <option value="+3">+3 分（一般成长）</option>
+              <option value="+2">+2 分（学习/普法）</option>
+              <option value="+1">+1 分（轻微成长）</option>
+            </optgroup>
+            <optgroup label="🔧 改进机会">
+              <option value="-1">-1 分（轻微）</option>
+              <option value="-3">-3 分（一般）</option>
+              <option value="-5">-5 分（重大）</option>
+              <option value="-10">-10 分（底线·纪律红线）</option>
+            </optgroup>
+          </select>
+          <span style="font-size:12px;color:#94a3b8;">或</span>
+          <span style="font-size:12px;color:#8b5cf6;cursor:pointer;text-decoration:underline;" onclick="switchEntryMode(false)">切换到详细录入 →</span>
+        </div>
+      </div>`;
+    }
+    el.className = 'quick-preview';
+    // 存储建议列表供点击使用
+    window._suggestionList = sugs;
+    return;
+  }
+  // ── 精确匹配：原有渲染逻辑 ──
   const typeIcon = result.type === 'growth' ? '🌟' : '🔧';
   const typeLabel = result.type === 'growth' ? '成长亮点' : '改进机会';
   const scoreCls = result.score > 0 ? 'pos' : 'neg';
@@ -3789,6 +3908,23 @@ function renderQuickPreview(result) {
   el.className = 'quick-preview quick-has-match';
 }
 
+// 点击模糊推荐 → 自动填入并识别
+function applySuggestion(idx) {
+  const sug = (window._suggestionList || [])[idx];
+  if (!sug) return;
+  // 将推荐结果转为精确匹配格式，存为 _lastParsedResult
+  window._lastParsedResult = {
+    type: sug.type, category: sug.cat, score: sug.sc,
+    pieceAmount: sug.pc, mediateLevel: sug.ml,
+    faultGrade: sug.fg, isMajor: sug.fg === '重大',
+    isBottomLine: sug.fg === '底线',
+    behavior: document.getElementById('quickEventText').value.trim(),
+    hint: sug.h, matchedKw: sug.kw,
+    suggestions: null,
+  };
+  renderQuickPreview(window._lastParsedResult);
+}
+
 function onQuickInput() {
   try {
     const text = document.getElementById('quickEventText').value;
@@ -3806,6 +3942,14 @@ function switchEntryMode(quick) {
   document.getElementById('quickEntryPanel').style.display = quick ? '' : 'none';
   document.getElementById('detailEntryPanel').style.display = quick ? 'none' : '';
   document.getElementById('modeToggleBtn').textContent = quick ? '📋 切换到详细录入' : '✨ 切换到快速录入';
+}
+
+// 快捷标签：填入事件描述并自动识别
+function fillQuickTag(text) {
+  const ta = document.getElementById('quickEventText');
+  ta.value = text;
+  onQuickInput();
+  ta.focus();
 }
 
 // ===== 打开记录弹窗 =====
@@ -4061,23 +4205,45 @@ async function saveGrowthEntry() {
     if (!targetMember) { showToast('请选择被记录人'); return; }
     if (!eventText) { showToast('请输入事件描述'); return; }
     const parsed = window._lastParsedResult;
-    if (!parsed) { showToast('未识别到匹配的考核事件，请调整描述或切换到详细录入'); return; }
+    const manualScore = window._manualScore;
 
-    // 用解析结果构建 entry
-    currentGrowType = parsed.type;
-    selectedScore = parsed.score;
-    // 填充到详细字段以便保存逻辑复用
-    document.getElementById('growTargetMember').value = targetMember;
-    document.getElementById('growCategory').value = parsed.category;
-    document.getElementById('growBehavior').value = eventText;
-    document.getElementById('growCaseRef').value = caseRef || '不关联';
-    document.getElementById('growPieceAmount').value = String(parsed.pieceAmount);
-    if (parsed.mediateLevel) document.getElementById('growMediateLevel').value = parsed.mediateLevel;
-    if (parsed.faultGrade) { document.getElementById('growFaultGrade').value = parsed.faultGrade; onFaultGradeChange(); }
-    // 改进机会的必填字段自动填充
-    if (parsed.type === 'improvement') {
-      document.getElementById('growImpact').value = parsed.hint;
-      document.getElementById('growSuggestion').value = '下次注意避免：' + parsed.matchedKw;
+    // 情况A：有精确匹配或已选推荐 → 用解析结果
+    if (parsed && parsed.type) {
+      currentGrowType = parsed.type;
+      selectedScore = parsed.score;
+      document.getElementById('growTargetMember').value = targetMember;
+      document.getElementById('growCategory').value = parsed.category;
+      document.getElementById('growBehavior').value = eventText;
+      document.getElementById('growCaseRef').value = caseRef || '不关联';
+      document.getElementById('growPieceAmount').value = String(parsed.pieceAmount);
+      if (parsed.mediateLevel) document.getElementById('growMediateLevel').value = parsed.mediateLevel;
+      if (parsed.faultGrade) { document.getElementById('growFaultGrade').value = parsed.faultGrade; onFaultGradeChange(); }
+      if (parsed.type === 'improvement') {
+        document.getElementById('growImpact').value = parsed.hint;
+        document.getElementById('growSuggestion').value = '下次注意避免：' + (parsed.matchedKw || '');
+      }
+    }
+    // 情况B：手动选择了分值（下拉框）→ 构建基础 entry
+    else if (manualScore) {
+      const sc = parseInt(manualScore);
+      currentGrowType = sc > 0 ? 'growth' : 'improvement';
+      selectedScore = sc;
+      document.getElementById('growTargetMember').value = targetMember;
+      document.getElementById('growCategory').value = sc > 0 ? '其他成长' : '其他改进';
+      document.getElementById('growBehavior').value = eventText;
+      document.getElementById('growCaseRef').value = caseRef || '不关联';
+      document.getElementById('growPieceAmount').value = '0';
+      if (sc < 0) {
+        const fg = sc === -1 ? '轻微' : (sc === -3 ? '一般' : (sc === -5 ? '重大' : '底线'));
+        document.getElementById('growFaultGrade').value = fg; onFaultGradeChange();
+        document.getElementById('growImpact').value = '手动记录（'+fg+'档）';
+        document.getElementById('growSuggestion').value = '需负责人确认具体改进措施';
+      }
+    }
+    // 情况C：完全无匹配且未选手动分值 → 提示用户操作
+    else {
+      showToast('请先点击推荐项、选手动分值，或切换到「详细录入」');
+      return;
     }
   }
 
