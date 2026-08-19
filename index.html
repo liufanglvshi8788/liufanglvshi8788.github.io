@@ -1210,9 +1210,13 @@ body {
 .review-author .avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #a855f7, #ec4899); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
 .review-time { font-size: 12px; color: #94a3b8; }
 .review-content { font-size: 13px; color: #374151; line-height: 1.6; }
-.review-actions { margin-top: 8px; text-align: right; }
-.review-actions button { font-size: 12px; color: #ef4444; background: none; border: 1px solid #fecaca; border-radius: 8px; padding: 3px 10px; cursor: pointer; }
-.review-actions button:hover { background: #fef2f2; }
+.review-actions { margin-top: 8px; text-align: right; display: flex; gap: 6px; justify-content: flex-end; }
+.review-actions button { font-size: 12px; background: none; border: 1px solid #ddd; border-radius: 8px; padding: 4px 10px; cursor: pointer; color: #6b7280; transition: all .15s; }
+.review-actions button:hover { background: #f3f4f6; }
+.review-actions .btn-edit-note { color: #7c3aed; border-color: #c4b5fd; }
+.review-actions .btn-edit-note:hover { background: #f5f3ff; }
+.review-actions .btn-del-note { color: #ef4444; border-color: #fecaca; }
+.review-actions .btn-del-note:hover { background: #fef2f2; }
 .note-card { box-shadow: 0 6px 20px -10px rgba(168, 85, 247, 0.25); transition: transform 0.18s ease, box-shadow 0.18s ease; }
 .note-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -12px rgba(168, 85, 247, 0.35); }
 .note-title { font-size: 15px; font-weight: 700; color: #4c1d95; margin: 6px 0 4px; line-height: 1.4; }
@@ -4381,7 +4385,7 @@ function renderNotes() {
         <div class="note-title">${title}</div>
         ${linked}
         <div class="review-content note-content">${esc(n.content || '')}</div>
-        ${canDelete ? `<div class="review-actions"><button onclick="deleteNote('${n.id}')">删除</button></div>` : ''}
+        ${canDelete ? `<div class="review-actions"><button class="btn-edit-note" onclick="editNote('${n.id}')">✏️ 编辑</button><button class="btn-del-note" onclick="deleteNote('${n.id}')">🗑️ 删除</button></div>` : ''}
       </div>`;
     });
     html += `</div>`;
@@ -4408,6 +4412,26 @@ function openNote() {
 function closeNote() {
   document.getElementById('noteModal').classList.remove('show');
   editingNoteId = null;
+}
+
+function editNote(id) {
+  const note = (cloudData.notes || []).find(n => n.id === id);
+  if (!note) { showToast('未找到该手记'); return; }
+  // 权限检查：只能编辑自己的或管理员可编辑
+  if (note.author !== currentUser && !isManager()) { showToast('只能编辑自己的手记'); return; }
+  editingNoteId = id;
+  document.getElementById('noteModalTitle').textContent = '✏️ 编辑律师手记';
+  // 回填记录人
+  const sel = document.getElementById('noteAuthor');
+  const names = (cloudData.members && cloudData.members.length) ? cloudData.members : ['刘芳律师', '曾梓涵律师', '潘奥星律师'];
+  sel.innerHTML = names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+  sel.value = note.author || currentUser || names[0];
+  // 回填各字段
+  document.getElementById('noteDate').value = note.date || '';
+  document.getElementById('noteTitle').value = note.title || '';
+  document.getElementById('noteLinkedCase').value = note.linkedCase || '';
+  document.getElementById('noteContent').value = note.content || '';
+  document.getElementById('noteModal').classList.add('show');
 }
 
 async function saveNote() {
