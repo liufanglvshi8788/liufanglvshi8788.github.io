@@ -1259,6 +1259,7 @@ body {
   letter-spacing: .5px;
 }
 .note-content .nl-text { flex: 1; }
+.note-content .nl-preamble { font-size: 13.5px; color: #6b7280; margin-bottom: 10px; line-height: 1.7; }
 .note-content .nl-bullet {
   flex-shrink: 0;
   width: 6px;
@@ -4401,45 +4402,96 @@ async function deleteReview(id) {
   catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
 }
 
-// ===== 手记内容自动格式化（列表识别 + 段落排版）=====
+// ===== 手记内容自动格式化（智能拆分 + 列表排版）=====
+// 核心场景：用户常把编号列表写成一大段文字（"…事情。一、xxx 二、xxx 三、xxx"）
+// 需要按中文/数字编号在文本中任意位置拆分
 function formatNoteContent(raw) {
   if (!raw) return '';
   const t = raw.trim();
   if (!t) return '';
-  // 中文数字编号：一、二、三… / 一是…二是…（无分隔符）/ （一）（二）/ 1. 2. 3.
+
+  // ── 第一步：检测是否包含内嵌编号列表 ──
+  // 匹配：一、 / 1. / （一） / 一是 / 1） 等出现在文本中任意位置
+  // 前面要有分隔符（空格/句号/换行/开头）避免误匹配普通文字
+  const splitRe = /(?:^|\s|[。！？；\n])((?:[（(]?[一二三四五六七八九十百零〇\d]+[、.．)）\]]|(?:[一二三四五六七八九十百]+(?:是|有|为))))\s*/g;
+
+  // 先尝试拆分
+  const parts = [];
+  let lastEnd = 0;
+  let match;
+  let hasList = false;
+
+  while ((match = splitRe.exec(t)) !== null) {
+    if (match.index > lastEnd) {
+      parts.push({ type: 'text', content: t.slice(lastEnd, match.index).trim() });
+    }
+    parts.push({ type: 'item', marker: match[1].replace(/[（(]/g,'').replace(/[）)]/g,'') });
+    lastEnd = match.index + match[0].length;
+    hasList = true;
+  }
+  if (lastEnd < t.length) {
+    parts.push({ type: 'text', content: t.slice(lastEnd).trim() });
+  }
+
+  // ── 如果没有检测到列表，走逐行分析 fallback ──
+  if (!hasList || parts.length <= 1) {
+    return formatNoteByLines(t);
+  }
+
+  // ── 有列表：按 item 分组渲染 ──
+  let html = '';
+  for (let i = 0; i < parts.length; i++) {
+    const p = parts[i];
+    if (p.type === 'item') {
+      // 收集这个项的文本：向后找直到下一个 item 或结尾
+      const cleanMarker = p.marker.replace(/[、.．)）是有为]$/, '');
+      let itemText = '';
+      let j = i + 1;
+      while (j < parts.length && parts[j].type !== 'item') {
+        if (parts[j].content) itemText += (itemText ? ' ' : '') + parts[j].content;
+        j++;
+      }
+      html += `<div class="nl-item"><span class="nl-marker">${esc(cleanMarker)}</span><span class="nl-text">${esc(itemText)}</span></div>`;
+    } else if (p.type === 'text' && p.content) {
+      // 列表之前的文本作为前缀段落
+      if (!html.includes('nl-item')) {
+        html += `<p class="nl-preamble">${esc(p.content)}</p>`;
+      }
+      // 列表之后的尾部文本追加到最后一个列表项（或忽略）
+    }
+  }
+
+  return html || esc(t);
+}
+
+// 逐行格式化 fallback（无内嵌列表时使用）
+function formatNoteByLines(t) {
   const cnNumRe = /^(?:[（(]?)((?:[一二三四五六七八九十百]+|[1-9]\d*)(?:[、.．)\]]|(?:是|有|为)))\s*(.*)$/s;
-  // 项目符号行：· — – • · 开头
   const bulletRe = /^[·—–•・]\s*(.+)$/;
 
   const lines = t.split('\n');
   let html = '';
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const trimmed = line.trim();
+    const trimmed = lines[i].trim();
     if (!trimmed) { html += '<br>'; continue; }
 
-    // 检测中文/数字编号列表（含"一是""二是"等无分隔符格式）
     let m = trimmed.match(cnNumRe);
     if (m && m[1]) {
       let marker = m[1].replace(/[（(]/g, '').replace(/[）)]/g, '');
-      // 去掉尾部"是有为"等动词/分隔符只保留纯数字
       marker = marker.replace(/[、.．)\]是有为]$/, '');
       if (!marker || marker.length > 4) marker = marker.slice(0, 4);
       html += `<div class="nl-item"><span class="nl-marker">${esc(marker)}</span><span class="nl-text">${esc(m[2] || '')}</span></div>`;
       continue;
     }
 
-    // 检测项目符号
     m = trimmed.match(bulletRe);
     if (m && m[1]) {
       html += `<div class="nl-item"><span class="nl-bullet"></span><span class="nl-text">${esc(m[1])}</span></div>`;
       continue;
     }
 
-    // 普通段落
     html += `<p>${esc(trimmed)}</p>`;
   }
-  // 清理连续 <br>
   html = html.replace(/(<br>\s*){2,}/g, '<br>');
   html = html.replace(/^<br>|<br>$/g, '');
   return html || esc(t);
