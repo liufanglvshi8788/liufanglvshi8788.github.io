@@ -1219,9 +1219,54 @@ body {
 .review-actions .btn-del-note:hover { background: #fef2f2; }
 .note-card { box-shadow: 0 6px 20px -10px rgba(168, 85, 247, 0.25); transition: transform 0.18s ease, box-shadow 0.18s ease; }
 .note-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -12px rgba(168, 85, 247, 0.35); }
-.note-title { font-size: 15px; font-weight: 700; color: #4c1d95; margin: 6px 0 4px; line-height: 1.4; }
-.note-linked { display: inline-block; font-size: 12px; color: #a855f7; background: #faf5ff; border: 1px solid #f3e8ff; border-radius: 8px; padding: 2px 8px; margin-bottom: 6px; }
-.note-content { font-size: 13.5px; color: #374151; line-height: 1.65; white-space: pre-wrap; word-break: break-word; margin-top: 6px; }
+.note-title { font-size: 16px; font-weight: 700; color: #4c1d95; margin: 8px 0 6px; line-height: 1.4; letter-spacing: .3px; }
+.note-linked { display: inline-block; font-size: 12px; color: #a855f7; background: #faf5ff; border: 1px solid #f3e8ff; border-radius: 8px; padding: 2px 8px; margin-bottom: 8px; }
+.note-content {
+  font-size: 13.5px;
+  color: #374151;
+  line-height: 1.85;
+  margin-top: 10px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #fafbff 0%, #f5f3ff 100%);
+  border-left: 3px solid #a78bfa;
+  border-radius: 0 10px 10px 0;
+  word-break: break-word;
+}
+/* 手记内容排版：段落 + 列表 */
+.note-content p { margin: 0 0 8px 0; }
+.note-content p:last-child { margin-bottom: 0; }
+.note-content .nl-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 6px 0;
+  padding: 4px 0;
+  line-height: 1.75;
+}
+.note-content .nl-marker {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #a78bfa, #7c3aed);
+  border-radius: 6px;
+  padding: 0 5px;
+  letter-spacing: .5px;
+}
+.note-content .nl-text { flex: 1; }
+.note-content .nl-bullet {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(135deg, #a78bfa, #c4b5fd);
+  border-radius: 50%;
+  margin-top: 9px;
+}
 
 /* ===== 快速录入模式 ===== */
 .quick-preview { margin: 10px 0; min-height: 40px; }
@@ -4356,6 +4401,50 @@ async function deleteReview(id) {
   catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
 }
 
+// ===== 手记内容自动格式化（列表识别 + 段落排版）=====
+function formatNoteContent(raw) {
+  if (!raw) return '';
+  const t = raw.trim();
+  if (!t) return '';
+  // 中文数字编号：一、二、三… / 一是…二是…（无分隔符）/ （一）（二）/ 1. 2. 3.
+  const cnNumRe = /^(?:[（(]?)((?:[一二三四五六七八九十百]+|[1-9]\d*)(?:[、.．)\]]|(?:是|有|为)))\s*(.*)$/s;
+  // 项目符号行：· — – • · 开头
+  const bulletRe = /^[·—–•・]\s*(.+)$/;
+
+  const lines = t.split('\n');
+  let html = '';
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    if (!trimmed) { html += '<br>'; continue; }
+
+    // 检测中文/数字编号列表（含"一是""二是"等无分隔符格式）
+    let m = trimmed.match(cnNumRe);
+    if (m && m[1]) {
+      let marker = m[1].replace(/[（(]/g, '').replace(/[）)]/g, '');
+      // 去掉尾部"是有为"等动词/分隔符只保留纯数字
+      marker = marker.replace(/[、.．)\]是有为]$/, '');
+      if (!marker || marker.length > 4) marker = marker.slice(0, 4);
+      html += `<div class="nl-item"><span class="nl-marker">${esc(marker)}</span><span class="nl-text">${esc(m[2] || '')}</span></div>`;
+      continue;
+    }
+
+    // 检测项目符号
+    m = trimmed.match(bulletRe);
+    if (m && m[1]) {
+      html += `<div class="nl-item"><span class="nl-bullet"></span><span class="nl-text">${esc(m[1])}</span></div>`;
+      continue;
+    }
+
+    // 普通段落
+    html += `<p>${esc(trimmed)}</p>`;
+  }
+  // 清理连续 <br>
+  html = html.replace(/(<br>\s*){2,}/g, '<br>');
+  html = html.replace(/^<br>|<br>$/g, '');
+  return html || esc(t);
+}
+
 // ===== 律师手记 =====
 function renderNotes() {
   if (!cloudData.notes) cloudData.notes = [];
@@ -4384,7 +4473,7 @@ function renderNotes() {
         </div>
         <div class="note-title">${title}</div>
         ${linked}
-        <div class="review-content note-content">${esc(n.content || '')}</div>
+        <div class="review-content note-content">${formatNoteContent(n.content)}</div>
         ${canDelete ? `<div class="review-actions"><button class="btn-edit-note" onclick="editNote('${n.id}')">✏️ 编辑</button><button class="btn-del-note" onclick="deleteNote('${n.id}')">🗑️ 删除</button></div>` : ''}
       </div>`;
     });
