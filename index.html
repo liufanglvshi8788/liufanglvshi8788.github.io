@@ -1273,6 +1273,9 @@ body {
 .summon-parse-grid label { font-size:12px;font-weight:600;color:#6b7280; }
 .summon-parse-grid input,.summon-parse-grid select { padding:8px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13.5px;background:#fff;color:#1f2937;outline:none;transition:border-color .2s; }
 .summon-parse-grid input:focus,.summon-parse-grid select:focus { border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,0.12); }
+.sp-conf-badge { font-size:11px;font-weight:700;margin-left:4px;padding:1px 5px;border-radius:4px;vertical-align:middle;display:inline-block; }
+.sp-conf-badge.confound-high { background:#d1fae5;color:#065f46; }
+.sp-conf-badge.conf-low { background:#fef3c7;color:#92400e; }
 .summon-spinner { display:inline-block;width:28px;height:28px;border:3px solid #e5e7eb;border-top-color:#a855f7;border-radius:50%;animation:spin .7s linear infinite; margin:0 auto; }
 @keyframes spin { to{transform:rotate(360deg);} }
 .note-content .nl-bullet {
@@ -1985,10 +1988,10 @@ body {
         <div style="font-weight:600;font-size:14px;color:#4c1d95;margin-bottom:10px;">✅ 识别结果（可编辑修正）</div>
         <div class="summon-parse-grid">
           <div class="summon-field">
-            <label>案号</label><input id="sp_caseNo" placeholder="(2024)渝01民初1234号">
+            <label>案号 <span id="sp_caseNo_conf" class="sp-conf-badge" style="display:none"></span></label><input id="sp_caseNo" placeholder="(2024)渝01民初1234号">
           </div>
           <div class="summon-field">
-            <label>法院</label><input id="sp_court" placeholder="重庆市XX区人民法院">
+            <label>法院 <span id="sp_court_conf" class="sp-conf-badge" style="display:none"></span></label><input id="sp_court" placeholder="重庆市XX区人民法院">
           </div>
           <div class="summon-field">
             <label>开庭日期</label><input type="date" id="sp_date">
@@ -1997,16 +2000,16 @@ body {
             <label>开庭时间</label><input type="time" id="sp_time" value="09:30">
           </div>
           <div class="summon-field half">
-            <label>审判庭室</label><input id="sp_courtroom" placeholder="第X审判庭">
+            <label>审判庭室 <span id="sp_courtroom_conf" class="sp-conf-badge" style="display:none"></span></label><input id="sp_courtroom" placeholder="第X审判庭">
           </div>
           <div class="summon-field half">
-            <label>审判员</label><input id="sp_judge" placeholder="审判长/审判员">
+            <label>审判员 <span id="sp_judge_conf" class="sp-conf-badge" style="display:none"></span></label><input id="sp_judge" placeholder="审判长/审判员">
           </div>
           <div class="summon-field full">
-            <label>案由</label><input id="sp_cause" placeholder="合同纠纷 / 劳动争议等">
+            <label>案由 <span id="sp_cause_conf" class="sp-conf-badge" style="display:none"></span></label><input id="sp_cause" placeholder="留空则不显示（未识别到时不会填默认值）">
           </div>
           <div class="summon-field full">
-            <label>当事人</label><input id="sp_parties" placeholder="原告：XXX  被告：XXX">
+            <label>当事人 <span id="sp_parties_conf" class="sp-conf-badge" style="display:none"></span></label><input id="sp_parties" placeholder="原告：XXX  被告：XXX">
           </div>
           <div class="summon-field full">
             <label>负责人</label>
@@ -4749,113 +4752,392 @@ function loadScript(url, type) {
   });
 }
 
-// ── 传票文本结构化解析 ──
+// ── 传票字段清洗 v3（针对手机拍照OCR强噪声） ──
+function cleanSummonField(type, raw) {
+  if (!raw) return { value: '', confidence: '' };
+  let v = raw.replace(/[ \t]+/g, ' ').trim();
+  // 去首尾噪声标点和空白
+  v = v.replace(/^[：:\s,;；，。、·\-—|丨\r\n]+|[：:\s,;；，。、·\-—|丨\r\n]+$/g, '');
+
+  switch(type) {
+    case 'caseNo':
+      // 第一步：去掉标签前缀（"案号""案 号""案号："等）
+      v = v.replace(/^[\s]*(?:案\s*号[：:\s|丨]*|案件编号[：:\s]*)/, '');
+      // 只保留案号合法字符：括号 数字 字母 民初终再督特赔 字 第 号 省份简称
+      v = v.replace(/[^（()\(\)\d\w民初终再督特赔字第号渝京沪粤浙苏鲁豫鄂湘皖赣闽滇黔陕甘青辽吉黑蒙晋冀新宁琼藏津川云贵]/g, '');
+      // 取第一段连续合法字符
+      const cm = v.match(/^([^\s]{5,45})/);
+      v = cm ? cm[1] : v;
+      // 去末尾常见垃圾字
+      v = v.replace(/[下上了的了吗呢吧啊哈在是有不令其及与和对中]/g, '');
+      // 规范化空格：(2026) 渝 0104 → (2026)渝0104
+      v = v.replace(/\s+/g, '');
+      return { value: v, confidence: v.length >= 12 ? '✅' : '⚠️' };
+
+    case 'court':
+      if (!v.includes('法院')) {
+        if (v.includes('院法')) v = v.replace('院法', '法院');
+        else return { value: '', confidence: '' };
+      }
+      // 去除 XX / x 等占位符
+      v = v.replace(/XX|x\s*x|XX区/gi, '');
+      // 重庆区名完整列表 + OCR容错映射
+      const districtMap = [
+        ['大渡口',['大渡','渡口','大度','大卫']],
+        ['渝中',['渝中','渝中区']],
+        ['江北',['江北']],
+        ['沙坪坝',['沙坪','沙坪坝','沙场']],
+        ['九龙坡',['九龙','九龙坡']],
+        ['南岸',['南岸']],
+        ['北碚',['北碚','北培','北埠']],
+        ['綦江',['綦江','綦江']],
+        ['大足',['大足']],
+        ['渝北',['渝北']],
+        ['巴南',['巴南']],
+        ['黔江',['黔江']],
+        ['长寿',['长寿']],
+        ['江津',['江津']],
+        ['合川',['合川']],
+        ['永川',['永川']],
+        ['南川',['南川']],
+        ['璧山',['璧山','壁山']],
+        ['铜梁',['铜梁']],
+        ['潼南',['潼南']],
+        ['荣昌',['荣昌']],
+        ['开州',['开州','开县']],
+        ['梁平',['梁平','梁平']],
+        ['武隆',['武隆']],
+        ['城口',['城口']],
+        ['丰都',['丰都','丰都县']],
+        ['垫江',['垫江']],
+        ['忠县',['忠县']],
+        ['云阳',['云阳']],
+        ['奉节',['奉节']],
+        ['巫山',['巫山']],
+        ['巫溪',['巫溪']],
+        ['石柱',['石柱']],
+        ['秀山',['秀山']],
+        ['酉阳',['酉阳']],
+        ['彭水',['彭水']],
+        ['万州',['万州','万县市']],
+        ['涪陵',['涪陵']],
+        ['两江新区',['两江','两江新区']],
+      ];
+      for (const [standard, alts] of districtMap) {
+        for (const alt of alts) {
+          if (v.includes(alt)) {
+            v = v.replace(new RegExp(alt + '\\s*(人民)?法院'), '重庆市' + standard + '$1人民法院');
+            v = v.replace(/\s{2,}/g, ' ').trim();
+            return { value: v, confidence: '✅' };
+          }
+        }
+      }
+      // 如果包含"重庆市X区"格式但没匹配到上面的，尝试通用提取
+      const genericMatch = v.match(/(重庆市?[^\s,;；，。]{2,10}(?:人民)?法院)/);
+      if (genericMatch) {
+        v = genericMatch[1].replace(/\s{2,}/g, ' ').trim();
+        return { value: v, confidence: '⚠️' };
+      }
+      return { value: v.replace(/\s{2,}/g, ' ').trim(), confidence: '⚠️' };
+
+    case 'courtroom':
+      // 先尝试完整匹配
+      let roomM = v.match(/第\s*([一二三四五六七八九十百零\d]+)\s*审判(?:庭|室)/);
+      if (roomM) {
+        v = `第${roomM[1]}审判庭`;
+        return { value: v, confidence: '✅' };
+      }
+      // 处理数字间有空格的情况： "第 十二 审判 庭" → 提取所有中文数字片段合并
+      const spacedM = v.match(/第\s*([一二三四五六七八九十百零\d]\s*)+审判/);
+      if (spacedM) {
+        const numStr = spacedM[0].replace(/[^\s一二三四五六七八九十百零\d]/g, '').replace(/\s+/g, '');
+        if (numStr) {
+          v = `第${numStr}审判庭`;
+          return { value: v, confidence: '✅' };
+        }
+      }
+      // 只有"第X庭"
+      roomM = v.match(/第\s*([一二三四五六七八九十百零\d]+)\s*庭/);
+      if (roomM) {
+        v = `第${roomM[1]}审判庭`;
+        return { value: v, confidence: '⚠️' };
+      }
+      return { value: v || '', confidence: v ? '⚠️' : '' };
+
+    case 'judge':
+      // 将文本按分隔符拆分，提取所有有效中文片段（支持单字姓名）
+      const nameParts = v.split(/[\s\/\\,，;；、·]+/).filter(p => p);
+      const cleanNames = [];
+      const seen = new Set();
+      for (const np of nameParts) {
+        // 提取连续中文段（1-4字都可以）
+        const cnMatches = np.matchAll(/([\u4e00-\u9fa5]{1,4})/g);
+        for (const m of cnMatches) {
+          const n = m[1];
+          // 排除非人名词汇和OCR噪声
+          if (/^(审判员|审判长|法官|书记员|原告|被告|代理人|律师|本院|法庭|传票|收到|无|BH|FH|SH|WH|ZJ|电话|联系)$/i.test(n)) continue;
+          if (!seen.has(n) && n.length >= 1) {
+            seen.add(n);
+            cleanNames.push(n);
+          }
+        }
+      }
+      v = cleanNames.join('');
+      // 如果合起来太长（>4字），可能是多个人名，用空格分隔
+      if (v.length > 4 && cleanNames.length > 1) {
+        // 尝试合理分组：通常每个人名2-3字
+        const groups = [];
+        let cur = '';
+        for (const n of cleanNames) {
+          cur += n;
+          if (cur.length >= 2) { groups.push(cur); cur = ''; }
+        }
+        if (cur) groups[groups.length-1] += cur;
+        v = groups.join(' / ');
+      }
+      return { value: v, confidence: cleanNames.length > 0 ? '✅' : '' };
+
+    case 'cause':
+      // 空或默认提示文字 → 返回空
+      if (!v || v.length < 2) return { value: '', confidence: '' };
+      if (/合同纠纷.*劳动争议|劳动争议.*合同纠纷|纠纷.*争议.*等|选择或不填/.test(v)) {
+        return { value: '', confidence: '' };
+      }
+      // 去末尾干扰词
+      v = v.replace(/\s*(?:原告|被告|定于|开庭|传票|受理|本案|被传唤人|应到)[\s:：]*$/, '').trim();
+      // 常见案由白名单（如果匹配到这些，高置信）
+      const knownCauses = ['离婚纠纷','离婚','婚姻家庭','抚养费','抚养纠纷','赡养纠纷','继承纠纷',
+        '借贷纠纷','借款合同','民间借贷','买卖合同','租赁合同','房屋租赁','房屋买卖',
+        '劳动争议','劳动合同','工伤认定','交通事故','侵权责任','人格权','名誉权',
+        '物业服务合同','建设工程合同','股权转让','合伙协议','不当得利','医疗服务'];
+      for (const kc of knownCauses) {
+        if (v.includes(kc)) return { value: v, confidence: '✅' };
+      }
+      return { value: v, confidence: v.length >= 3 ? '⚠️' : '' };
+
+    case 'parties':
+      // 噪声词黑名单
+      const noiseWords = ['收到','无','不详','待查','待定','等','以上','以下','如下',
+        '本院','法庭','传票','法官','书记员','代理','律师','BH','FH','SH','WH','ZJ','XX',
+        '电话','联系','不详','空'];
+      
+      // 模式1：被传唤人（重庆传票常用格式）
+      let summonM = t_match(v, /被传唤人[：:\s]+([^\n\r,;；。原告被告应到传票事由]{2,20}?)(?:\s|$|送达|传唤|应到|原告|被告)/);
+      if (summonM) {
+        let name = summonM[1].trim();
+        for (const nw of noiseWords) name = name.replace(new RegExp(nw, 'g'), '');
+        name = name.replace(/[^\u4e00-\u9fa5a-zA-Z（）()·.]/g, '').replace(/\s{2,}/g, ' ').trim();
+        if (name && name.length >= 2) return { value: '被传唤人：' + name, confidence: '✅' };
+      }
+
+      // 模式2：原告/被告
+      let plaintiff = '', defendant = '';
+      const plM = t_match(v, /原告[：:\s]+([^被告]{2,20}?)(?:\s|$|被告)/);
+      if (plM) {
+        plaintiff = plM[1].trim();
+        for (const nw of noiseWords) plaintiff = plaintiff.replace(new RegExp(nw, 'g'), '');
+        plaintiff = plaintiff.replace(/[^\u4e00-\u9fa5a-zA-Z（）()·.]/g, '').replace(/\s{2,}/g, ' ').trim();
+      }
+      const defM = t_match(v, /被告[：:\s]+([^原告]{2,20}?)(?:\s|$|原告|第三方)/);
+      if (defM) {
+        defendant = defM[1].trim();
+        for (const nw of noiseWords) defendant = defendant.replace(new RegExp(nw, 'g'), '');
+        defendant = defendant.replace(/[^\u4e00-\u9fa5a-zA-Z（）()·.]/g, '').replace(/\s{2,}/g, ' ').trim();
+      }
+      if (plaintiff && plaintiff.length < 2) plaintiff = '';
+      if (defendant && defendant.length < 2) defendant = '';
+      v = (plaintiff ? '原告：' + plaintiff : '') + (defendant ? '  被告：' + defendant : '');
+      return { value: v, confidence: (plaintiff || defendant) ? '⚠️' : '' };
+
+    default:
+      return { value: v.replace(/\s{2,}/g, ' ').trim(), confidence: '⚠️' };
+  }
+}
+
+// 辅助：match 的包装（避免全局变量污染）
+function t_match(s, re) { return s.match(re); }
+
+// ── 传票文本结构化解析（v3 — 针对手机拍照OCR精调版） ──
 function parseSummonText(text) {
-  // 预处理：去除OCR常见空格（"原 告"→"原告"，"被 告"→"被告"）
+  // 预处理：统一空格、修复OCR常见错误
   let t = text.replace(/\s+/g, ' ').trim();
   t = t.replace(/原\s+告/g, '原告').replace(/被\s+告/g, '被告')
         .replace(/审\s+判\s+长/g, '审判长').replace(/审\s+判\s+员/g, '审判员')
         .replace(/审\s+判\s+庭/g, '审判庭').replace(/案\s+由/g, '案由')
-        .replace(/开\s+庭\s+日\s+期/g, '开庭日期').replace(/开\s+庭\s+时\s+间/g, '开庭时间');
+        .replace(/被\s+传\s+唤\s+人/g, '被传唤人')
+        .replace(/传\s+唤\s+事\s+由/g, '传唤事由')
+        .replace(/应\s+到\s+时\s+间/g, '应到时间')
+        .replace(/应\s+到\s+场\s+所/g, '应到场所')
+        .replace(/开\s+庭\s+日\s*期/g, '开庭日期').replace(/开\s+庭\s+时\s*间/g, '开庭时间')
+        .replace(/送\s+达\s+地\s+址/g, '送达地址');
+
   const r = {};
 
-  // 案号：多种格式 (2024)渝01民初1234号 / （2024）渝01民初1234号 / 渝01民初1234号
-  const caseNoPatterns = [
-    /[（(]?\d{4}[）)]?[^\s]*?民[^\s]*?(?:初|终|再|督|特|赔)[^\s]*?\d+号/g,
-    /(?:案\s*号[：:\s]*|案件编号[：:\s]*)([^\n\r,;；，。]+)/g,
-    /(?:渝|[川京沪粤浙苏鲁豫鄂湘皖赣闽滇黔陕甘青辽吉黑蒙晋冀新宁琼藏津]|重庆市?)[^\s]{0,6}(?:法)?[^\s]{0,4}(?:民|行|刑)[^\s]{0,8}\d+号/g,
-  ];
-  for (const p of caseNoPatterns) {
-    const m = t.match(p);
-    if (m && m[0]) { r.caseNo = m[0].trim(); break; }
+  // ===== 案号（最优先：标准格式严格匹配） =====
+  // 模式1: (2026)渝0104民初11440号 — 最常见的重庆格式
+  const caseNoStrict = t.match(/[（(](\d{4})[）)]\s*(渝)?\s*(\d+)\s*民\s*(初|终|再|督|特|赔)\s*(\d+)\s*号/);
+  if (caseNoStrict) {
+    r.caseNo = `(${caseNoStrict[1]})${caseNoStrict[2]||''}${caseNoStrict[3]}民${caseNoStrict[4]}${caseNoStrict[5]}号`;
+    r._caseNoConf = '✅';
+  } else {
+    // 模式2: 宽松匹配 + 强清洗
+    const loosePatterns = [
+      /[（(]?\d{4}[）)]?\s*[^\s\n,;；，。|丨]{0,8}?\s*民\s*[^\s\n,;；，。|丨]{0,6}?(?:初|终|再|督|特|赔)\s*[^\s\n,;；，。|丨]{0,4}?\d+\s*号/,
+      /(?:案\s*号[：:\s|丨]*)(([（(]?\d{4}[）)])?[^\s\n,;；，。|丨]{0,15}?号)/,
+    ];
+    for (const p of loosePatterns) {
+      const m = t.match(p);
+      if (m && m[0]) {
+        const cleaned = cleanSummonField('caseNo', m[0]);
+        r.caseNo = cleaned.value;
+        r._caseNoConf = cleaned.confidence;
+        break;
+      }
+    }
   }
 
-  // 法院
+  // ===== 法院（增强OCR容错） =====
   const courtPatterns = [
-    /(重庆市?[^\s,;；，。]{2,15}(?:人民)?法院)/g,
-    /(?:法院名称[：:\s]*)([^\n\r,;；，。]{2,20})/g,
-    /([^\s,;；，。]{2,10}(?:中级|基层|高级)?(?:人民)?法院)/g,
+    /(重庆市?[\s]*[^\s,;；，。\n]{2,18}(?:人民)?法院)/,
+    /([\u4e00-\u9fa5]{2,8}(?:中级|基层|高级)?(?:人民)?法院)/,
+    /(?:法院名称[：:\s]*)([^\n\r,;；，。]{2,20})/,
   ];
   for (const p of courtPatterns) {
     const m = t.match(p);
-    if (m) { r.court = m[m.length > 1 ? 1 : 0]; break; }
+    if (m) {
+      const raw = m[m.length > 1 ? 1 : 0];
+      const cleaned = cleanSummonField('court', raw);
+      if (cleaned.value) {
+        r.court = cleaned.value;
+        r._courtConf = cleaned.confidence;
+        break;
+      }
+    }
   }
 
-  // 开庭日期：多种格式
+  // ===== 开庭日期 =====
   const datePatterns = [
-    /(?:开庭日期|开庭时间|时间|传唤到庭时间)[：:\s]*(\d{4})[年\-\/\.](\d{1,2})[月\-\/\.](\d{1,2})[日]?/,
-    /(\d{4})[年\-\/\.](\d{1,2})[月\-\/\.](\d{1,2})[日]?.*?(?:开庭|传唤|应到)/,
-    /(?:定于|于)(\d{4})[年\-\/\.](\d{1,2})[月\-\/\.](\d{1,2})/,
+    /(?:开庭日期|应到时间|时间|传唤到庭时间)[：:\s]*(\d{4})[年\-\/\.](\d{1,2})[月\-\/\.](\d{1,2})[日]?/,
+    /(\d{4})[年\-\/\.](\d{1,2})[月\-\/\.](\d{1,2})[日]?.*?(?:09:\d{2}|1[0-5]:\d{2}|0[1-9]:\d{2}|开庭|传唤|应到)/,
+    /(?:定于|于)\s*(\d{4})[年\-\/\.](\d{1,2})[月\-\/\.](\d{1,2})/,
     /(\d{4})\s*[年\-\/\.]\s*(\d{1,2})\s*[月\-\/\.]\s*(\d{1,2})/,
   ];
   for (const p of datePatterns) {
     const m = t.match(p);
-    if (m) { r.date = `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`; break; }
+    if (m) { r.date = `${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}`; break; }
   }
 
-  // 开庭时间
+  // ===== 开庭时间 =====
   const timePatterns = [
-    /(?:开庭时间|时间|传唤时间)[：:\s]*(\d{1,2})[时:：](\d{1,2})(?:[时分:])?/,
+    /(?:开庭时间|应到时间|时间|传唤时间)[：:\s]*(\d{1,2})[时:：](\d{1,2})(?:[时分:]?)/,
     /(?:上午|下午|午)[：:\s]*(\d{1,2})[时:：](\d{1,2})/,
     /(\d{1,2}):(\d{2})(?:[:\d]*)\s*(?:开庭|开始)/,
+    /(\d{2})[：:](\d{2})(?=\s*$|\s*(?:原告|被告|被传|注意))/,
   ];
   for (const p of timePatterns) {
     const m = t.match(p);
-    if (m) { r.time = `${m[1].padStart(2,'0')}:${m[2].padStart(2,'0')}`; break; }
+    if (m) { r.time = `${String(m[1]).padStart(2,'0')}:${String(m[2]).padStart(2,'0')}`; break; }
   }
 
-  // 审判庭室（支持阿拉伯+中文数字）
+  // ===== 审判庭室（支持"第十二审判庭"等中文数字） =====
   const roomPatterns = [
-    /第([一二三四五六七八九十百零\d]+)审判(?:庭|室)/,
-    /(第[一二三四五六七八九十百零\d]+审判庭)/,
+    /第\s*([一二三四五六七八九十百零]+)\s*审判(?:庭|室)/,
+    /第\s*(\d+)\s*审判(?:庭|室)/,
+    /第\s*([一二三四五六七八九十百零]+)\s*庭/,
+    /第\s*(\d+)\s*庭/,
   ];
   for (const p of roomPatterns) {
     const m = t.match(p);
-    if (m) { r.courtroom = m[0]; break; }
+    if (m) {
+      const cleaned = cleanSummonField('courtroom', m[0]);
+      r.courtroom = cleaned.value;
+      r._courtroomConf = cleaned.confidence;
+      break;
+    }
   }
 
-  // 审判员/审判长
+  // ===== 审判员/审判长（支持单字姓名如"何津"） =====
   const judgePatterns = [
-    /审判长[：:\s]+([^\n\r,;；，。]{2,6})/,
-    /审判员[：:\s]+([^\n\r,;；，。]{2,6})/,
-    /(?:主审法官|承办法官|法官)[：:\s]+([^\n\r,;；，。]{2,6})/,
+    /审判长[：:\s]+([^\n\r,;；，。]{1,6})/,
+    /审判员[：:\s]+([^\n\r,;；，。]{1,6})/,
+    /(?:主审法官|承办法官|法官)[：:\s]+([^\n\r,;；，。]{1,6})/,
   ];
   for (const p of judgePatterns) {
     const m = t.match(p);
-    if (m) { r.judge = (r.judge ? r.judge + ' / ' : '') + m[m.length > 1 ? 1 : 0]; }
+    if (m) {
+      const cleaned = cleanSummonField('judge', m[m.length > 1 ? 1 : 0]);
+      if (cleaned.value) {
+        r.judge = (r.judge ? r.judge + ' / ' : '') + cleaned.value;
+        r._judgeConf = cleaned.confidence;
+      }
+    }
   }
 
-  // 案由（限制长度避免贪婪）
+  // ===== 案由（扩展常见类型） =====
   const causePatterns = [
-    /(?:案由)[：:\s]+([^\n\r,;；，。]{2,20}?)(?:\s|$|原告|被告|定于|开庭)/,
-    /(?:关于|系)[^\n\r,;；，。]{0,4}([^\n\r,;；，。]{2,16}(?:纠纷|争议|案件|合同|侵权|劳动|离婚|借贷|买卖|租赁|服务|建设工程|股权))/,
+    /(?:案由)[：:\s]+([^\n\r,;；，。]{2,24}?)(?:\s*$|原告|被告|被传|定于|开庭|传票|受理|本案|送达)/,
+    /(?:关于|系)[^\n\r,;；，。]{0,4}([^\n\r,;；，。]{2,18}(?:纠纷|争议|案件|合同|侵权|劳动|离婚|借贷|买卖|租赁|服务|建设工程|股权|损害赔偿|人格权|抚养|赡养|继承|婚姻|家务))/,
   ];
   for (const p of causePatterns) {
     const m = t.match(p);
-    if (m) { r.cause = m[m.length > 1 ? 1 : 0]; break; }
+    if (m) {
+      const cleaned = cleanSummonField('cause', m[m.length > 1 ? 1 : 0]);
+      r.cause = cleaned.value;
+      r._causeConf = cleaned.confidence;
+      break;
+    }
   }
 
-  // 当事人（限制长度避免吃到后续内容）
-  const plaintiffM = t.match(/原告[：:\s]+([^\n\r,;；，。被告定于开庭]{2,20}?)(?:\s|被告|定于|开庭|$)/);
-  if (plaintiffM) r.plaintiff = plaintiffM[1].trim();
-  const defendantM = t.match(/被告[：:\s]+([^\n\r,;；，。第三方原告定于开庭]{2,20}?)(?:\s|原告|第三方|定于|开庭|$)/);
-  if (defendantM) r.defendant = defendantM[1].trim();
-  if (r.plaintiff || r.defendant) {
-    r.parties = (r.plaintiff ? '原告：' + r.plaintiff : '') + (r.defendant ? '  被告：' + r.defendant : '');
+  // ===== 当事人（支持"被传唤人"格式） =====
+  // 先试被传唤人
+  const summonPartyM = t.match(/被传唤人[：:\s]+([^\n\r,;；。原告被告应到传唤送达]{2,20}?)(?:\s|$|送达地址|传唤|应到|原告|被告|注意)/);
+  if (summonPartyM) {
+    const rawParties = '被传唤人：' + summonPartyM[1].trim();
+    const cleaned = cleanSummonField('parties', rawParties);
+    r.parties = cleaned.value;
+    r._partiesConf = cleaned.confidence;
+  } else {
+    // 回退到原告/被告模式
+    const plaintiffM = t.match(/原告[：:\s]+([^\n\r,;；。被告被传定于开庭传票受理]{2,20}?)(?:\s|被告|被传|定于|开庭|传票|$)/);
+    if (plaintiffM) r._rawPlaintiff = plaintiffM[1].trim();
+    const defendantM = t.match(/被告[：:\s]+([^\n\r,;；。原告被传第三方定于开庭传票受理]{2,20}?)(?:\s|原告|被传|第三方|定于|开庭|传票|$)/);
+    if (defendantM) r._rawDefendant = defendantM[1].trim();
+
+    if (r._rawPlaintiff || r._rawDefendant) {
+      const rawParties = '原告：' + (r._rawPlaintiff || '') + '  被告：' + (r._rawDefendant || '');
+      const cleaned = cleanSummonField('parties', rawParties);
+      r.parties = cleaned.value;
+      r._partiesConf = cleaned.confidence;
+    }
+    delete r._rawPlaintiff;
+    delete r._rawDefendant;
   }
 
   return r;
 }
 
 function fillSummonForm(parsed) {
-  if (parsed.caseNo) setV('sp_caseNo', parsed.caseNo);
-  if (parsed.court) setV('sp_court', parsed.court);
-  if (parsed.date) setV('sp_date', parsed.date);
-  if (parsed.time) setV('sp_time', parsed.time);
-  if (parsed.courtroom) setV('sp_courtroom', parsed.courtroom);
-  if (parsed.judge) setV('sp_judge', parsed.judge);
-  if (parsed.cause) setV('sp_cause', parsed.cause);
-  if (parsed.parties) setV('sp_parties', parsed.parties);
+  // 填充字段并显示置信度标记
+  const fields = [
+    ['sp_caseNo', parsed.caseNo, parsed._caseNoConf],
+    ['sp_court', parsed.court, parsed._courtConf],
+    ['sp_date', parsed.date, ''],
+    ['sp_time', parsed.time, ''],
+    ['sp_courtroom', parsed.courtroom, parsed._courtroomConf],
+    ['sp_judge', parsed.judge, parsed._judgeConf],
+    ['sp_cause', parsed.cause, parsed._causeConf],
+    ['sp_parties', parsed.parties, parsed._partiesConf],
+  ];
+  for (const [id, val, conf] of fields) {
+    if (val) setV(id, val);
+    // 更新对应label的置信度标记
+    const label = document.getElementById(id + '_conf');
+    if (label) {
+      label.textContent = conf || '';
+      label.style.display = conf ? '' : 'none';
+      label.className = 'sp-conf-badge ' + (conf === '✅' ? 'conf-high' : 'conf-low');
+    }
+  }
 }
 
 function setV(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
