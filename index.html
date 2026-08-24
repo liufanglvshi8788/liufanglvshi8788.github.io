@@ -426,18 +426,38 @@ body {
 .card-due.overdue { color: var(--urgent); font-weight: 700; }
 .card-due.today { color: var(--important); font-weight: 700; }
 
-/* ===== 备注栏 - 显眼设计 ===== */
+/* ===== 备注栏 - 高显眼设计 v2 ===== */
 .card-note {
-  font-size: 12.5px; color: #3a4052; margin-top: 9px; padding: 9px 12px;
-  background: linear-gradient(135deg, #f8f9fc 0%, #f1f3f8 100%);
-  border-radius: var(--radius-xs); white-space: pre-wrap; word-break: break-word;
-  border: 1px dashed #d4dae6; line-height: 1.65;
-  position: relative; display: flex; gap: 7px;
+  font-size: 13px; color: #2d3142; margin-top: 10px; padding: 0;
+  background: linear-gradient(135deg, #f5f0ff 0%, #ede7fe 40%, #e8dff8 100%);
+  border-radius: var(--radius); white-space: pre-wrap; word-break: break-word;
+  border: 1.5px solid #c4a6ff; line-height: 1.72;
+  position: relative; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+  animation: noteIn 0.35s ease-out;
 }
+@keyframes noteIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* 左侧色条 */
 .card-note::before {
-  content: '📝'; font-size: 12px; flex-shrink: 0; margin-top: 1px;
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; background: linear-gradient(180deg, #a855f7, #7c3aed, #6d28d9);
+  border-radius: 3px 0 0 3px;
 }
-.card-note .note-text { flex: 1; }
+/* 标题标签栏 */
+.card-note::after {
+  content: '✏️ 编辑内容'; position: absolute; top: 0; left: 0; right: 0;
+  font-size: 11px; font-weight: 700; color: #7c3aed;
+  background: linear-gradient(90deg, rgba(168,85,247,0.12) 0%, rgba(168,85,247,0.04) 100%);
+  padding: 4px 12px 4px 14px; letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(168,85,247,0.15);
+}
+.card-note .note-text {
+  display: block; padding: 22px 12px 11px 14px;
+  font-weight: 500; color: #37384c;
+}
 
 /* 复核信息 */
 .card-review-info { font-size: 11.5px; margin-top: 7px; padding: 7px 11px; background: var(--review-bg); border-radius: var(--radius-xs); color: var(--review-border); border: 1px solid rgba(155,109,208,0.18); }
