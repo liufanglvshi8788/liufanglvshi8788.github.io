@@ -998,6 +998,8 @@ body {
 .calendar-legend .dot.red { background: var(--urgent); }
 .calendar-legend .dot.orange { background: var(--important); }
 .calendar-legend .dot.green { background: var(--done-border); }
+.calendar-summon-btn { font-size:12.5px; padding:5px 14px; background:linear-gradient(135deg,#f0e7ff,#e9d5ff); color:#6b21a8; border:1.5px solid #c4b5fd; border-radius:10px; cursor:pointer; white-space:nowrap; transition:all .2s; }
+.calendar-summon-btn:hover { background:linear-gradient(135deg,#c4b5fd,#a78bfa); color:#fff; transform:scale(1.03); }
 .calendar-grid { background: var(--card-bg); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--border-soft); }
 .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); border-bottom: 2px solid var(--border); }
 .calendar-weekday { padding: 10px 6px; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -1260,6 +1262,19 @@ body {
 }
 .note-content .nl-text { flex: 1; }
 .note-content .nl-preamble { font-size: 13.5px; color: #6b7280; margin-bottom: 10px; line-height: 1.7; }
+
+/* ===== 开庭传票上传 ===== */
+.summon-drop-zone { border:2px dashed #c4b5fd;border-radius:14px;padding:32px 20px;text-align:center;background:#faf5ff;cursor:pointer;transition:all .25s;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.summon-drop-zone:hover,.summon-drop-zone.drag-over { border-color:#7c3aed;background:#f3e8ff;box-shadow:0 0 0 4px rgba(124,58,237,0.1); }
+.summon-parse-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; }
+.summon-parse-grid .summon-field { display:flex; flex-direction:column; gap:3px; }
+.summon-parse-grid .summon-field.half { grid-column:span 1; }
+.summon-parse-grid .summon-field.full { grid-column:span 2; }
+.summon-parse-grid label { font-size:12px;font-weight:600;color:#6b7280; }
+.summon-parse-grid input,.summon-parse-grid select { padding:8px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13.5px;background:#fff;color:#1f2937;outline:none;transition:border-color .2s; }
+.summon-parse-grid input:focus,.summon-parse-grid select:focus { border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,0.12); }
+.summon-spinner { display:inline-block;width:28px;height:28px;border:3px solid #e5e7eb;border-top-color:#a855f7;border-radius:50%;animation:spin .7s linear infinite; margin:0 auto; }
+@keyframes spin { to{transform:rotate(360deg);} }
 .note-content .nl-bullet {
   flex-shrink: 0;
   width: 6px;
@@ -1933,6 +1948,84 @@ body {
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeNote()">取消</button>
       <button class="btn-save" onclick="saveNote()">保存手记</button>
+    </div>
+  </div>
+</div>
+
+<!-- 开庭传票上传 Modal -->
+<div class="modal-overlay" id="summonModal">
+  <div class="modal" style="max-width:680px; max-height:92vh; overflow-y:auto;">
+    <div class="modal-header">
+      <h2>📋 上传开庭传票</h2>
+      <button onclick="closeSummonUpload()" class="modal-close">&times;</button>
+    </div>
+    <div class="modal-body" style="padding:20px;">
+      <p style="font-size:13px;color:#6b7280;margin-bottom:14px;">支持 PDF 传票或照片（截图/拍照），系统将自动识别案号、开庭时间、审判庭等信息并录入日历。</p>
+
+      <!-- 拖拽上传区 -->
+      <div id="summonDropZone" class="summon-drop-zone"
+           ondragover="event.preventDefault();this.classList.add('drag-over')"
+           ondragleave="this.classList.remove('drag-over')"
+           ondrop="handleSummonDrop(event)"
+           onclick="document.getElementById('summonFileInput').click()">
+        <input type="file" id="summonFileInput" accept=".pdf,image/*" onchange="handleSummonFile(this.files[0])" style="display:none;">
+        <div id="summonDropHint">
+          <div style="font-size:36px;margin-bottom:8px;">📄</div>
+          <div style="font-weight:600;font-size:15px;color:#4c1d95;">拖入开庭传票文件到这里</div>
+          <div style="font-size:12.5px;color:#9ca3af;margin-top:6px;">或点击选择 · 支持 PDF / JPG / PNG</div>
+        </div>
+        <div id="summonPreviewArea" style="display:none;">
+          <img id="summonImgPreview" style="max-width:100%;max-height:280px;border-radius:10px;border:1px solid #e5e7eb;">
+          <div id="summonPdfName" style="margin-top:8px;font-size:13px;color:#6b7280;"></div>
+        </div>
+      </div>
+
+      <!-- 解析结果预览 -->
+      <div id="summonParseResult" style="display:none;margin-top:16px;">
+        <div style="font-weight:600;font-size:14px;color:#4c1d95;margin-bottom:10px;">✅ 识别结果（可编辑修正）</div>
+        <div class="summon-parse-grid">
+          <div class="summon-field">
+            <label>案号</label><input id="sp_caseNo" placeholder="(2024)渝01民初1234号">
+          </div>
+          <div class="summon-field">
+            <label>法院</label><input id="sp_court" placeholder="重庆市XX区人民法院">
+          </div>
+          <div class="summon-field">
+            <label>开庭日期</label><input type="date" id="sp_date">
+          </div>
+          <div class="summon-field">
+            <label>开庭时间</label><input type="time" id="sp_time" value="09:30">
+          </div>
+          <div class="summon-field half">
+            <label>审判庭室</label><input id="sp_courtroom" placeholder="第X审判庭">
+          </div>
+          <div class="summon-field half">
+            <label>审判员</label><input id="sp_judge" placeholder="审判长/审判员">
+          </div>
+          <div class="summon-field full">
+            <label>案由</label><input id="sp_cause" placeholder="合同纠纷 / 劳动争议等">
+          </div>
+          <div class="summon-field full">
+            <label>当事人</label><input id="sp_parties" placeholder="原告：XXX  被告：XXX">
+          </div>
+          <div class="summon-field full">
+            <label>负责人</label>
+            <select id="sp_assignee"><option value="">选择负责人</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 处理状态 -->
+      <div id="summonStatus" style="display:none;text-align:center;padding:16px;margin-top:12px;">
+        <div class="summon-spinner"></div>
+        <div id="summonStatusText" style="margin-top:8px;font-size:13.5px;color:#6b7280;"></div>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div style="margin-top:18px;display:flex;gap:10px;justify-content:flex-end;">
+        <button class="gp-btn gp-btn-ghost" onclick="closeSummonUpload()" style="flex:0 0 auto;">取消</button>
+        <button id="summonConfirmBtn" class="gp-btn" onclick="confirmSummonEntry()" style="display:none;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;padding:10px 24px;border-radius:10px;font-size:14px;cursor:pointer;">✅ 确认录入日历</button>
+      </div>
     </div>
   </div>
 </div>
@@ -3175,6 +3268,7 @@ function renderCalendar() {
         <button onclick="calNextMonth()">›</button>
       </div>
       <button class="calendar-today-btn" onclick="calGoToday()">今天</button>
+      <button class="calendar-summon-btn" onclick="openSummonUpload()" title="上传开庭传票（PDF/图片），自动识别案号、时间、法庭等信息">📋 开庭传票</button>
       <div class="calendar-legend">
         <span><span class="dot red"></span>逾期</span>
         <span><span class="dot orange"></span>紧急</span>
@@ -4497,7 +4591,335 @@ function formatNoteByLines(t) {
   return html || esc(t);
 }
 
-// ===== 律师手记 =====
+// ===== 开庭传票自动录入 =====
+let _summonPdfJsLoaded = false;
+let _summonTesseractLoaded = false;
+
+function openSummonUpload() {
+  document.getElementById('summonModal').classList.add('show');
+  resetSummonForm();
+  // 填充负责人下拉
+  const sel = document.getElementById('sp_assignee');
+  sel.innerHTML = '<option value="">选择负责人</option>';
+  (cloudData.members || []).forEach(m => {
+    sel.innerHTML += `<option value="${esc(m)}">${esc(m)}</option>`;
+  });
+}
+
+function closeSummonUpload() {
+  document.getElementById('summonModal').classList.remove('show');
+}
+
+function resetSummonForm() {
+  document.getElementById('summonDropHint').style.display = '';
+  document.getElementById('summonPreviewArea').style.display = 'none';
+  document.getElementById('summonParseResult').style.display = 'none';
+  document.getElementById('summonStatus').style.display = 'none';
+  document.getElementById('summonConfirmBtn').style.display = 'none';
+  ['sp_caseNo','sp_court','sp_date','sp_time','sp_courtroom','sp_judge','sp_cause','sp_parties'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  document.getElementById('sp_time').value = '09:30';
+  document.getElementById('summonDropZone').classList.remove('drag-over');
+}
+
+function handleSummonDrop(ev) {
+  ev.preventDefault();
+  document.getElementById('summonDropZone').classList.remove('drag-over');
+  const file = ev.dataTransfer.files[0];
+  if (file) handleSummonFile(file);
+}
+
+async function handleSummonFile(file) {
+  if (!file) return;
+  // 显示文件预览
+  const hint = document.getElementById('summonDropHint');
+  const preview = document.getElementById('summonPreviewArea');
+  hint.style.display = 'none';
+  preview.style.display = '';
+  const imgPrev = document.getElementById('summonImgPreview');
+  const pdfName = document.getElementById('summonPdfName');
+
+  if (file.type === 'application/pdf') {
+    imgPrev.style.display = 'none';
+    pdfName.textContent = '📄 ' + file.name + ' (' + (file.size/1024).toFixed(0) + ' KB)';
+    pdfName.style.display = '';
+  } else {
+    imgPrev.style.display = '';
+    pdfName.style.display = 'none';
+    const reader = new FileReader();
+    reader.onload = e => { imgPrev.src = e.target.result; };
+    reader.readAsDataURL(file);
+  }
+
+  // 显示处理状态
+  document.getElementById('summonStatus').style.display = '';
+  document.getElementById('summonParseResult').style.display = 'none';
+  document.getElementById('summonConfirmBtn').style.display = 'none';
+  const statusText = document.getElementById('summonStatusText');
+
+  let text = '';
+  try {
+    if (file.type === 'application/pdf') {
+      statusText.textContent = '正在读取 PDF 文本…';
+      text = await extractPDFText(file);
+    } else {
+      statusText.textContent = '正在进行 OCR 文字识别…（图片可能需要几秒）';
+      text = await extractImageText(file);
+    }
+    if (!text || text.trim().length < 10) {
+      statusText.textContent = '⚠️ 未能提取到有效文字，请尝试更清晰的图片或手动填写下方信息';
+      showManualSummonForm();
+      return;
+    }
+    statusText.textContent = '正在解析开庭信息…';
+
+    // 解析传票信息
+    const parsed = parseSummonText(text);
+
+    // 填入表单
+    fillSummonForm(parsed);
+
+    document.getElementById('summonStatus').style.display = 'none';
+    document.getElementById('summonParseResult').style.display = '';
+    document.getElementById('summonConfirmBtn').style.display = '';
+
+  } catch(err) {
+    console.error('传票解析错误:', err);
+    statusText.textContent = '⚠️ 解析出错：' + err.message + ' — 请手动填写下方信息';
+    showManualSummonForm();
+  }
+}
+
+function showManualSummonForm() {
+  document.getElementById('summonStatus').style.display = 'none';
+  document.getElementById('summonParseResult').style.display = '';
+  document.getElementById('summonConfirmBtn').style.display = '';
+}
+
+// ── PDF 文本提取 ──
+async function extractPDFText(file) {
+  // 动态加载 pdf.js
+  if (!_summonPdfJsLoaded) {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs', 'module');
+    // pdfjsLib is global when loaded as module
+    _summonPdfJsLoaded = true;
+  }
+  const arrayBuffer = await file.arrayBuffer();
+  const pdfjsLib = window.pdfjsLib || (await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs')).default;
+  if (!window.pdfjsLib) window.pdfjsLib = pdfjsLib;
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let fullText = '';
+  for (let i = 1; i <= Math.min(pdf.numPages, 10); i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const pageText = content.items.map(item => item.str).join('');
+    fullText += pageText + '\n';
+  }
+  return fullText;
+}
+
+// ── 图片 OCR ──
+async function extractImageText(file) {
+  if (!_summonTesseractLoaded) {
+    await loadScript('https://cdn.jsdelivr.net/npm/tesseract.js@5.0.5/dist/tesseract.min.js', 'classic');
+    _summonTesseractLoaded = true;
+  }
+  const result = await Tesseract.recognize(file, 'chi_sim+eng', { logger: m => {} });
+  return result.data.text;
+}
+
+function loadScript(url, type) {
+  return new Promise((resolve, reject) => {
+    if (type === 'module') {
+      const el = document.createElement('script');
+      el.type = 'module';
+      el.src = url;
+      el.onload = resolve;
+      el.onerror = () => reject(new Error('加载脚本失败: ' + url));
+      document.head.appendChild(el);
+    } else {
+      const el = document.createElement('script');
+      el.src = url;
+      el.onload = resolve;
+      el.onerror = () => reject(new Error('加载脚本失败: ' + url));
+      document.head.appendChild(el);
+    }
+  });
+}
+
+// ── 传票文本结构化解析 ──
+function parseSummonText(text) {
+  // 预处理：去除OCR常见空格（"原 告"→"原告"，"被 告"→"被告"）
+  let t = text.replace(/\s+/g, ' ').trim();
+  t = t.replace(/原\s+告/g, '原告').replace(/被\s+告/g, '被告')
+        .replace(/审\s+判\s+长/g, '审判长').replace(/审\s+判\s+员/g, '审判员')
+        .replace(/审\s+判\s+庭/g, '审判庭').replace(/案\s+由/g, '案由')
+        .replace(/开\s+庭\s+日\s+期/g, '开庭日期').replace(/开\s+庭\s+时\s+间/g, '开庭时间');
+  const r = {};
+
+  // 案号：多种格式 (2024)渝01民初1234号 / （2024）渝01民初1234号 / 渝01民初1234号
+  const caseNoPatterns = [
+    /[（(]?\d{4}[）)]?[^\s]*?民[^\s]*?(?:初|终|再|督|特|赔)[^\s]*?\d+号/g,
+    /(?:案\s*号[：:\s]*|案件编号[：:\s]*)([^\n\r,;；，。]+)/g,
+    /(?:渝|[川京沪粤浙苏鲁豫鄂湘皖赣闽滇黔陕甘青辽吉黑蒙晋冀新宁琼藏津]|重庆市?)[^\s]{0,6}(?:法)?[^\s]{0,4}(?:民|行|刑)[^\s]{0,8}\d+号/g,
+  ];
+  for (const p of caseNoPatterns) {
+    const m = t.match(p);
+    if (m && m[0]) { r.caseNo = m[0].trim(); break; }
+  }
+
+  // 法院
+  const courtPatterns = [
+    /(重庆市?[^\s,;；，。]{2,15}(?:人民)?法院)/g,
+    /(?:法院名称[：:\s]*)([^\n\r,;；，。]{2,20})/g,
+    /([^\s,;；，。]{2,10}(?:中级|基层|高级)?(?:人民)?法院)/g,
+  ];
+  for (const p of courtPatterns) {
+    const m = t.match(p);
+    if (m) { r.court = m[m.length > 1 ? 1 : 0]; break; }
+  }
+
+  // 开庭日期：多种格式
+  const datePatterns = [
+    /(?:开庭日期|开庭时间|时间|传唤到庭时间)[：:\s]*(\d{4})[年\-\/\.](\d{1,2})[月\-\/\.](\d{1,2})[日]?/,
+    /(\d{4})[年\-\/\.](\d{1,2})[月\-\/\.](\d{1,2})[日]?.*?(?:开庭|传唤|应到)/,
+    /(?:定于|于)(\d{4})[年\-\/\.](\d{1,2})[月\-\/\.](\d{1,2})/,
+    /(\d{4})\s*[年\-\/\.]\s*(\d{1,2})\s*[月\-\/\.]\s*(\d{1,2})/,
+  ];
+  for (const p of datePatterns) {
+    const m = t.match(p);
+    if (m) { r.date = `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`; break; }
+  }
+
+  // 开庭时间
+  const timePatterns = [
+    /(?:开庭时间|时间|传唤时间)[：:\s]*(\d{1,2})[时:：](\d{1,2})(?:[时分:])?/,
+    /(?:上午|下午|午)[：:\s]*(\d{1,2})[时:：](\d{1,2})/,
+    /(\d{1,2}):(\d{2})(?:[:\d]*)\s*(?:开庭|开始)/,
+  ];
+  for (const p of timePatterns) {
+    const m = t.match(p);
+    if (m) { r.time = `${m[1].padStart(2,'0')}:${m[2].padStart(2,'0')}`; break; }
+  }
+
+  // 审判庭室（支持阿拉伯+中文数字）
+  const roomPatterns = [
+    /第([一二三四五六七八九十百零\d]+)审判(?:庭|室)/,
+    /(第[一二三四五六七八九十百零\d]+审判庭)/,
+  ];
+  for (const p of roomPatterns) {
+    const m = t.match(p);
+    if (m) { r.courtroom = m[0]; break; }
+  }
+
+  // 审判员/审判长
+  const judgePatterns = [
+    /审判长[：:\s]+([^\n\r,;；，。]{2,6})/,
+    /审判员[：:\s]+([^\n\r,;；，。]{2,6})/,
+    /(?:主审法官|承办法官|法官)[：:\s]+([^\n\r,;；，。]{2,6})/,
+  ];
+  for (const p of judgePatterns) {
+    const m = t.match(p);
+    if (m) { r.judge = (r.judge ? r.judge + ' / ' : '') + m[m.length > 1 ? 1 : 0]; }
+  }
+
+  // 案由（限制长度避免贪婪）
+  const causePatterns = [
+    /(?:案由)[：:\s]+([^\n\r,;；，。]{2,20}?)(?:\s|$|原告|被告|定于|开庭)/,
+    /(?:关于|系)[^\n\r,;；，。]{0,4}([^\n\r,;；，。]{2,16}(?:纠纷|争议|案件|合同|侵权|劳动|离婚|借贷|买卖|租赁|服务|建设工程|股权))/,
+  ];
+  for (const p of causePatterns) {
+    const m = t.match(p);
+    if (m) { r.cause = m[m.length > 1 ? 1 : 0]; break; }
+  }
+
+  // 当事人（限制长度避免吃到后续内容）
+  const plaintiffM = t.match(/原告[：:\s]+([^\n\r,;；，。被告定于开庭]{2,20}?)(?:\s|被告|定于|开庭|$)/);
+  if (plaintiffM) r.plaintiff = plaintiffM[1].trim();
+  const defendantM = t.match(/被告[：:\s]+([^\n\r,;；，。第三方原告定于开庭]{2,20}?)(?:\s|原告|第三方|定于|开庭|$)/);
+  if (defendantM) r.defendant = defendantM[1].trim();
+  if (r.plaintiff || r.defendant) {
+    r.parties = (r.plaintiff ? '原告：' + r.plaintiff : '') + (r.defendant ? '  被告：' + r.defendant : '');
+  }
+
+  return r;
+}
+
+function fillSummonForm(parsed) {
+  if (parsed.caseNo) setV('sp_caseNo', parsed.caseNo);
+  if (parsed.court) setV('sp_court', parsed.court);
+  if (parsed.date) setV('sp_date', parsed.date);
+  if (parsed.time) setV('sp_time', parsed.time);
+  if (parsed.courtroom) setV('sp_courtroom', parsed.courtroom);
+  if (parsed.judge) setV('sp_judge', parsed.judge);
+  if (parsed.cause) setV('sp_cause', parsed.cause);
+  if (parsed.parties) setV('sp_parties', parsed.parties);
+}
+
+function setV(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
+function getV(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+// ── 确认录入日历事项 ──
+async function confirmSummonEntry() {
+  const caseNo = getV('sp_caseNo');
+  const court = getV('sp_court');
+  const date = getV('sp_date');
+  const time = getV('sp_time');
+  const courtroom = getV('sp_courtroom');
+  const judge = getV('sp_judge');
+  const cause = getV('sp_cause');
+  const parties = getV('sp_parties');
+  const assignee = getV('sp_assignee');
+
+  if (!date) { showToast('请确认或填写开庭日期'); return; }
+  if (!assignee) { showToast('请选择负责人'); return; }
+
+  // 构建标题
+  let title = '[开庭]';
+  if (caseNo) title += ' ' + caseNo;
+  else if (cause) title += ' ' + cause;
+
+  // 构建备注
+  let noteParts = [];
+  if (court) noteParts.push('🏛️ ' + court);
+  if (courtroom) noteParts.push('🚪 ' + courtroom);
+  if (judge) noteParts.push('⚖️ ' + judge);
+  if (parties) noteParts.push('👥 ' + parties);
+  if (cause && !title.includes(cause)) noteParts.push('📋 ' + cause);
+
+  const dueDate = date + (time ? 'T' + time + ':00' : 'T09:30:00');
+
+  const newItem = {
+    id: 'item-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6),
+    title,
+    assignee,
+    priority: '重要',
+    type: '每日日程',
+    caseType: '诉讼案件',
+    status: '待办',
+    dueDate,
+    createdAt: new Date().toISOString(),
+    completedAt: null,
+    note: noteParts.join('\n'),
+    recorder: currentUser || assignee,
+    hours: 0,
+    summonAutoEntry: true, // 标记为传票自动录入
+  };
+
+  cloudData.items.push(newItem);
+  setSyncStatus('syncing', '录入中…');
+  try {
+    await cloudWrite(cloudData);
+    closeSummonUpload();
+    showToast('✅ 开庭事项已录入日历');
+    refreshUI();
+  } catch(e) {
+    showToast('已保存到本地，同步失败');
+    setSyncStatus('error', '同步失败');
+  }
+}
 function renderNotes() {
   if (!cloudData.notes) cloudData.notes = [];
   if (!cloudData.deductions) cloudData.deductions = [];
