@@ -1903,6 +1903,17 @@ body {
 </div>
 
 <!-- Growth Pool Modal (律师考核记录) -->
+<!-- 律师考核板块密码锁 -->
+<div class="login-modal" id="reviewLockModal" style="display:none;">
+  <div class="login-modal-card" style="width:360px;">
+    <h3 style="margin:0 0 6px;font-size:17px;">🔒 律师考核 · 请输入访问密码</h3>
+    <p style="font-size:12px;color:var(--text-light);margin:0 0 14px;">该板块包含团队成员考核积分、奖金与薪酬数据，仅限授权访问</p>
+    <input type="password" id="reviewLockPassword" placeholder="访问密码" style="width:100%;box-sizing:border-box;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;margin-bottom:6px;" onkeydown="if(event.key==='Enter')submitReviewLock()" />
+    <div id="reviewLockError" style="color:#dc3545;font-size:12px;min-height:16px;text-align:left;padding-left:4px;margin-bottom:8px;"></div>
+    <button style="width:100%;padding:10px;border:none;border-radius:10px;background:var(--primary-gradient);color:#fff;font-size:14px;font-weight:600;cursor:pointer;" onclick="submitReviewLock()">解 锁</button>
+  </div>
+</div>
+
 <!-- 成员记录快速编辑弹层 -->
 <div class="kp-mr-modal" id="memberRecordsModal" onclick="if(event.target===this)closeMemberRecords()">
   <div class="kp-mr-box">
@@ -2591,6 +2602,11 @@ async function loadData() {
   updateFilterOptions();
   ensureReviewCollections();
   normalizeReviews();
+  // 初始化律师考核板块密码锁（首次使用写入默认密码）
+  if (cloudData.config && !cloudData.config.reviewLockHash) {
+    cloudData.config.reviewLockHash = await sha256('lfls102810');
+    try { await cloudWrite(cloudData); } catch(e) { console.warn('Review lock init failed', e); }
+  }
   // 自动填入当前用户为录入人
   if (currentUser) {
     const recSel = document.getElementById('quickRecorder');
@@ -2907,6 +2923,11 @@ function getFilteredItems() {
 
 // ===== View Switching =====
 function switchView(view) {
+  // 律师考核板块独立密码锁
+  if (view === 'review' && !reviewUnlocked()) {
+    openReviewLock();
+    return;
+  }
   currentView = view;
   // 更新左侧导航栏 + 手机端底部导航高亮
   document.querySelectorAll('.nav-item[data-view], .mobile-nav-item[data-view]').forEach(n => {
@@ -2936,6 +2957,86 @@ function switchView(view) {
     renderOverdueBanner();
   }
   render();
+}
+
+// ===== 律师考核板块密码锁 =====
+// 密码哈希存储于云端 config.reviewLockHash，首次默认 lfls102810
+function reviewLockHashDefault() {
+  // 预置密码 lfls102810 的 SHA-256（首次加载时若无自定义密码则使用）
+  return 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2'; // 占位，运行时按需计算
+}
+let _reviewUnlockedSession = false; // 本次会话已解锁（刷新后需重新输入）
+
+async function _sha256Hex(text) { return await sha256(text); }
+
+function reviewUnlocked() {
+  if (_reviewUnlockedSession) return true;
+  return false;
+}
+
+function openReviewLock() {
+  document.getElementById('reviewLockError').textContent = '';
+  document.getElementById('reviewLockPassword').value = '';
+  document.getElementById('reviewLockModal').style.display = 'flex';
+  setTimeout(() => { const el = document.getElementById('reviewLockPassword'); if (el) el.focus(); }, 100);
+}
+function closeReviewLock() {
+  document.getElementById('reviewLockModal').style.display = 'none';
+}
+
+async function submitReviewLock(e) {
+  if (e) e.preventDefault();
+  const pwd = document.getElementById('reviewLockPassword').value;
+  const err = document.getElementById('reviewLockError');
+  let storedHash = (cloudData.config && cloudData.config.reviewLockHash) || '';
+  // 兜底：云端尚未初始化密码时，按默认密码比对，并补写哈希
+  if (!storedHash) {
+    storedHash = await sha256('lfls102810');
+    cloudData.config = cloudData.config || {};
+    cloudData.config.reviewLockHash = storedHash;
+    try { await cloudWrite(cloudData); } catch (err2) { console.warn('lock init fail', err2); }
+  }
+  const inputHash = await sha256(pwd);
+  if (inputHash === storedHash) {
+    _reviewUnlockedSession = true;
+    sessionStorage.setItem('review_unlocked', '1');
+    closeReviewLock();
+    switchView('review');
+    showToast('🔓 律师考核已解锁');
+  } else {
+    err.textContent = '密码错误，请重试';
+    document.getElementById('reviewLockPassword').value = '';
+  }
+  return false;
+}
+
+// 会话内恢复解锁状态
+(function restoreReviewUnlock() {
+  if (sessionStorage.getItem('review_unlocked') === '1') _reviewUnlockedSession = true;
+})();
+
+// 修改考核板块密码（仅负责人）
+async function changeReviewLockPwd() {
+  if (!isManager()) { showToast('仅团队负责人可修改密码'); return; }
+  const cur = prompt('请输入当前密码：');
+  if (cur === null) return;
+  const curHash = await sha256(cur);
+  const storedHash = (cloudData.config && cloudData.config.reviewLockHash) || '';
+  if (curHash !== storedHash) { showToast('当前密码错误'); return; }
+  const p1 = prompt('请输入新密码（至少4位）：');
+  if (!p1 || p1.length < 4) { showToast('新密码至少4位'); return; }
+  const p2 = prompt('请再次输入新密码：');
+  if (p1 !== p2) { showToast('两次输入不一致'); return; }
+  cloudData.config = cloudData.config || {};
+  cloudData.config.reviewLockHash = await sha256(p1);
+  setSyncStatus('syncing', '保存密码...');
+  try {
+    await cloudWrite(cloudData);
+    showToast('考核板块密码已更新');
+  } catch (err) {
+    showToast('已保存到本地，GitHub 同步失败');
+    setSyncStatus('error', '同步失败');
+  }
 }
 
 // ===== 收起/展开右侧"日程与提醒"面板 =====
@@ -3693,6 +3794,7 @@ function renderReview() {
       <button class="gp-btn gp-btn-secondary" onclick="openReport()">📊 月度考核报告</button>
       <button class="gp-btn gp-btn-secondary" onclick="openWeekly()">📅 周汇总</button>
       <button class="gp-btn gp-btn-ghost" onclick="openSpec()">📋 考核制度</button>
+      <button class="gp-btn gp-btn-ghost" onclick="changeReviewLockPwd()">🔒 修改板块密码</button>
     </div>`;
   } else {
     html += `<div class="gp-viewonly-bar"><span class="vicon">👁</span><span>当前为<strong>查看模式</strong>：仅团队负责人可录入与修改考核记录，您可查看全部考核数据与报告。</span></div>
