@@ -543,8 +543,7 @@ body {
 /* ===== Modal ===== */
 .modal-overlay {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(20,23,34,0.45);
-  backdrop-filter: blur(6px);
+  background: rgba(20,23,34,0.50);
   display: none; align-items: center; justify-content: center; z-index: 1000;
 }
 .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
@@ -857,7 +856,7 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #c084fc, #a855f7); background-clip: padding-box; }
 
-.modal-overlay { background: rgba(76, 29, 110, 0.30); backdrop-filter: blur(10px) saturate(1.2); }
+.modal-overlay { background: rgba(76, 29, 110, 0.30); }
 .modal {
   border: 1px solid rgba(255,255,255,0.6);
   box-shadow: 0 32px 70px -16px rgba(76,29,110,0.40), 0 10px 24px -6px rgba(76,29,110,0.18);
@@ -1051,7 +1050,7 @@ body {
 .cal-item.done { opacity: 0.5; text-decoration: line-through; }
 .cal-more { font-size: 10px; color: var(--text-light); text-align: center; padding: 1px; cursor: pointer; }
 .cal-more:hover { color: var(--primary); }
-.calendar-day-detail { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.4); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 900; }
+.calendar-day-detail { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.45); display: none; align-items: center; justify-content: center; z-index: 900; }
 .calendar-day-detail.show { display: flex; animation: fadeIn 0.2s ease; }
 .calendar-day-detail .day-detail-box { background: var(--card-bg); border-radius: var(--radius-xl); padding: 24px 28px; width: 90%; max-width: 500px; max-height: 70vh; overflow-y: auto; box-shadow: 0 24px 48px -12px rgba(15,23,42,0.25); }
 .calendar-day-detail .day-detail-header { font-size: 17px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
@@ -1111,7 +1110,6 @@ body {
   .panel-backdrop {
     display: none; position: fixed; inset: 0;
     background: rgba(15, 18, 30, 0.42); z-index: 550;
-    backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
   }
   body.mobile-panel-open .panel-backdrop { display: block; }
   .panel-reopen-tab { display: none !important; }
@@ -1147,8 +1145,7 @@ body {
   /* 手机端底部导航栏 */
   .mobile-bottom-nav {
     display: flex; position: fixed; bottom: 0; left: 0; right: 0;
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    background: rgba(255, 255, 255, 0.97);
     border-top: 1px solid var(--border); z-index: 400;
     padding: 5px 2px calc(6px + env(safe-area-inset-bottom));
     box-shadow: 0 -4px 24px rgba(26, 29, 41, 0.08);
@@ -1177,7 +1174,7 @@ body {
   width: 380px; max-width: 90vw; padding: 42px 36px 36px;
   background: rgba(255, 255, 255, 0.96); border-radius: 22px;
   box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.55);
-  text-align: center; backdrop-filter: blur(12px);
+  text-align: center;
   animation: loginPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 @keyframes loginPop { from { transform: scale(0.92) translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -1210,8 +1207,8 @@ body {
 .login-btn-ghost:hover { border-color: #94a3b8; color: #1e293b; }
 .login-error { color: #dc3545; font-size: 12.5px; min-height: 16px; text-align: left; padding-left: 4px; }
 .login-modal {
-  position: fixed; inset: 0; z-index: 3100; background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center;
+  position: fixed; inset: 0; z-index: 3100; background: rgba(15, 23, 42, 0.58);
+  display: flex; align-items: center; justify-content: center;
   animation: fadeIn 0.2s ease;
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -1359,6 +1356,107 @@ body {
 .gp-ded-btn { font-size: 12px; padding: 4px 10px; border: 1px solid #c4b5fd; background: #f5f0ff; color: #6d28d9; border-radius: 8px; cursor: pointer; }
 .gp-ded-btn:hover { background: #ede9fe; }
 .gp-ded-note { font-size: 12px; color: #6b7280; margin-top: 8px; }
+
+/* ===== 律师考核 v3（《律师团队内部绩效管理与考核办法》） ===== */
+/* 录入弹窗 Tab */
+.rev-tabs { display: flex; gap: 6px; margin: 4px 0 16px; background: #f4f0fa; padding: 5px; border-radius: 14px; }
+.rev-tab { flex: 1; text-align: center; padding: 9px 6px; border-radius: 10px; font-size: 13.5px; font-weight: 600; color: #6b6285; cursor: pointer; transition: all .2s; border: none; background: transparent; }
+.rev-tab:hover { color: #4c1d95; }
+.rev-tab.active { background: var(--primary-gradient); color: #fff; box-shadow: 0 3px 10px -2px rgba(168,85,247,.4); }
+.rev-panel { display: none; }
+.rev-panel.active { display: block; animation: fadeIn .2s ease; }
+.rev-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+@media(max-width:560px){ .rev-grid2 { grid-template-columns: 1fr; } }
+.rev-alert { border-radius: 10px; padding: 9px 12px; font-size: 12.5px; line-height: 1.65; margin: 8px 0; }
+.rev-alert.warn { background: #fffbeb; border: 1.5px solid #fcd34d; color: #92400e; }
+.rev-alert.danger { background: #fef2f2; border: 1.5px solid #fecaca; color: #991b1b; animation: pulse 1.5s infinite; }
+.rev-alert.ok { background: #f0fdf4; border: 1.5px solid #86efac; color: #166534; }
+.rev-alert b { font-weight: 700; }
+.rev-calc { background: linear-gradient(135deg,#ecfdf5,#d1fae5); border: 1.5px solid #6ee7b7; border-radius: 10px; padding: 10px 14px; margin: 8px 0; font-size: 13px; color: #047857; }
+.rev-calc .amt { font-size: 20px; font-weight: 800; }
+.rev-calc .sub { font-size: 11.5px; color: #059669; margin-top: 2px; }
+
+/* 档次徽章 */
+.kp-grade { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 10px; white-space: nowrap; }
+.kp-grade.g1 { background: #f1f5f9; color: #475569; }
+.kp-grade.g3 { background: #fef3c7; color: #92400e; }
+.kp-grade.g5 { background: #fee2e2; color: #b91c1c; }
+.kp-grade.g10 { background: linear-gradient(135deg,#dc2626,#b91c1c); color: #fff; }
+.kp-grade.waived { background: #ecfeff; color: #0e7490; }
+.kp-grade.bonus { background: #ecfdf5; color: #047857; }
+.kp-status { display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 600; padding: 1px 8px; border-radius: 9px; cursor: pointer; border: 1px solid transparent; }
+.kp-status.st-effective { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
+.kp-status.st-notify { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.kp-status.st-dispute { background: #fef9c3; color: #854d0e; border-color: #fde68a; }
+
+/* 季度概览卡 */
+.kp-quarter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.kp-qcard { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 16px; padding: 16px 18px; box-shadow: var(--shadow-xs); }
+.kp-qcard-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.kp-qcard-name { font-size: 15.5px; font-weight: 800; color: var(--text); }
+.kp-qcard-act { margin-left: auto; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; white-space: nowrap; }
+.kp-qcard-act.ok { background: #f0fdf4; color: #15803d; }
+.kp-qcard-act.warn { background: #fffbeb; color: #b45309; }
+.kp-qcard-act.danger { background: #fef2f2; color: #b91c1c; }
+.kp-qstats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+@media(max-width:480px){ .kp-qstats { grid-template-columns: repeat(2, 1fr); } }
+.kp-qstat { background: var(--card-bg-soft); border-radius: 10px; padding: 8px 6px; text-align: center; }
+.kp-qstat .k { font-size: 10.5px; color: var(--text-light); margin-bottom: 3px; white-space: nowrap; }
+.kp-qstat .v { font-size: 17px; font-weight: 800; color: var(--text); }
+.kp-qstat .v.good { color: #16a34a; } .kp-qstat .v.bad { color: #dc2626; } .kp-qstat .v.gold { color: #d97706; }
+.kp-qnote { font-size: 11.5px; color: var(--text-mid); margin-top: 9px; line-height: 1.6; background: var(--card-bg-soft); border-radius: 8px; padding: 7px 10px; }
+
+/* 评优面板 */
+.kp-star-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+@media(max-width:768px){ .kp-star-panel { grid-template-columns: 1fr; } }
+.kp-star-card { border-radius: 16px; padding: 16px 18px; border: 1.5px solid; }
+.kp-star-card.month { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border-color: #d8b4fe; }
+.kp-star-card.quarter { background: linear-gradient(135deg,#fffbeb,#fef3c7); border-color: #fcd34d; }
+.kp-star-title { font-size: 14px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.kp-star-row { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,.75); margin-bottom: 6px; font-size: 13px; flex-wrap: wrap; }
+.kp-star-row .nm { font-weight: 700; min-width: 78px; }
+.kp-star-row .cond { font-size: 11.5px; color: var(--text-mid); }
+.kp-star-badge { margin-left: auto; font-size: 11.5px; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
+.kp-star-badge.yes { background: #dcfce7; color: #15803d; }
+.kp-star-badge.no { background: #f1f5f9; color: #94a3b8; }
+.kp-star-badge.win { background: linear-gradient(135deg,#f59e0b,#fbbf24); color: #fff; }
+.kp-star-foot { font-size: 11.5px; color: var(--text-light); margin-top: 4px; line-height: 1.6; }
+.kp-mini-btn { font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 8px; border: 1px solid #c4b5fd; background: #f5f0ff; color: #6d28d9; cursor: pointer; }
+.kp-mini-btn:hover { background: #ede9fe; }
+.kp-mini-btn.green { border-color: #86efac; background: #f0fdf4; color: #15803d; }
+.kp-mini-btn.green:hover { background: #dcfce7; }
+
+/* 调薪面板 */
+.kp-salary-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 12px; margin-bottom: 8px; font-size: 13px; }
+.kp-salary-row .nm { font-weight: 700; min-width: 84px; }
+.kp-salary-row input[type=number] { width: 92px; padding: 5px 8px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; }
+.kp-streak { font-size: 11.5px; color: var(--text-mid); }
+.kp-streak b { color: #7c3aed; }
+.kp-switch { font-size: 11.5px; color: var(--text-mid); display: inline-flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; }
+.kp-switch input { accent-color: #a855f7; }
+
+/* 记录条目通用 */
+.kp-entry { padding: 8px 0; border-bottom: 1px dashed rgba(0,0,0,.07); font-size: 13px; line-height: 1.55; }
+.kp-entry:last-child { border-bottom: none; padding-bottom: 0; }
+.kp-entry-head { display: flex; align-items: flex-start; gap: 7px; margin-bottom: 3px; flex-wrap: wrap; }
+.kp-entry-text { color: var(--text); flex: 1; min-width: 140px; }
+.kp-entry-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-light); margin-top: 4px; flex-wrap: wrap; }
+.kp-entry-meta .del { margin-left: auto; cursor: pointer; font-size: 11px; }
+.kp-entry-meta .del:hover { color: var(--urgent); }
+.kp-entry-std { font-size: 11px; color: #7c3aed; margin-top: 3px; padding-left: 6px; border-left: 2px solid #e9d5ff; }
+.kp-amt { font-weight: 800; }
+.kp-amt.pos { color: #16a34a; }
+.kp-entry-caseref { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+
+/* 考核弹窗：操作按钮吸附底部，任何屏高都可见可点（不可用backdrop-filter，会拦截点击） */
+#reviewModal .modal-actions, #reportModal .modal-actions, #weeklyModal .modal-actions {
+  position: sticky; bottom: 0; z-index: 5;
+  margin: 18px -28px -28px; padding: 12px 28px;
+  background: #ffffff;
+  border-top: 1px solid var(--border-soft);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  box-shadow: 0 -6px 16px -10px rgba(124,58,237,0.18);
+}
 </style>
 </head>
 <body>
@@ -1488,7 +1586,7 @@ body {
     </button>
   </nav>
   <div class="sidebar-footer">
-    刘芳律师团队 · v2.0
+    刘芳律师团队 · v3.0
   </div>
 </aside>
 
@@ -1789,155 +1887,143 @@ body {
 
 <!-- Growth Pool Modal (律师考核记录) -->
 <div class="modal-overlay" id="reviewModal">
-  <div class="modal" style="max-width:640px; max-height:92vh; overflow-y:auto;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px;">
-      <h2 id="growModalTitle" style="margin:0;font-size:18px;">🌟 记录成长亮点</h2>
-      <button id="modeToggleBtn" class="gp-btn gp-btn-ghost mode-toggle-big" onclick="switchEntryMode(false)">📋 切换到详细录入</button>
+  <div class="modal" style="max-width:660px; max-height:92vh; overflow-y:auto;">
+    <h2 id="revModalTitle" style="margin:0 0 4px;font-size:18px;">📝 考核记录录入</h2>
+    <div style="font-size:12px;color:var(--text-light);margin-bottom:12px;">依据《律师团队内部绩效管理与考核办法》· 仅团队负责人可录入</div>
+
+    <div class="rev-tabs">
+      <button type="button" class="rev-tab active" id="revTabBtn-hl" onclick="switchRevTab('hl')">🌟 成长亮点</button>
+      <button type="button" class="rev-tab" id="revTabBtn-ft" onclick="switchRevTab('ft')">🔧 改进机会</button>
+      <button type="button" class="rev-tab" id="revTabBtn-bn" onclick="switchRevTab('bn')">💰 奖金激励</button>
     </div>
 
-    <!-- 快速录入面板（默认显示） -->
-    <div id="quickEntryPanel">
+    <div class="rev-alert danger" id="revMemberWarn" style="display:none;">⚠️ <b>团队成员名单为空</b>，无法选择被记录人。请先点击下方按钮或前往「⚙ 设置 → 团队成员」添加授薪律师名单（每行一个名字）。<div style="margin-top:8px;"><button class="kp-mini-btn" onclick="closeReview();openSettings()">前往设置添加成员</button></div></div>
+
+    <div class="rev-grid2">
       <div class="grow-modal-field">
-        <label>被记录人（被考核人） <span style="color:var(--urgent)">*</span></label>
-        <select id="quickTargetMember" class="grow-input"><option value="">请选择成员</option></select>
-      </div>
-      <div class="grow-modal-field">
-        <label>事件描述 <span style="color:var(--urgent)">*</span></label>
-        <textarea id="quickEventText" rows="3" class="grow-input"
-          placeholder="输入事件，系统自动识别类型、分值和计件金额&#10;例：今日调解案件2人以上，调解成功&#10;例：合同审查法律依据援引错误&#10;例：完成立案，已提交法院"
-          oninput="onQuickInput()"></textarea>
-      </div>
-      <div id="quickPreview" class="quick-preview"><div class="quick-placeholder">✍️ 输入事件描述后自动识别考核项…</div></div>
-      <!-- 常用快捷标签（点击自动填入事件描述并识别） -->
-      <div id="quickTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
-        <span class="quick-tag-btn" onclick="fillQuickTag('调解成功')">🤝 调解成功</span>
-        <span class="quick-tag-btn" onclick="fillQuickTag('完成立案')">📂 完成立案</span>
-        <span class="quick-tag-btn" onclick="fillQuickTag('已开庭')">⚖️ 已开庭</span>
-        <span class="quick-tag-btn" onclick="fillQuickTag('接待咨询完成')">💬 接待咨询</span>
-        <span class="quick-tag-btn" onclick="fillQuickTag('撰写文书完成')">📝 文书编制</span>
-        <span class="quick-tag-btn" onclick="fillQuickTag('普法文章发表')">📢 普法文章</span>
-        <span class="quick-tag-btn" onclick="fillQuickTag('合同审查法律依据援引错误')" style="color:#dc2626;border-color:#fca5a5;background:#fef2f2;">🔧 引用错误</span>
-        <span class="quick-tag-btn" onclick="fillQuickTag('开庭迟到')" style="color:#dc2626;border-color:#fca5a5;background:#fef2f2;">⏰ 开庭迟到</span>
-        <span class="quick-tag-btn" onclick="fillQuickTag('反馈延迟未及时回复')" style="color:#d97706;border-color:#fcd34d;background:#fffbeb;">📨 反馈延迟</span>
+        <label>被记录人（被考核人）<span style="color:var(--urgent)">*</span></label>
+        <select id="revTargetMember" class="grow-input" onchange="updateFtAlerts()"><option value="">请选择成员</option></select>
       </div>
       <div class="grow-modal-field">
-        <label>关联案件/任务 <span style="color:var(--text-light);font-weight:400">（选填）</span></label>
-        <input type="text" id="quickCaseRef" class="grow-input" placeholder="案号或任务名称，不关联则留空" />
+        <label>日期</label>
+        <input type="date" id="revDate" class="grow-input" onchange="updateFtAlerts()" />
       </div>
     </div>
-
-    <!-- 详细录入面板（默认隐藏） -->
-    <div id="detailEntryPanel" style="display:none;">
-
-    <!-- 类型切换 -->
-    <div class="grow-type-toggle">
-      <div class="grow-type-option selected-growth" id="growTypeGrowth" onclick="setGrowType('growth')">
-        <span class="grow-type-icon">🌟</span>
-        <div class="grow-type-label">成长亮点</div>
-        <div class="grow-type-desc">加分项 · 记录优秀表现</div>
-      </div>
-      <div class="grow-type-option" id="growTypeImprove" onclick="setGrowType('improvement')">
-        <span class="grow-type-icon">🔧</span>
-        <div class="grow-type-label">改进机会</div>
-        <div class="grow-type-desc">扣分项 · 客观记录改进点</div>
-      </div>
-    </div>
-    <input type="hidden" id="growType" value="growth">
-
-    <!-- 重复检测提示 -->
-    <div class="grow-repeat-alert" id="growRepeatAlert"></div>
-
     <div class="grow-modal-field">
-      <label>被记录人（被考核人） <span style="color:var(--urgent)">*</span></label>
-      <select id="growTargetMember" onchange="onGrowMemberChange()"><option value="">请选择成员</option></select>
+      <label>关联案件/任务 <span style="color:var(--text-light);font-weight:400">（选填）</span></label>
+      <input type="text" id="revCaseRef" class="grow-input" placeholder="例：(2026)渝01民初123号 / 驻点日常" />
     </div>
 
-    <div class="grow-modal-field">
-      <label>关联案件/任务 <span style="color:var(--text-light);font-weight:400">（案号或任务名称，不关联填"不关联"）</span></label>
-      <input type="text" id="growCaseRef" class="grow-input" placeholder="例：(2026)渝01民初123号 / 驻点日常工作" />
-    </div>
-
-    <div class="grow-modal-field">
-      <label>行为分类 <span style="color:var(--urgent)">*</span></label>
-      <select id="growCategory" onchange="updateStandardHint(); updateGrowExtraFields();"><option value="">请先选择被记录人</option></select>
-    </div>
-
-    <div class="grow-standard-hint" id="growStandardHint"></div>
-
-    <!-- 调解级别（调解工作·成长亮点时显示，决定计件金额） -->
-    <div class="grow-modal-field" id="growMediateField" style="display:none;">
-      <label>调解级别 <span style="color:var(--text-light);font-weight:400">（决定计件金额）</span></label>
-      <select id="growMediateLevel" onchange="onMediateLevelChange()" class="grow-input">
-        <option value="">请选择级别</option>
-        <option value="口头">口头（计件 30 元）</option>
-        <option value="简单">简单（计件 80 元）</option>
-        <option value="一般">一般（计件 120 元）</option>
-        <option value="重大">重大（计件 200 元）</option>
-        <option value="疑难">疑难（计件 500 元）</option>
-      </select>
-    </div>
-
-    <!-- 失误档次（改进机会时显示，替代分值按钮） -->
-    <div class="grow-modal-field" id="growFaultField" style="display:none;">
-      <label>失误档次 <span style="color:var(--text-light);font-weight:400">（决定扣分值，四档分离）</span></label>
-      <select id="growFaultGrade" onchange="onFaultGradeChange()" class="grow-input">
-        <option value="">请选择档次</option>
-        <option value="轻微">轻微（扣 1 分）</option>
-        <option value="一般">一般（扣 3 分）</option>
-        <option value="重大">重大（扣 5 分）</option>
-        <option value="底线">底线·纪律红线（扣 10 分，双人确认+取消评优+24h面谈）</option>
-      </select>
-      <div id="growFaultBottomLine" style="display:none;margin-top:6px;font-size:12px;color:#991b1b;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:8px 10px;line-height:1.6;">
-        ⚠️ <strong>底线·纪律红线（10分）</strong>：双人确认（团队负责人+律所主任）· 取消当季评优 · 24小时内面谈复盘 · 不适用积分抵扣 · 记录保留12个月。
+    <!-- 成长亮点面板 -->
+    <div class="rev-panel active" id="revPanel-hl">
+      <div class="grow-modal-field">
+        <label>亮点类型（第八条）<span style="color:var(--urgent)">*</span></label>
+        <select id="hlCat" class="grow-input" onchange="onHlCatChange()"></select>
       </div>
-      <div id="growFaultScoreLabel" style="margin-top:4px;font-size:13px;color:var(--urgent);"></div>
-    </div>
-
-    <!-- 改进机会 · 考核制度触发条款参考（仅改进机会时显示） -->
-    <div class="grow-modal-field" id="triggerClausePanel" style="display:none;">
-      <label style="display:flex;align-items:center;gap:6px;">
-        📋 <strong>考核制度触发条款</strong>
-        <span style="font-size:12px;color:var(--text-light);font-weight:400;">（点击展开查看对应分值标准）</span>
-      </label>
-      <div id="triggerClauseContent" class="trigger-clause-box">
-        <!-- 由 JS 动态渲染 -->
+      <div id="hlCatNote" class="rev-alert ok" style="display:none;"></div>
+      <div class="grow-modal-field">
+        <label>具体描述 <span style="color:var(--urgent)">*</span></label>
+        <textarea id="hlDesc" rows="2" class="grow-input" placeholder="做了什么？产生了什么可验证的成果？&#10;例：成功调解XX物业纠纷并签署调解协议"></textarea>
       </div>
+      <div class="grow-modal-field">
+        <label>同步发放激励奖（元）<span style="color:var(--text-light);font-weight:400">（选填，按第七条"按工作情况发放"）</span></label>
+        <input type="number" id="hlBonus" class="grow-input" placeholder="0" step="1" min="0" />
+      </div>
+      <div class="rev-alert ok">📖 <b>第八条</b>：每取得以下成果之一记 <b>1 个成长亮点</b>——调解成功1件（任何级别）/ 交付成果一次性通过、贡献度较高 / 提供有效案源线索 / 高质量普法文章·视频被采用 / 负责人认定的其他情形。亮点仅用于月度·季度评优和晋升参考，<b>不单独折算为现金</b>。</div>
     </div>
 
-    <div class="grow-modal-field" id="growBehaviorField">
-      <label id="growBehaviorLabel">具体行为与成果 <span style="color:var(--urgent)">*</span></label>
-      <textarea id="growBehavior" rows="2" placeholder="做了什么？产生了什么可验证的结果？&#10;例：完成XX租赁合同初审，识别3处违约风险并标注修改建议，经复核仅需调整1处措辞"></textarea>
+    <!-- 改进机会面板 -->
+    <div class="rev-panel" id="revPanel-ft">
+      <div class="rev-grid2">
+        <div class="grow-modal-field">
+          <label>业务场景（第十二条）<span style="color:var(--urgent)">*</span></label>
+          <select id="ftScene" class="grow-input" onchange="onFtSceneChange()"></select>
+        </div>
+        <div class="grow-modal-field">
+          <label>档次（第十一条·四档）<span style="color:var(--urgent)">*</span></label>
+          <select id="ftGrade" class="grow-input" onchange="onFtGradeChange()">
+            <option value="">请选择档次</option>
+            <option value="轻微">轻微 · 1分</option>
+            <option value="一般">一般 · 3分</option>
+            <option value="重大">重大 · 5分</option>
+            <option value="底线">底线 · 10分</option>
+          </select>
+        </div>
+      </div>
+      <div class="grow-modal-field">
+        <label>典型情形（第十二条分值标准，自动带出）</label>
+        <select id="ftItem" class="grow-input"></select>
+      </div>
+      <div id="ftLenientAlert" class="rev-alert warn" style="display:none;"></div>
+      <div id="ftBottomAlert" class="rev-alert danger" style="display:none;">⚠️ <b>底线（10分）特殊规则</b>（第十一条5款）：由团队负责人与律所主任<b>双人共同确认</b>后生效 · 一次即触发<b>留用资格评估</b> · 取消当季评优 · <b>24小时内面谈复盘</b> · 不适用积分抵扣 · 记录保留12个月不随季度清零 · 同时按律所制度及律师行业规范处理，团队保留移交处理的权利。</div>
+      <div class="grow-modal-field">
+        <label>事实描述 <span style="color:var(--urgent)">*</span></label>
+        <textarea id="ftDesc" rows="2" class="grow-input" placeholder="具体发生了什么？（客观描述）"></textarea>
+      </div>
+      <div class="grow-modal-field">
+        <label>影响与补救情况 <span style="color:var(--text-light);font-weight:400">（选填）</span></label>
+        <textarea id="ftImpact" rows="2" class="grow-input" placeholder="造成的影响、是否已补救、是否造成当事人损失&#10;注：执业事故类底线事项应自发现之日起24小时内书面报告并复盘（第十三条）"></textarea>
+      </div>
+      <div class="grow-modal-field" style="display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="ftForce" style="accent-color:#a855f7;width:16px;height:16px;" onchange="updateFtAlerts()" />
+        <label for="ftForce" style="margin:0;cursor:pointer;font-size:13px;color:var(--text);">不可抗力/客观原因免责（第十一条3款：书面说明并经负责人确认，<b>不记积分</b>）</label>
+      </div>
+      <div id="ftPreview" class="rev-alert" style="display:none;"></div>
     </div>
 
-    <div class="grow-modal-field" id="growImpactField" style="display:none;">
-      <label>客观影响 <span style="color:var(--urgent)">*</span></label>
-      <textarea id="growImpact" rows="2" placeholder="具体造成的时间/成本/客户体验/程序风险影响（客观描述）&#10;例：法院退回补正1次，延误立案3天"></textarea>
+    <!-- 奖金激励面板 -->
+    <div class="rev-panel" id="revPanel-bn">
+      <div class="grow-modal-field">
+        <label>奖金类型<span style="color:var(--urgent)">*</span></label>
+        <select id="bnType" class="grow-input" onchange="onBnTypeChange()">
+          <option value="办案提成">办案提成（第六条 · 团队分配案源）</option>
+          <option value="案源线索奖">案源线索奖（第三条 · 签约金额×2%）</option>
+          <option value="案件转化奖">案件转化奖（第七条 · 签约金额×2%）</option>
+          <option value="学习激励奖">学习激励奖（第七条 · 按工作情况发放）</option>
+          <option value="评优奖金">评优奖金（月度之星300 / 季度之星500）</option>
+        </select>
+      </div>
+      <div class="rev-grid2">
+        <div class="grow-modal-field" id="bnFeeField" style="display:none;">
+          <label>实际到账律师费（元）<span style="color:var(--urgent)">*</span></label>
+          <input type="number" id="bnFee" class="grow-input" placeholder="扣除管理费、案源成本后" step="1" min="0" oninput="computeBonus()" />
+        </div>
+        <div class="grow-modal-field" id="bnRateField" style="display:none;">
+          <label>提成比例（5%-10%，按参与度确定）</label>
+          <select id="bnRate" class="grow-input" onchange="computeBonus()">
+            <option value="0.05">5%</option><option value="0.06">6%</option><option value="0.07">7%</option>
+            <option value="0.08">8%</option><option value="0.09">9%</option><option value="0.10" selected>10%</option>
+          </select>
+        </div>
+        <div class="grow-modal-field" id="bnSignField" style="display:none;">
+          <label>案件签约金额（元）<span style="color:var(--urgent)">*</span></label>
+          <input type="number" id="bnSign" class="grow-input" placeholder="按实际签约金额" step="1" min="0" oninput="computeBonus()" />
+        </div>
+        <div class="grow-modal-field" id="bnAmountField" style="display:none;">
+          <label>发放金额（元）<span style="color:var(--urgent)">*</span></label>
+          <input type="number" id="bnAmount" class="grow-input" placeholder="按工作情况确定" step="1" min="0" />
+        </div>
+      </div>
+      <div class="grow-modal-field" id="bnSpecialField" style="display:none;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--text);">
+          <input type="checkbox" id="bnSpecial" style="accent-color:#a855f7;width:16px;height:16px;" onchange="computeBonus()" />
+          特殊情况审批（第六条：经负责人审批上限可至 50000 元/案，需事前书面确认）
+        </label>
+      </div>
+      <div id="bnCalc" class="rev-calc" style="display:none;"></div>
+      <div class="grow-modal-field">
+        <label>案件名称/事由说明 <span style="color:var(--text-light);font-weight:400">（选填）</span></label>
+        <input type="text" id="bnNote" class="grow-input" placeholder="例：XX公司法律顾问合同（2026）" />
+      </div>
+      <div class="rev-alert warn">📖 发放规则：办案提成于律师费<b>实际到账后的次月</b>随基本薪酬一并发放；案源线索奖、学习激励奖与<b>季度奖金同步发放</b>（第三条备注）。同一案件的案源线索奖与案件转化奖<b>不重复计发</b>（第七条）。</div>
     </div>
-
-    <div class="grow-modal-field" id="growSuggestionField" style="display:none;">
-      <label>改进措施 <span style="color:var(--urgent)">*</span></label>
-      <textarea id="growSuggestion" rows="2" placeholder="下次如何避免？给出具体行动方案&#10;例：使用终稿检查清单 / 提前1天确认截止日期"></textarea>
-    </div>
-
-    <div class="grow-modal-field" id="growScoreRangeField">
-      <label>分值评定 <span style="color:var(--urgent)">*</span></label>
-      <div class="grow-score-range" id="growScoreRange"></div>
-    </div>
-
-    <div class="grow-modal-field">
-      <label>计件金额（元） <span style="color:var(--text-light);font-weight:400">（按标准自动带出，可修改；负数为扣罚）</span></label>
-      <input type="number" id="growPieceAmount" class="grow-input" placeholder="0" step="1" />
-    </div>
-
-    </div><!-- /detailEntryPanel -->
 
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeReview()">取消</button>
-      <button class="btn-save" onclick="saveGrowthEntry()">保存记录</button>
+      <button class="btn-save" onclick="saveReviewEntry()">保存记录</button>
     </div>
   </div>
 </div>
-
 <!-- 律师手记 Modal -->
 <div class="modal-overlay" id="noteModal">
   <div class="modal" style="max-width:640px; max-height:90vh; overflow-y:auto;">
@@ -2060,7 +2146,7 @@ body {
     <div class="gp-report-month">
       <label>考核月份</label>
       <input type="month" id="reportMonth" onchange="renderReportBody()" />
-      <span style="font-size:12px;color:var(--text-light);">每月 5 日前核算 · 8 日前确认签字 · 10 日前发放</span>
+      <span style="font-size:12px;color:var(--text-light);">月度考核评定与奖金核算 · 办案提成于律师费到账次月随薪发放</span>
     </div>
     <div id="reportBody"></div>
     <div class="modal-actions">
@@ -2083,169 +2169,135 @@ body {
 
 <!-- 考核办法说明 Modal -->
 <div class="modal-overlay" id="specModal" onclick="if(event.target===this)closeSpec()">
-  <div class="modal" style="max-width:860px; max-height:92vh; overflow-y:auto;">
-    <h2>📋 考核管理嵌入每日复盘 · 需求规格说明</h2>
+  <div class="modal" style="max-width:880px; max-height:92vh; overflow-y:auto;">
+    <h2>📋 律师团队内部绩效管理与考核办法（制度速查）</h2>
     <div class="spec-doc">
       <div class="spec-quote">
-        适用工具：WorkBuddy 看板系统（日程看板 · 每日复盘模块）<br/>
-        依据：《律师团队内部绩效管理与考核办法（最终版）》《考核嵌入每日复盘-方案分析与需求明确指南.md》
+        本看板「律师考核」板块依据《律师团队内部绩效管理与考核办法》搭建：成长亮点、改进机会积分、奖金激励、评优与调薪均按制度条款自动核算。<br/>
+        本办法仅适用于团队授薪制执业律师（第三条），由团队负责人负责解释（第十七条）。
       </div>
       <div class="spec-iron">
-        <b>三条铁律：</b><br/>
-        ① 每日只记录、不计算；② 事件驱动、无事不记；③ 复盘记录是唯一台账源，月底不再手抄。
+        <b>考核三原则（第二条）：</b><br/>
+        ① 保质保量完成团队分配的工作，是授薪执业律师的基本要求；② 建立律师助理→主办律师→合伙人阶梯式晋升与激励机制，业绩考核、案件产出是晋升核心依据；③ 薪资结构透明，多劳多得、能者奖励。
       </div>
 
-      <h3>0. 关于 WorkBuddy 的假设（请先读）</h3>
-      <p>本规格按"看板系统通常具备的能力"编写（自定义字段、多视图、筛选、导出）。WorkBuddy 具体支持到什么程度，请对照<b>第 4 节能力核对表</b>逐项核实，再据实微调。两种情况都能落地：</p>
+      <h3>一、岗位与薪酬框架（第三条）</h3>
+      <table>
+        <thead><tr><th>项目</th><th>标准</th></tr></thead>
+        <tbody>
+          <tr><td>底薪</td><td>试用期4000元，初始底薪5000元；连续12个考核周期考核达标的，可获调薪资格，以初始底薪5000元为基数增加10%；后续每完整年度考核合格继续按该基数递增；当年度考核不合格不予调薪，底薪不作下调</td></tr>
+          <tr><td>社保</td><td>单位负担部分由团队缴纳</td></tr>
+          <tr><td>办案提成（团队分配案源）</td><td>实际到账律师费（扣除事务所管理费、案源开拓成本）的5%-10%，每案上限20000元（特殊审批50000元）</td></tr>
+          <tr><td>案源线索奖</td><td>挖掘案源线索并促成签约成交的，按签约金额的2%计发</td></tr>
+          <tr><td>学习激励奖</td><td>普法宣传、业务拓展等按工作实绩发放；实现案件转化的另按签约金额2%计发</td></tr>
+          <tr><td>调解案件成功奖</td><td>根据调解成功率计入个人成长亮点</td></tr>
+          <tr><td>补贴</td><td>办案交通补贴及垫付费用，经负责人审核后实报实销</td></tr>
+          <tr><td>发放时点</td><td>办案提成于律师费实际到账后次月随基本薪酬发放；案源线索奖、学习激励奖与季度奖金同步发放</td></tr>
+        </tbody>
+      </table>
+      <div class="spec-quote">基础工作量（第四条）：遵守考勤按时到岗、跟进调解分配案件、配合完成负责人交办的诉讼/非诉任务。连续两个月产出明显低于合理标准的，记工作改进机会并启动岗位谈话提醒。</div>
+
+      <h3>二、办案提成与自行开拓案源（第五、六条）</h3>
       <ul>
-        <li><b>能力强</b>（支持字段公式/自动化/统计）→ 月底四件套可自动生成，规格按自动方案执行；</li>
-        <li><b>能力弱</b>（仅看板+文本）→ 月底走"导出 Excel 手工汇总"替代方案，依然满足 15 分钟目标。</li>
+        <li><b>提成前提</b>：律师能独立承办案件、无需负责人参与。客户指定或负责人主导的案件，不发放该案办案提成。</li>
+        <li><b>限额</b>：每案上限20000元；特殊情况经负责人审批上限50000元（事前书面确认）；超限部分不发放，可在季度评优时作贡献参考。</li>
+        <li><b>自行开拓案源</b>：须提前向负责人汇报备案。单案创收1万元以下团队不提成；1万元以上创收计入团队收入，一般标准为案源费用20%-30%+办案费用10%（负责人一般合计提取60%），特殊比例事前书面确认。</li>
+        <li><b>禁止行为</b>：不得为非团队所属的分配案源提供服务。违反的：当月尚未发放的奖励及提成不予发放（已发放不倒扣），记重大改进机会（5分），团队保留追偿权利。</li>
       </ul>
 
-      <h3>1. 总体设计</h3>
-      <h4>1.1 嵌入形态（二选一）</h4>
-      <table>
-        <thead><tr><th>形态</th><th>做法</th><th>适用条件</th></tr></thead>
-        <tbody>
-          <tr><td><span class="spec-tag">A（推荐）</span></td><td>复盘本身就是结构化表单：每天一条"复盘记录"，字段含考核事件</td><td>WorkBuddy 复盘支持自定义字段（单选/日期/多行文本）</td></tr>
-          <tr><td><span class="spec-tag">B</span></td><td>复盘保持自由文本，另建一张"考核记录表"，复盘时顺手录入</td><td>复盘不支持自定义字段</td></tr>
-        </tbody>
-      </table>
-      <div class="spec-quote">判断方法：在 WorkBuddy 里看"每日复盘"能否添加自定义字段或子表。能 → A；不能 → B。两种形态下数据模型相同（见 1.2），只是录入入口不同。</div>
-
-      <h4>1.2 数据模型：一张表、四种记录类型</h4>
-      <p>为避免依赖"关联/子表"能力，采用<b>单表平铺</b>设计：每条记录 = 一个事件 或 一条复盘文本。同一天同一成员可以有多个事件行（如当天调解成功 1 件 + 1 个失误），月底汇总时按类型归集。</p>
-      <h4>主字段（所有记录共用）</h4>
-      <table>
-        <thead><tr><th>字段</th><th>类型</th><th>选项/格式</th><th>必填</th><th>说明</th></tr></thead>
-        <tbody>
-          <tr><td>日期</td><td>日期</td><td>YYYY-MM-DD</td><td>✔</td><td>记录日期</td></tr>
-          <tr><td>成员</td><td>单选</td><td>团队成员名单</td><td>✔</td><td>见第 6 节待确认清单</td></tr>
-          <tr><td>记录类型</td><td>单选</td><td>复盘 / 调解事件 / 失误事件 / 成长亮点</td><td>✔</td><td>一张表的四种记录</td></tr>
-          <tr><td>复盘正文</td><td>多行文本</td><td>—</td><td>仅"复盘"类型</td><td>今日完成事项，<b>不参与考核计算</b></td></tr>
-          <tr><td>备注</td><td>多行文本</td><td>—</td><td>否</td><td>抵扣申请、不可抗力说明、待办</td></tr>
-        </tbody>
-      </table>
-      <h4>调解事件字段组（记录类型=调解事件时填写）</h4>
-      <table>
-        <thead><tr><th>字段</th><th>类型</th><th>选项</th><th>必填</th><th>对应办法</th></tr></thead>
-        <tbody>
-          <tr><td>案件名称</td><td>文本</td><td>—</td><td>✔</td><td>第六条</td></tr>
-          <tr><td>级别</td><td>单选</td><td>口头(30) / 简单(80) / 一般(120) / 重大(200) / 疑难(500)</td><td>✔</td><td>分配时定级，就高不就低（第七条）</td></tr>
-          <tr><td>状态</td><td>单选</td><td>跟进中 / 成功</td><td>✔</td><td>—</td></tr>
-          <tr><td>成功日期</td><td>日期</td><td>—</td><td>状态=成功时</td><td><b>按成功日期归月计奖</b>（第八条：跨月案件成功当月计奖）</td></tr>
-          <tr><td>成功凭证</td><td>单选</td><td>调解协议书 / 确认笔录 / 支付记录等</td><td>状态=成功时</td><td>第九条</td></tr>
-        </tbody>
-      </table>
-      <h4>失误事件字段组（记录类型=失误事件时填写）</h4>
-      <table>
-        <thead><tr><th>字段</th><th>类型</th><th>选项</th><th>必填</th><th>对应办法</th></tr></thead>
-        <tbody>
-          <tr><td>领域</td><td>单选</td><td>诉讼 / 非诉调解 / 通用规范</td><td>✔</td><td>第十五条三张表</td></tr>
-          <tr><td>档次</td><td>单选</td><td>轻微(1分) / 一般(3分) / 重大(5分) / 底线(10分)</td><td>✔</td><td>四档分离（第十五、十六条）；底线=纪律红线，双人确认+取消评优+24h面谈+不抵扣+保留12月</td></tr>
-          <tr><td>情形编号</td><td>文本</td><td>如"诉讼-轻微-①"</td><td>✔</td><td>引用第十五条编号，保证可追溯</td></tr>
-          <tr><td>事实描述</td><td>多行文本</td><td>—</td><td>✔</td><td>同事项取最高档；不可抗力不记分需在此说明（第十五条）</td></tr>
-          <tr><td>依据说明</td><td>多行文本</td><td>—</td><td>未列明情形时</td><td>参照最相近情形并说明依据（第十五条）</td></tr>
-        </tbody>
-      </table>
-      <h4>成长亮点字段组（记录类型=成长亮点时填写）</h4>
-      <table>
-        <thead><tr><th>字段</th><th>类型</th><th>选项</th><th>必填</th><th>对应办法</th></tr></thead>
-        <tbody>
-          <tr><td>亮点类型</td><td>单选</td><td>调解成功 / 案件阶段成果 / 有效案源线索 / 优质普法产出</td><td>✔</td><td>第十二条</td></tr>
-          <tr><td>描述</td><td>文本</td><td>—</td><td>✔</td><td>用于月度/季度评优排名</td></tr>
-        </tbody>
-      </table>
-
-      <h4>1.3 月底输出四件套（负责人 15 分钟内完成）</h4>
-      <table>
-        <thead><tr><th>#</th><th>产出</th><th>生成方式</th><th>依据</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>月度计件台账</td><td>筛选"调解事件+成功"，按成功日期归月，按成员汇总金额</td><td>附件四模板</td></tr>
-          <tr><td>2</td><td>季度积分汇总表</td><td>失误事件按 领域×档次 汇总；重大×2；减抵扣（每季≤5分）</td><td>第十五、十六、十八条</td></tr>
-          <tr><td>3</td><td>阈值触发提示</td><td>季度累计 ≥10 提醒 / ≥18 改进计划 / ≥25 评估留用</td><td>第十七条</td></tr>
-          <tr><td>4</td><td>评优候选名单</td><td>月度：当月无积分+亮点排名前二（或客户表扬）；季度：亮点≥12+无重大+未触发18分</td><td>第十三、十四条</td></tr>
-        </tbody>
-      </table>
-
-      <h3>2. 功能需求明细</h3>
-      <p><b>FR-1 每日录入</b>（负责人操作，3-5 分钟/天）</p>
-      <ol>
-        <li>打开看板 → 新建记录：日期（默认今天）+ 成员 + 记录类型=复盘 + 复盘正文；</li>
-        <li>有考核事件则追加事件行（调解事件 / 失误事件 / 成长亮点，按字段组填写）；</li>
-        <li>无事发生的一天：只有一条"复盘"记录，无事件行。<b>禁止每日主观打分</b>。</li>
-      </ol>
-      <p><b>FR-2 重大失误即时动作</b></p>
-      <p>档次选择"底线(10分·纪律红线)"时，负责人须当天完成：</p>
+      <h3>三、成长亮点（第八条）</h3>
+      <p>每取得以下成果之一，自动记 <b>1 个成长亮点</b>：</p>
       <ul>
-        <li>记录里选"底线"，系统自动标注特殊规则（双人确认+取消当季评优+24h面谈+不抵扣+保留12月）；</li>
-        <li>重大(5分)与底线区分：重大计入季度累计积分，底线单独处理、保留12个月不随季度清零；</li>
-        <li>24 小时内面谈复盘（如 WorkBuddy 支持自动化提醒，设置为事件行保存后立即提醒负责人；不支持则人工执行）。</li>
+        <li>调解成功1件（任何级别）；</li>
+        <li>诉讼/非诉案件交付成果一次性通过、贡献度较高；</li>
+        <li>提供有效案源线索；</li>
+        <li>完成高质量普法文章/视频并被团队采用；</li>
+        <li>团队负责人认为应当计入的其他情形。</li>
       </ul>
-      <p><b>FR-3 查询视图</b>（至少三种）</p>
+      <div class="spec-quote">获得客户锦旗的，在原有亮点外额外增加2个亮点（第七条）。成长亮点仅用于月度/季度评优和晋升参考，不单独折算为现金。</div>
+
+      <h3>四、月度与季度评优（第九、十条）</h3>
       <table>
-        <thead><tr><th>视图</th><th>分组/筛选</th><th>用途</th></tr></thead>
+        <thead><tr><th>评优</th><th>条件</th><th>奖励</th></tr></thead>
         <tbody>
-          <tr><td>成员视图</td><td>按成员分组 + 当月</td><td>月度评优与积分核对</td></tr>
-          <tr><td>日历/日期视图</td><td>按日期</td><td>每日复盘入口</td></tr>
-          <tr><td>事件视图</td><td>记录类型=调解事件 / 失误事件 / 成长亮点</td><td>月底汇总取数</td></tr>
+          <tr><td>月度之星<br>（每月最多1人）</td><td>① 当月无改进积分；② 当月成长亮点数量排名前二（2人团队须第一），或获得客户书面表扬/锦旗</td><td>300元 + 内部表扬<br>当月无人达标名额作废，不递补</td></tr>
+          <tr><td>季度之星<br>（每季度末）</td><td>① 季度累计成长亮点≥12个；② 季度无重大改进机会（5分）；③ 当季未触发正式改进计划（≥15分）</td><td>500元 + 下月优先选择值班时间权<br>多人均达标均发放，不限名额</td></tr>
         </tbody>
       </table>
-      <p><b>FR-4 权限与可见性</b></p>
+
+      <h3>五、改进机会积分总则（第十一条）</h3>
+      <ol>
+        <li><b>只积分、不扣钱</b>：工作失误记"改进机会"并积分，只触发管理动作（违规情形下当月未发奖励/提成不予发放除外）；</li>
+        <li><b>四档分级</b>：轻微1分、一般3分、重大5分、底线10分。同一事项符合多项情形按最高档计一条，不重复累计；</li>
+        <li><b>不可抗力免责</b>：因不可抗力或客观原因导致（书面说明并经负责人确认）不记改进机会；</li>
+        <li><b>记录程序</b>：自发现之日起3个工作日内告知本人；本人3个工作日内可申辩，负责人复核生效；季度归档备查；</li>
+        <li><b>底线事项（10分）特殊规则</b>：负责人与律所主任双人共同确认后生效；一次即触发留用资格评估、取消当季评优、24小时内面谈复盘；不适用积分抵扣，记录保留12个月不随季度清零；同时按律所制度及行业规范处理，团队保留移交处理权利；</li>
+        <li><b>轻错宽容</b>：轻微档当月前2次只口头提醒、不积分，第3次起记1分；入职第一年（含试用期）轻微档全年只提醒、不累计积分。</li>
+      </ol>
+
+      <h3>六、分值标准（第十二条）</h3>
+      <h4>（一）诉讼类（含仲裁、执行）</h4>
+      <table>
+        <thead><tr><th>档次</th><th>典型情形</th></tr></thead>
+        <tbody>
+          <tr><td>轻微 1分</td><td>文书错别字/页码/装订遗漏、格式不符；非紧急询问24小时内未回复；开庭迟到≤10分钟未致不利后果</td></tr>
+          <tr><td>一般 3分</td><td>非关键证据逾期提交或证据目录不对应（未失权）；未及时提醒上诉期/再审期（未错过）；法律依据引用不当或策略偏差（未造成实质不利）；关键节点未告知当事人</td></tr>
+          <tr><td>重大 5分</td><td>错过上诉期/时效等但已补救无损失；迟到30分钟以上未致不利后果；送达地址核对错误未致失权；遗失关键案卷材料未致损失</td></tr>
+          <tr><td>底线 10分<br>纪律红线</td><td>向对方泄露策略/证据；收受对方利益；私自收取当事人费用；伪造、变造或隐匿证据；泄露团队商业秘密和客户隐私</td></tr>
+          <tr><td>底线 10分<br>执业事故</td><td>错过期限致当事人失权或团队被追责；无正当理由缺席致撤诉/败诉；关键证据缺失致败诉；送达错误致当事人失权；关键依据引用错误或策略结论错误致败诉/重大损失；遗漏保全/续封致无法执行；遗失关键案卷材料致当事人受损</td></tr>
+        </tbody>
+      </table>
+      <h4>（二）非诉/调解类</h4>
+      <table>
+        <thead><tr><th>档次</th><th>典型情形</th></tr></thead>
+        <tbody>
+          <tr><td>轻微 1分</td><td>笔录/协议错别字、日期、页码遗漏；回访或台账延迟≤1天；当事人信息登记不全</td></tr>
+          <tr><td>一般 3分</td><td>协议条款明显失衡或履行期限不明；应转介案件拖延超1个工作日；合同审查遗漏一般风险（B级1-2处或A级1处）；程序瑕疵或结论模糊需补救</td></tr>
+          <tr><td>重大 5分</td><td>遗漏必参加调解的当事人（未造成实际损害）；A级2处以上或关键资质瑕疵（未致合同无效）；遗失关键原件（未致损失）</td></tr>
+          <tr><td>底线 10分<br>纪律红线</td><td>泄露调解保密信息；强迫或变相强迫调解；明知违法仍促成签订；故意虚假尽调；挪用代收款项；泄露团队商业秘密和客户隐私</td></tr>
+          <tr><td>底线 10分<br>执业事故</td><td>调解协议条款违法致协议无效；调解中造成当事人实际经济损失；A级2处以上或关键资质瑕疵致合同无效；法律意见结论错误致客户损失；尽职调查重大遗漏致客户损失；代收款项超7日未交付；遗失关键原件致当事人受损</td></tr>
+        </tbody>
+      </table>
+      <h4>（三）通用执业规范</h4>
+      <table>
+        <thead><tr><th>档次</th><th>典型情形</th></tr></thead>
+        <tbody>
+          <tr><td>轻微 1分</td><td>着装不规范、文件杂乱、未参加例会；台账延迟≤1天、值班迟到≤30分钟；结案超30天未归档、委托后3天未建档</td></tr>
+          <tr><td>一般 3分</td><td>收费未开票/未进公账经提醒未改；文件未审核擅自发出（无后果）、隐私材料乱放；口头投诉经核实属实</td></tr>
+          <tr><td>重大 5分</td><td>未经同意为非团队案源服务（当月计件及提成归零）；利益冲突未披露未回避；旷工</td></tr>
+          <tr><td>底线 10分</td><td>私自收费/未经报备私自接案；作胜诉/结果承诺；社交媒体泄密、书面投诉属实、政府负面反馈；伪造出勤记录、虚假报销</td></tr>
+        </tbody>
+      </table>
+      <div class="spec-quote">以上为典型情形。未列明情形由团队负责人参照最相近情形认定并说明依据；有重大分歧的，由团队负责人与律所主任共同裁定。</div>
+
+      <h3>七、积分累计阈值与管理动作（第十三条）</h3>
+      <p>积分按季度累计，季度末清零（底线记录除外）。</p>
+      <table>
+        <thead><tr><th>季度累计积分</th><th>管理动作</th></tr></thead>
+        <tbody>
+          <tr><td>≥8分，或当季存在重大（5分）事项</td><td>书面改进提醒，限期1个月观察</td></tr>
+          <tr><td>≥15分</td><td>正式改进计划，每周提交改进报告，取消当季评优</td></tr>
+          <tr><td><b>≥20分，或当季重大（5分）达2次</b></td><td><b>视为季度考核不合格，评估是否继续留用</b></td></tr>
+          <tr><td><b>底线（10分）事项1次</b></td><td><b>直接触发留用资格评估（双人确认），取消当季评优，24小时内面谈</b></td></tr>
+        </tbody>
+      </table>
+      <div class="spec-quote">执业事故类底线事项（造成当事人败诉、失权或实际损失）应自发现之日起24小时内书面报告负责人并复盘；留用评估结论可为继续留用并限期整改，或不再留用。及时补救且未造成当事人损失的，按重大5分处理。</div>
+
+      <h3>八、积分抵扣（第十四条）</h3>
       <ul>
-        <li>编辑权：仅团队负责人；</li>
-        <li>查看权：负责人 + 成员本人（建议开放，避免月底争议）；</li>
-        <li>金额/积分属团队内部管理数据，不对外。</li>
+        <li>每季度最多抵扣 <b>5分</b>；底线档（10分）不得抵扣；</li>
+        <li>抵扣项目：优秀案例复盘/类案检索报告 1分/次；经负责人确认的自我纠错 1分/次；团队分享会主题分享 2分/次；</li>
+        <li>抵扣后分数用于判断阈值（例：季度原始20分，抵扣5分后按15分计，触发正式改进计划，不触发留用评估）。</li>
       </ul>
-      <p><b>FR-5 数据导出</b></p>
-      <p>月度可导出 Excel（或 CSV）用于月底台账与存档；WorkBuddy 不支持导出时，用筛选视图 + 截图/复制替代（规格按"能导出"设计）。</p>
 
-      <h3>3. 月底 15 分钟操作手册（SOP）</h3>
-      <ol>
-        <li><b>筛选</b>：事件视图 → 调解事件 + 状态=成功 + 成功日期∈本月 → 导出/复制；</li>
-        <li><b>对账</b>：逐条核对成功凭证字段非空；跨月案件确认归入成功月（而不是分配月）；</li>
-        <li><b>计件台账</b>：按成员汇总金额 → 填入附件四模板（或直接以导出表为台账）；</li>
-        <li><b>积分表</b>：筛选失误事件 → 领域×档次汇总 → 重大×2 → 扣除备注中登记的抵扣（每季≤5分）→ 与季度累计数核对；</li>
-        <li><b>阈值与评优</b>：对照第 17 条阈值输出提示；按 13/14 条生成评优候选名单；</li>
-        <li><b>收尾</b>：检查本月记录完整性（无未填情形的失误行、无缺少成功日期的成功案件）。</li>
-      </ol>
-
-      <h3>4. WorkBuddy 能力核对表（请逐项核实）</h3>
-      <table>
-        <thead><tr><th>#</th><th>能力问题</th><th>支持？</th><th>支持时怎么做</th><th>不支持时替代方案</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>复盘/表单支持自定义字段（单选、日期、多行文本）</td><td>☐</td><td>形态A：复盘自带字段</td><td>形态B：另建考核记录表</td></tr>
-          <tr><td>2</td><td>支持按字段分组/筛选的视图</td><td>☐</td><td>建三种视图（FR-3）</td><td>单列表 + 按日期手动翻</td></tr>
-          <tr><td>3</td><td>支持字段公式/自动计算（积分、金额）</td><td>☐</td><td>月底四件套自动生成</td><td>导出 Excel 汇总</td></tr>
-          <tr><td>4</td><td>支持自动化提醒（事件后触发）</td><td>☐</td><td>重大失误/月底汇总提醒</td><td>人工执行（FR-2）</td></tr>
-          <tr><td>5</td><td>支持按人控制权限</td><td>☐</td><td>成员查看自己</td><td>导出后分发</td></tr>
-          <tr><td>6</td><td>支持导出 Excel/CSV</td><td>☐</td><td>月底台账直接导出</td><td>筛选视图复制粘贴</td></tr>
-          <tr><td>7</td><td>手机端可录入</td><td>☐</td><td>复盘时随手记录</td><td>固定时间电脑录入</td></tr>
-        </tbody>
-      </table>
-      <div class="spec-quote">核实结果请回填，我将据实把规格调整成"自动版"或"导出版"。</div>
-
-      <h3>5. 验收标准</h3>
-      <ol>
-        <li>任意抽查一个月：复盘记录汇总结果与附件四台账<b>完全一致</b>；</li>
-        <li>积分累计与第十五、十六、十七、十八条规则计算结果一致（四档分离、底线单独处理、抵扣上限5分、季度清零/底线保留12月）；</li>
-        <li>每日录入 ≤5 分钟；月底汇总 ≤15 分钟；</li>
-        <li>当月评优名单与 13/14 条规则一致；</li>
-        <li>重大失误（5分）记录均有面谈痕迹（记录或备注）。</li>
-      </ol>
-
-      <h3>6. 待你确认的决策点（回填后规格即定稿）</h3>
-      <table>
-        <thead><tr><th>#</th><th>决策点</th><th>建议默认值</th></tr></thead>
-        <tbody>
-          <tr><td>D1</td><td>成员名单（选项列表）</td><td>填写团队授薪律师名单</td></tr>
-          <tr><td>D2</td><td>成员能否查看自己的记录</td><td>可以</td></tr>
-          <tr><td>D3</td><td>客户书面表扬/锦旗是否单独记录（月度之星条件之一）</td><td>单独记一条"成长亮点"，备注标注"客户表扬"</td></tr>
-          <tr><td>D4</td><td>积分抵扣如何登记</td><td>在失误事件备注注明"抵扣：案例复盘1分"，月底统一扣除</td></tr>
-          <tr><td>D5</td><td>提成（5%-10%，限额2万）是否纳入本表</td><td>第一版不纳入，提成按回款另表管理（数据源不同）</td></tr>
-          <tr><td>D6</td><td>值班/咨询登记（第四条基础工作量）是否记录</td><td>只在复盘正文提及，不进考核字段</td></tr>
-        </tbody>
-      </table>
+      <h3>九、离职与交接 · 附则（第十五至十八条）</h3>
+      <ul>
+        <li>主动离职：提前1个月书面申请，按要求数办理交接；离职当月按实际出勤发底薪；未按规定交接的视为自愿放弃未结算的分配权利，团队有权追偿；</li>
+        <li>因故离岗：评估确定不留用之日起通知，案件逐步移交；未按规定交接的后果同上；</li>
+        <li>计件金额争议按"就高不就低"原则临时执行，当月复盘后次月调整；</li>
+        <li>本办法及原分配办法均未规定的内容，由全体成员一人一票、2/3以上同意通过；</li>
+        <li>本制度自各成员律师签字确认之日起生效，试行3个月；试行期满由负责人调整并经全体成员同意后继续运行。</li>
+      </ul>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeSpec()">关闭</button>
@@ -2253,7 +2305,6 @@ body {
     </div>
   </div>
 </div>
-
 <script>
 // ===== GitHub 永久存储配置 =====
 // 数据存储在 GitHub 仓库中，永久不丢失，多人协同（10秒轮询同步）
@@ -2428,9 +2479,9 @@ function startRealtimeListener() {
       if (!cloudData.deductions) cloudData.deductions = [];
       if (!cloudData.errors) cloudData.errors = [];
       delete cloudData.auth;
-      document.getElementById('boardTitle').textContent = cloudData.boardName || '团队日清看板';
-      document.title = cloudData.boardName || '团队日清看板';
-      renderStats();
+  document.getElementById('boardTitle').textContent = cloudData.boardName || '团队日清看板';
+  document.title = cloudData.boardName || '团队日清看板';
+  renderStats();
       updateFilterOptions();
       render();
       renderOverdueBanner();
@@ -2500,8 +2551,16 @@ async function loadData() {
   }
   document.getElementById('boardTitle').textContent = cloudData.boardName || '团队日清看板';
   document.title = cloudData.boardName || '团队日清看板';
+  // 已登录但未设置身份：默认以团队负责人身份进入（可在「设置」中切换）
+  if (!currentUser && cloudData.manager) {
+    currentUser = cloudData.manager;
+    try { localStorage.setItem('board_current_user', currentUser); } catch(e) {}
+    setTimeout(() => showToast('已默认以「' + currentUser + '」身份进入，如需切换请到「⚙ 设置」'), 800);
+  }
   renderStats();
   updateFilterOptions();
+  ensureReviewCollections();
+  normalizeReviews();
   // 自动填入当前用户为录入人
   if (currentUser) {
     const recSel = document.getElementById('quickRecorder');
@@ -3358,311 +3417,391 @@ function closeCalDayDetail() {
   document.getElementById('calDayDetail').classList.remove('show');
 }
 let editingReviewId = null;
-let currentGrowType = 'growth'; // 'growth' | 'improvement'
-let selectedScore = 3;
+let currentRevTab = 'hl';
 
-// ===== 进步池分类预设 =====
-const GROWTH_CATEGORIES = ['合同审查','客户沟通','文书撰写','知识分享','团队协作','其他成长'];
-const IMPROVE_CATEGORIES = ['条款遗漏','引用错误','时间节点延误','沟通边界','格式规范','其他改进'];
-const SCORE_OPTIONS = { growth: [1,2,3,4,5], improvement: [-1,-2,-3,-4,-5] };
+/* ===== 《律师团队内部绩效管理与考核办法》考核数据层 ===== */
 
-/* ===== 差异化评分与计件标准数据层（《刘芳律师团队月度考核与浮动薪酬管理办法（试行）》） ===== */
-// 仅曾梓涵律师、潘奥星律师为可考核计件对象；刘芳律师为管理律师（仅其可录入）
-const BEHAVIOR_CATS = {
-  '曾梓涵律师': ['驻点服务', '调解工作', '非诉初审', '案源线索', '学习成长'],
-  '潘奥星律师': ['出庭辅助', '文书质量', '案件推进', '学习复盘', '团队协作'],
-};
-// 计薪基数：底薪 + 驻点补贴（曾梓涵）/ 0（潘奥星）+ 1500×绩效系数 + Σ计件
-const SALARY_BASE = {
-  '曾梓涵律师': { base: 5000, allowance: 500 },
-  '潘奥星律师': { base: 5000, allowance: 0 },
-};
-// 评分标准：member → category → type(growth/improvement) → score → {note, piece, cap}
-// piece：本记录触发的计件金额（元，负数为扣罚）；cap：当月绩效系数封顶值（无则 null）
-const SCORE_STANDARDS = {
-  '曾梓涵律师': {
-    '驻点服务': {
-      growth: { 2: { note: '全勤且周报按时提交，内容完整', piece: 0 },
-                3: { note: '获政府端口头表扬，或主动发现重要信息', piece: 300 } },
-      improvement: { '-1': { note: '周报延迟或内容敷衍', piece: 0, cap: null },
-                 '-2': { note: '驻点缺勤无报备（驻点补贴按天扣减）', piece: 0, cap: null },
-                 '-3': { note: '政府端投诉或工作失误', piece: 0, cap: 0.5 } }
-    },
-    '调解工作': {
-      growth: { 3: { note: '成功调解 1 起并签署协议', piece: 500 },
-                4: { note: '调解复杂纠纷或连续超额完成', piece: 500 } },
-      improvement: { '-2': { note: '本月调解 0 件（首月可豁免一次）', piece: 0, cap: null },
-                 '-3': { note: '调解协议出现法律漏洞', piece: 0, cap: 0.5 } }
-    },
-    '非诉初审': {
-      growth: { 2: { note: '初审合格（A级0处/B级≤1处/C级≤3处）', piece: 50 },
-                3: { note: '初审优秀（A/B级0处/C级≤2处）', piece: 100 } },
-      improvement: { '-2': { note: '出现 B 级错误（该份计件 0 元）', piece: 0, cap: null },
-                 '-4': { note: '出现 A 级错误（该份计件 0 元）', piece: 0, cap: 0.8 } }
-    },
-    '案源线索': {
-      growth: { 3: { note: '提供有效线索（有联系人+纠纷事实），记录存档', piece: 0 },
-                4: { note: '线索成功转化签约（案源线索奖=签约金额×2%，回款当月兑现）', piece: 0 } },
-      improvement: { '-1': { note: '提供无效/虚假线索', piece: 0, cap: null } }
-    },
-    '学习成长': {
-      growth: { 2: { note: '按时提交案例复盘或学习笔记', piece: 0 },
-                3: { note: '复盘质量高，对团队有参考价值', piece: 0 } },
-      improvement: { '-1': { note: '未按时提交', piece: 0, cap: null },
-                 '-2': { note: '连续缺交（当月绩效系数封顶 0.8）', piece: 0, cap: 0.8 } }
-    }
-  },
-  '潘奥星律师': {
-    '出庭辅助': {
-      growth: { 2: { note: '按时提交庭审提纲，出庭表现合格', piece: 200 },
-                3: { note: '庭审提纲质量高，纪要完整准确', piece: 200 },
-                4: { note: '出庭中出色临场发挥，获客户认可', piece: 200 } },
-      improvement: { '-2': { note: '未按时提交庭审提纲（取消当次出庭津贴）', piece: 0, cap: null },
-                 '-3': { note: '出庭出现明显失误（取消津贴+系数封顶0.5）', piece: 0, cap: 0.5 },
-                 '-4': { note: '未经审核擅自出庭或法律适用错误', piece: 0, cap: 0.5 } }
-    },
-    '文书质量': {
-      growth: { 2: { note: '文书一次性通过（仅改措辞），质量奖 50 元/份', piece: 50 },
-                3: { note: '文书质量优秀，可直接发出，质量奖 50 元/份', piece: 50 } },
-      improvement: { '-1': { note: '出现 C 级错误（错别字/格式，累计3处=1个B级），该份计件0元', piece: 0, cap: null },
-                 '-2': { note: '出现 B 级错误（逻辑漏洞/遗漏请求），该份计件0元', piece: 0, cap: null },
-                 '-4': { note: '出现 A 级错误（法条/当事人/金额错误），该份计件0元', piece: 0, cap: 0.8 } }
-    },
-    '案件推进': {
-      growth: { 2: { note: '节点准时，每周按时更新进度表（已含在案件提成10%）', piece: 0 },
-                3: { note: '提前完成或主动优化流程', piece: 0 } },
-      improvement: { '-2': { note: '节点延误 1 次', piece: 0, cap: null },
-                 '-3': { note: '节点延误导致客户投诉或程序风险', piece: 0, cap: 0.5 } }
-    },
-    '学习复盘': {
-      growth: { 2: { note: '按时提交类案检索/案例复盘', piece: 0 },
-                3: { note: '复盘质量高，对办案有参考价值', piece: 0 } },
-      improvement: { '-1': { note: '未按时提交', piece: 0, cap: null },
-                 '-2': { note: '连续缺交（当月绩效系数封顶 0.8）', piece: 0, cap: 0.8 } }
-    },
-    '团队协作': {
-      growth: { 2: { note: '按时完成曾梓涵初审文书的复核', piece: 0 },
-                3: { note: '复核中发现关键错误并修正，或主动带教分享', piece: 0 } },
-      improvement: { '-1': { note: '复核延迟或敷衍', piece: 0, cap: null },
-                 '-2': { note: '复核未发现明显错误导致对外发出（系数封顶0.8）', piece: 0, cap: 0.8 } }
-    }
-  }
-};
-
-// 说明文档条款接入：调解级别计件金额、失误档次分值（录入时自动带出，并计入考核）
-const MEDIATE_LEVELS = { '口头': 30, '简单': 80, '一般': 120, '重大': 200, '疑难': 500 };
-// 四档分离评级模型（依据《考核办法》第十五、十六条）：轻微1 / 一般3 / 重大5 / 底线10
-const FAULT_GRADES = { '轻微': 1, '一般': 3, '重大': 5, '底线': 10 };
-// 底线（10分）特殊规则（第十五条5款）：纪律红线/执业事故，区别于普通重大
-const BOTTOM_LINE_RULES = '双人确认（团队负责人+律所主任）· 取消当季评优 · 24小时内面谈复盘 · 不适用积分抵扣 · 记录保留12个月不随季度清零 · 团队保留移交处理权利';
-
-// ===== 事件自动识别规则引擎 =====
-// 基于《律师团队内部绩效管理与考核办法（最终版）》全文提取
-const EVENT_RULES = [
-  // ── 成长亮点 · 调解成功（按级别自动带出计件）──
-  { kw:['调解成功','成功调解','调解达成','签署调解协议','调解好了','搞定调解','调解达成协议','双方同意调解','调解结案'], type:'growth', cat:'调解工作', sc:3, pc:0, ml:null, fg:null, h:'调解成功→+3分，请选级别定计件' },
-  { kw:['口头化解','当场履行','口头案件','现场口头'], type:'growth', cat:'调解工作', sc:3, pc:30, ml:'口头', fg:null, h:'口头调解成功→+3分+30元' },
-  { kw:['简单纠纷','小额矛盾','≤3人','≤5万','不超过3人','不超过5万'], type:'growth', cat:'调解工作', sc:3, pc:80, ml:'简单', fg:null, h:'简单纠纷调解成功→+3分+80元' },
-  { kw:['一般纠纷','常规纠纷','4-10人','5-50万'], type:'growth', cat:'调解工作', sc:3, pc:120, ml:'一般', fg:null, h:'一般纠纷调解成功→+3分+120元' },
-  { kw:['重大纠纷','案情复杂','专家参与','11-19人','50-200万'], type:'growth', cat:'调解工作', sc:3, pc:200, ml:'重大', fg:null, h:'重大纠纷调解成功→+3分+200元' },
-  { kw:['疑难纠纷','群体性事件','越级上访','民转刑','≥20人','≥200万'], type:'growth', cat:'调解工作', sc:3, pc:500, ml:'疑难', fg:null, h:'疑难纠纷调解成功→+3分+500元' },
-  // ── 成长亮点 · 案件阶段成果 ──
-  { kw:['立案','已立案','完成立案','提交立案','立好案了','立案搞定','交了立案材料','法院立案','立上案了'], type:'growth', cat:'驻点/案件推进', sc:3, pc:0, ml:null, fg:null, h:'完成立案阶段→+3分' },
-  { kw:['已开庭','庭审完成','出庭完成','庭审结束','开庭完毕','开完庭了','庭审搞完了','出庭回来','开完庭'], type:'growth', cat:'出庭辅助', sc:3, pc:0, ml:null, fg:null, h:'完成开庭阶段→+3分' },
-  { kw:['签约','已签约','合同签订','签约完成','签约成功'], type:'growth', cat:'案源开拓', sc:3, pc:0, ml:null, fg:null, h:'签约成功→+3分' },
-  { kw:['回款','已回款','款项到账','收到律师费','费用到账'], type:'growth', cat:'案源开拓', sc:3, pc:0, ml:null, fg:null, h:'回款到账→+3分' },
-  // ── 成长亮点 · 咨询接待 / 文书编制 ──
-  { kw:['独立接待咨询','接待咨询','咨询接待','完成咨询接待','法律咨询'], type:'growth', cat:'驻点/案件推进', sc:3, pc:0, ml:null, fg:null, h:'独立/完成法律咨询接待→+3分' },
-  { kw:['撰写起诉状','起草起诉状','起诉状初稿','起草答辩状','起草代理词','完成证据目录','证据目录整理','整理证据目录','起草法律意见书'], type:'growth', cat:'驻点/案件推进', sc:3, pc:0, ml:null, fg:null, h:'完成文书/证据目录编制→+3分' },
-  // ── 成长亮点 · 案源线索 ──
-  { kw:['案源线索','有效案源','提供线索','挖掘案源','客户推荐','转介绍'], type:'growth', cat:'案源开拓', sc:3, pc:0, ml:null, fg:null, h:'提供有效案源线索→+3分' },
-  // ── 成长亮点 · 普法/学习 ──
-  { kw:['普法文章','公众号文章','文章发表','发布文章','撰写文章'], type:'growth', cat:'学习复盘', sc:2, pc:0, ml:null, fg:null, h:'普法/公众号文章被采用→+2分' },
-  { kw:['视频号','拍摄剪辑','视频制作','普法视频','短视频'], type:'growth', cat:'学习复盘', sc:2, pc:0, ml:null, fg:null, h:'视频号文案/拍摄→+2分' },
-  { kw:['案例复盘','类案检索','学习笔记','复盘报告','分享会','主题分享'], type:'growth', cat:'学习复盘', sc:2, pc:0, ml:null, fg:null, h:'学习产出/分享→+2分' },
-  // ── 改进机会 · 诉讼类（含仲裁、执行）── 四档：轻微1/一般3/重大5/底线10
-  { kw:['错别字','页码错误','装订遗漏','格式不符','文书格式错误','写错字','打错字',' typo ','文字错误','排版错误'], type:'improvement', cat:'文书质量', sc:-1, pc:0, ml:null, fg:'轻微', h:'诉讼轻微(文书格式/错字)→-1分' },
-  { kw:['反馈延迟','延迟反馈','未及时反馈','回复晚了','未回复询问','回复慢了','没及时回','忘了回消息','没回信息'], type:'improvement', cat:'案件推进', sc:-1, pc:0, ml:null, fg:'轻微', h:'非紧急询问24h内未回复→-1分' },
-  { kw:['迟到几分钟','迟到片刻','迟到10分钟内','迟到≤10分钟','迟到五六分钟','稍微迟到','迟了一点'], type:'improvement', cat:'出庭辅助', sc:-1, pc:0, ml:null, fg:'轻微', h:'开庭迟到≤10分钟未致不利后果→-1分（10-30分钟选一般、>30分钟选重大）' },
-  { kw:['非关键证据未提交','遗漏非关键证据','证据补交','证据逾期'], type:'improvement', cat:'案件推进', sc:-3, pc:0, ml:null, fg:'一般', h:'非关键证据逾期提交(未失权)→-3分' },
-  { kw:['庭审意见矛盾','庭审发言矛盾','与方案矛盾','策略偏差'], type:'improvement', cat:'出庭辅助', sc:-3, pc:0, ml:null, fg:'一般', h:'庭审意见/策略偏差(未造成实质不利)→-3分' },
-  { kw:['严重迟到','迟到30分钟','迟到超半小时','迟到半小时以上'], type:'improvement', cat:'出庭辅助', sc:-5, pc:0, ml:null, fg:'重大', h:'迟到30分钟以上未致不利后果→-5分（已补救无损失）' },
-  { kw:['开庭迟到','迟到','到庭晚','迟到了','晚到了','没准时到','迟到开庭'], type:'improvement', cat:'出庭辅助', sc:-3, pc:0, ml:null, fg:'一般', h:'开庭迟到10-30分钟未致不利后果→-3分（≤10分钟选轻微、>30分钟选重大）' },
-  { kw:['未提醒上诉期','未提醒再审期','未提醒期限','忘记提醒期限'], type:'improvement', cat:'案件推进', sc:-3, pc:0, ml:null, fg:'一般', h:'未及时提醒期限(未错过)→-3分' },
-  { kw:['证据目录不对应','证据材料不匹配','目录与证据不符'], type:'improvement', cat:'文书质量', sc:-3, pc:0, ml:null, fg:'一般', h:'证据目录不对应→-3分' },
-  { kw:['关键节点未告知','未告知当事人','未主动告知','忘了告知'], type:'improvement', cat:'案件推进', sc:-3, pc:0, ml:null, fg:'一般', h:'关键节点未告知当事人→-3分' },
-  { kw:['法律依据引用不当','引用失效法律','法条理解错误','引用条款不匹配','引用错误法律'], type:'improvement', cat:'文书质量', sc:-3, pc:0, ml:null, fg:'一般', h:'法律依据引用不当(未造成实质不利)→-3分' },
-  { kw:['错过上诉期','错过时效','除斥期间过期','申请执行期限过'], type:'improvement', cat:'案件推进', sc:-5, pc:0, ml:null, fg:'重大', h:'错过上诉期/时效但已补救无损失→-5分（若致失权按底线10）' },
-  { kw:['送达错误','送达对象错误','送达地址错误','送达地址核对','地址核对错误','送达核对错误','送达核对','邮寄错误'], type:'improvement', cat:'文书质量', sc:-5, pc:0, ml:null, fg:'重大', h:'送达地址核对错误未致失权→-5分（若致失权按底线10）' },
-  { kw:['遗失案卷','遗失关键案卷','案卷丢失','卷宗遗失'], type:'improvement', cat:'案件推进', sc:-5, pc:0, ml:null, fg:'重大', h:'遗失关键案卷材料未致损失→-5分（若致当事人受损按底线10）' },
-  { kw:['泄露策略','泄露证据','泄密','不当接触','私下会面对方'], type:'improvement', cat:'团队协作', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 向对方泄露策略/证据（纪律红线）→-10分' },
-  { kw:['关键证据缺失','关键证据未收集','证据不足致败诉','败诉因证据'], type:'improvement', cat:'案件推进', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 关键证据缺失致败诉（执业事故）→-10分' },
-  { kw:['无故未出庭','缺席庭审','未到庭','严重缺庭'], type:'improvement', cat:'出庭辅助', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 无正当理由缺席致撤诉/败诉（执业事故）→-10分' },
-  { kw:['送达致失权','送达错误致失权','送达致当事人失权'], type:'improvement', cat:'文书质量', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 送达错误致当事人失权（执业事故）→-10分' },
-  { kw:['引用错误致败诉','关键依据引用错误致败诉','策略结论错误致败诉','重大损失'], type:'improvement', cat:'文书质量', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 关键依据引用错误致败诉/重大损失（执业事故）→-10分' },
-  // ── 改进机会 · 非诉/调解类 ── 四档
-  { kw:['笔录错别字','调解笔录错误','日期错误','页码遗漏','笔录有误'], type:'improvement', cat:'调解工作', sc:-1, pc:0, ml:null, fg:'轻微', h:'调解笔录格式错误→-1分' },
-  { kw:['回访延迟','延迟回访','补登回访','回访晚了','台账延迟','登记延迟'], type:'improvement', cat:'调解工作', sc:-1, pc:0, ml:null, fg:'轻微', h:'回访/台账延迟≤1天→-1分' },
-  { kw:['信息登记不全','信息不全','电话缺','地址缺','当事人信息不全'], type:'improvement', cat:'调解工作', sc:-1, pc:0, ml:null, fg:'轻微', h:'当事人基本信息不全→-1分' },
-  { kw:['合同审查遗漏格式','标点符号错误','格式条款遗漏','非关键条款遗漏'], type:'improvement', cat:'非诉初审', sc:-1, pc:0, ml:null, fg:'轻微', h:'合同审查格式/非关键条款遗漏→-1分' },
-  { kw:['协议条款失衡','协议明显失衡','条款明显失衡','权利义务失衡'], type:'improvement', cat:'调解工作', sc:-3, pc:0, ml:null, fg:'一般', h:'调解协议条款失衡(未履行)→-3分' },
-  { kw:['应转介诉讼拖延','转介超时','应转诉讼未转','拖延转介'], type:'improvement', cat:'调解工作', sc:-3, pc:0, ml:null, fg:'一般', h:'应转介诉讼拖延>1天→-3分' },
-  { kw:['程序瑕疵','应回避未回避','未告知权利义务','程序违规'], type:'improvement', cat:'调解工作', sc:-3, pc:0, ml:null, fg:'一般', h:'调解程序瑕疵→-3分' },
-  { kw:['履行期限不明','期限约定不明','执行困难风险'], type:'improvement', cat:'调解工作', sc:-3, pc:0, ml:null, fg:'一般', h:'履行期限约定不明→-3分' },
-  { kw:['合同遗漏一般风险','遗漏B级风险','一般违约条款遗漏','主体资质一般瑕疵'], type:'improvement', cat:'非诉初审', sc:-3, pc:0, ml:null, fg:'一般', h:'合同遗漏一般风险点→-3分' },
-  { kw:['合同审查法律依据援引错误','非诉引用错误','引用失效法条(非诉)','适用错误(非诉)'], type:'improvement', cat:'非诉初审', sc:-3, pc:0, ml:null, fg:'一般', h:'非诉/调解法律依据引用不当(未致无效)→-3分' },
-  { kw:['遗漏当事人','遗漏共有权人','遗漏继承人','遗漏连带责任人','必须参加的当事人遗漏'], type:'improvement', cat:'调解工作', sc:-5, pc:0, ml:null, fg:'重大', h:'遗漏必参加调解当事人(未致实际损害)→-5分（致合同无效按底线10）' },
-  { kw:['遗失原件','遗失借条','遗失合同','遗失权属证书','原件丢失'], type:'improvement', cat:'调解工作', sc:-5, pc:0, ml:null, fg:'重大', h:'遗失关键原件未致损失→-5分（致当事人受损按底线10）' },
-  { kw:['合同遗漏致命风险','A级错误','关键主体资质瑕疵','无资质','越权处分'], type:'improvement', cat:'非诉初审', sc:-5, pc:0, ml:null, fg:'重大', h:'A级2处以上/关键资质瑕疵(未致无效)→-5分（致无效按底线10）' },
-  { kw:['协议条款违法','违反强制性规定','协议无效','部分无效'], type:'improvement', cat:'调解工作', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 调解协议条款违法致协议无效→-10分' },
-  { kw:['法律意见致客户损失','法律意见结论错误','尽调重大遗漏','虚假尽调'], type:'improvement', cat:'非诉初审', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 法律意见/尽调结论错误致客户损失→-10分' },
-  { kw:['关键依据引用错误致无效','引用错误致协议无效','引用错误致撤销'], type:'improvement', cat:'非诉初审', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 关键法律依据引用错误致协议无效→-10分' },
-  { kw:['泄露调解保密','强迫调解','违法仍促成','挪用代收款项','代收款项挪用'], type:'improvement', cat:'调解工作', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 泄露调解保密/强迫调解/挪用代收款项（纪律红线）→-10分' },
-  // ── 改进机会 · 通用执业规范 ── 四档
-  { kw:['着装不规范','着装不符合规范','未穿正装','形象不规范'], type:'improvement', cat:'驻点/案件推进', sc:-1, pc:0, ml:null, fg:'轻微', h:'着装不规范→-1分' },
-  { kw:['文件杂乱','办公杂乱','材料未入柜','桌面凌乱'], type:'improvement', cat:'驻点/案件推进', sc:-1, pc:0, ml:null, fg:'轻微', h:'办公区域文件杂乱→-1分' },
-  { kw:['未参加例会','缺席例会','无故缺席会议','没开例会'], type:'improvement', cat:'团队协作', sc:-1, pc:0, ml:null, fg:'轻微', h:'未按时参加团队例会→-1分' },
-  { kw:['结案超30天未归档','归档延迟','逾期归档','未按时归档','委托后未建档','3天未建档','未建立档案','档案建立延迟'], type:'improvement', cat:'文书质量', sc:-1, pc:0, ml:null, fg:'轻微', h:'结案超30天未归档/委托后3天未建档→-1分' },
-  { kw:['收费未走流程','未开票','未进公账','收费流程违规'], type:'improvement', cat:'团队协作', sc:-3, pc:0, ml:null, fg:'一般', h:'收费未开票/未进公账经提醒未改→-3分' },
-  { kw:['文件未审核发出','擅自发出','未经审核发出','发出前未审','隐私材料乱放'], type:'improvement', cat:'文书质量', sc:-3, pc:0, ml:null, fg:'一般', h:'对外文件未经审核发出/隐私材料乱放(无后果)→-3分（致损失按底线10）' },
-  { kw:['口头投诉','客户抱怨','口头抱怨','服务态度投诉'], type:'improvement', cat:'团队协作', sc:-3, pc:0, ml:null, fg:'一般', h:'口头投诉经核实属实→-3分' },
-  { kw:['非团队案源','为外部案源服务','私自承接外部','未经同意为非团队案源'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'未经同意为非团队案源服务→-5分（当月计件及提成归零）' },
-  { kw:['利益冲突未回避','利益冲突','应当回避未回避'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'利益冲突未披露未回避→-5分' },
-  { kw:['旷工','无故缺勤','未请假不到岗'], type:'improvement', cat:'团队协作', sc:-5, pc:0, ml:null, fg:'重大', h:'旷工→-5分' },
-  { kw:['私自收费','私自收取','私自收款','私自接案','私自接受委托','未通过团队接案'], type:'improvement', cat:'团队协作', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 私自收费/未经报备私自接案（纪律红线）→-10分' },
-  { kw:['胜诉承诺','结果承诺','承诺胜诉','承诺结果','打包票'], type:'improvement', cat:'团队协作', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 向当事人作胜诉/结果承诺（纪律红线）→-10分' },
-  { kw:['社交媒体泄密','社交媒体泄露','公开披露案件细节','朋友圈发案件','微博发案件','可识别当事人'], type:'improvement', cat:'团队协作', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 社交媒体泄露案件信息（纪律红线）→-10分' },
-  { kw:['书面投诉','正式投诉','客户举报','政府负面反馈','主管部门批评','点名批评','行政处罚'], type:'improvement', cat:'团队协作', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 书面投诉属实/政府负面反馈（纪律红线）→-10分' },
-  { kw:['伪造出勤','虚假报销','伪造记录','虚假报销单'], type:'improvement', cat:'团队协作', sc:-10, pc:0, ml:null, fg:'底线', h:'⚠️ 伪造出勤记录/虚假报销（纪律红线）→-10分' },
+// 成长亮点类型（第八条）——每项默认记1个亮点；extra 为额外亮点数
+const HIGHLIGHT_CATS = [
+  { cat: '调解成功', note: '调解成功1件（任何级别），自动记1个成长亮点。' },
+  { cat: '交付成果一次性通过', note: '诉讼/非诉案件交付成果一次性通过、贡献度较高的，记1个成长亮点。' },
+  { cat: '提供有效案源线索', note: '提供有效案源线索记1个亮点；促成签约成交的，另按签约金额×2%计发案源线索奖（第三条）。' },
+  { cat: '高质量普法作品被采用', note: '完成高质量普法文章/视频并被团队采用，记1个亮点；可另按工作情况发放学习激励奖（第七条）。' },
+  { cat: '客户锦旗/书面表扬', note: '获得客户锦旗的，在原有成长亮点外额外增加2个亮点（第七条）；亦满足月度之星评选条件（第九条）。', extra: 2 },
+  { cat: '其他（负责人认定）', note: '团队负责人认为应当计入成长亮点的其他情形（第八条）。' },
 ];
 
-// 是否管理律师（刘芳律师）：唯一可录入/修改考核记录的角色
+// 改进机会四档分级（第十一条2款）：轻微1 / 一般3 / 重大5 / 底线10
+const FAULT_GRADES = { '轻微': 1, '一般': 3, '重大': 5, '底线': 10 };
+
+// 分值标准（第十二条）：场景 × 档次 × 典型情形
+const FAULT_TABLES = {
+  '诉讼类（含仲裁、执行）': {
+    '轻微': ['文书错别字/页码/装订遗漏、格式不符', '非紧急询问24小时内未回复', '开庭迟到≤10分钟未致不利后果'],
+    '一般': ['非关键证据逾期提交或证据目录不对应（未失权）', '未及时提醒上诉期/再审期（未错过）', '法律依据引用不当或策略偏差（未造成实质不利）', '关键节点未告知当事人'],
+    '重大': ['错过上诉期/时效等但已补救无损失', '迟到30分钟以上未致不利后果', '送达地址核对错误未致失权', '遗失关键案卷材料未致损失'],
+    '底线·纪律红线': ['向对方泄露策略/证据', '收受对方利益', '私自收取当事人费用', '伪造、变造或隐匿证据', '泄露团队商业秘密和客户隐私'],
+    '底线·执业事故': ['错过期限致当事人失权或团队被追责', '无正当理由缺席致撤诉/败诉', '关键证据缺失致败诉', '送达错误致当事人失权', '关键依据引用错误或策略结论错误致败诉/重大损失', '遗漏保全/续封致无法执行', '遗失关键案卷材料致当事人受损'],
+  },
+  '非诉/调解类': {
+    '轻微': ['笔录/协议错别字、日期、页码遗漏', '回访或台账延迟≤1天', '当事人信息登记不全'],
+    '一般': ['协议条款明显失衡或履行期限不明', '应转介案件拖延超1个工作日', '合同审查遗漏一般风险（B级1-2处或A级1处）', '程序瑕疵或结论模糊需补救'],
+    '重大': ['遗漏必参加调解的当事人（未造成实际损害）', 'A级2处以上或关键资质瑕疵（未致合同无效）', '遗失关键原件（未致损失）'],
+    '底线·纪律红线': ['泄露调解保密信息', '强迫或变相强迫调解', '明知违法仍促成签订', '故意虚假尽调', '挪用代收款项', '泄露团队商业秘密和客户隐私'],
+    '底线·执业事故': ['调解协议条款违法致协议无效', '调解中造成当事人实际经济损失', 'A级2处以上或关键资质瑕疵致合同无效', '法律意见结论错误致客户损失', '尽职调查重大遗漏致客户损失', '代收款项超7日未交付', '遗失关键原件致当事人受损'],
+  },
+  '通用执业规范': {
+    '轻微': ['着装不规范、文件杂乱、未参加例会', '台账延迟≤1天、值班迟到≤30分钟', '结案超30天未归档', '委托后3天未建档'],
+    '一般': ['收费未开票/未进公账经提醒未改', '文件未审核擅自发出（无后果）、隐私材料乱放', '口头投诉经核实属实'],
+    '重大': ['未经同意为非团队案源服务（当月尚未发放的计件及提成不予发放）', '利益冲突未披露未回避', '旷工'],
+    '底线': ['私自收费/未经报备私自接案', '作胜诉/结果承诺', '社交媒体泄密、书面投诉属实、政府负面反馈', '伪造出勤记录、虚假报销'],
+  },
+};
+
+// 奖金类型（第三、六、七、九、十条）
+const BONUS_META = {
+  '办案提成': { icon: '💼', desc: '实际到账律师费×5%-10%，每案上限20000元（特殊审批50000元）' },
+  '案源线索奖': { icon: '🧭', desc: '签约金额×2%（第三条）' },
+  '案件转化奖': { icon: '🔗', desc: '签约金额×2%（第七条，与案源线索奖不重复计发）' },
+  '学习激励奖': { icon: '📚', desc: '普法文章/公众号/视频号等，按工作情况发放（第七条）' },
+  '评优奖金': { icon: '🏆', desc: '月度之星300元 / 季度之星500元（第九、十条）' },
+};
+
+// 是否团队负责人（唯一可录入/修改考核记录的角色）
 function isManager() {
   return !!currentUser && (currentUser || '').trim() === (cloudData.manager || '').trim();
 }
 
-// 月度考核分 → 等级 / 绩效系数
-function gradeOf(score) {
-  if (score >= 90) return { grade: '优秀', coeff: 1.2 };
-  if (score >= 80) return { grade: '良好', coeff: 1.0 };
-  if (score >= 70) return { grade: '合格', coeff: 0.8 };
-  if (score >= 60) return { grade: '待改进', coeff: 0.5 };
-  return { grade: '不合格', coeff: 0.0 };
+// 考核对象：授薪制执业律师（不含负责人本人）；若名单异常则为空时回退为全部成员，保证下拉不为空
+function getReviewMembers() {
+  const mgr = (cloudData.manager || '').trim();
+  const all = (cloudData.members || []).map(m => (m || '').trim()).filter(Boolean);
+  const list = all.filter(m => m !== mgr);
+  return list.length ? list : all;
 }
 
-// 取某条改进记录的绩效系数封顶值（来自标准，或按通用规则推导）
-function coeffCapOf(member, category, type, score) {
-  const std = SCORE_STANDARDS[member] && SCORE_STANDARDS[member][category] && SCORE_STANDARDS[member][category][type] && SCORE_STANDARDS[member][category][type][score];
-  if (std && std.cap !== undefined && std.cap !== null) return std.cap;
-  if (score <= -5) return 0;
-  if (score <= -4) return 0.5;
-  return null;
+function monthOfDate(d) { return (d || '').slice(0, 7); }
+function quarterOf(monthStr) {
+  const [y, m] = (monthStr || '').split('-').map(Number);
+  if (!y || !m) return '';
+  return `${y}Q${Math.ceil(m / 3)}`;
+}
+function reviewEntries() { return cloudData.reviews || []; }
+
+// 单条改进记录的有效积分（考虑免责/口头提醒）
+function faultPoints(e) {
+  if (!e || e.kind !== 'fault' || e.waived) return 0;
+  return FAULT_GRADES[e.grade] || Math.abs(e.score) || 0;
+}
+// 单条亮点的亮点数
+function hlCount(e) { return (e && e.kind === 'highlight') ? (e.count || 1) : 0; }
+
+// 旧数据迁移（幂等）：老 growth/improvement 结构 → 新 kind 结构
+function normalizeReviews() {
+  (cloudData.reviews || []).forEach(e => {
+    if (e.kind) { if (!e.status) e.status = '生效'; return; }
+    if (e.type === 'growth') {
+      const catMap = { '调解工作': '调解成功', '非诉初审': '交付成果一次性通过', '案源线索': '提供有效案源线索', '案源开拓': '提供有效案源线索', '学习复盘': '高质量普法作品被采用', '学习成长': '高质量普法作品被采用', '普法宣传': '高质量普法作品被采用', '知识分享': '高质量普法作品被采用', '驻点/案件推进': '交付成果一次性通过', '出庭辅助': '交付成果一次性通过', '驻点服务': '交付成果一次性通过', '文书质量': '交付成果一次性通过', '案件推进': '交付成果一次性通过', '文书撰写': '交付成果一次性通过', '合同审查': '交付成果一次性通过', '团队协作': '其他（负责人认定）', '客户沟通': '其他（负责人认定）' };
+      e.kind = 'highlight';
+      e.cat = catMap[e.category] || '其他（负责人认定）';
+      e.count = 1;
+      e.desc = e.behavior || e.category || '';
+      e.bonusAmount = e.pieceAmount || 0;
+      e.status = '生效';
+    } else if (e.type === 'improvement') {
+      const g = e.faultGrade || ({ '-1': '轻微', '-3': '一般', '-5': '重大', '-10': '底线' }[String(e.score)] || '一般');
+      e.kind = 'fault';
+      e.grade = g;
+      e.scene = '通用执业规范';
+      e.item = e.category ? ('历史记录：' + e.category) : '其他/未列明情形';
+      e.desc = e.behavior || e.category || '';
+      e.waived = false;
+      e.status = '生效';
+    } else {
+      e.kind = 'legacy';
+      e.status = '生效';
+    }
+  });
 }
 
-// ===== 维度映射（雷达图）=====
-const DIMENSION_MAP = {
-  '合同审查':'文书质量', '文书撰写':'文书质量', '条款遗漏':'文书质量', '引用错误':'文书质量', '格式规范':'文书质量',
-  '客户沟通':'客户沟通', '沟通边界':'客户沟通',
-  '知识分享':'法律知识', '引用错误':'法律知识',
-  '时间节点延误':'时间管理',
-  '团队协作':'团队协作',
-  '其他成长':'团队协作', '其他改进':'团队协作',
-};
+function ensureReviewCollections() {
+  if (!cloudData.reviews) cloudData.reviews = [];
+  if (!cloudData.deductions) cloudData.deductions = [];
+  if (!cloudData.assessments) cloudData.assessments = [];
+  if (!cloudData.salaryBase) cloudData.salaryBase = {};
+  if (!cloudData.firstYear) cloudData.firstYear = {};
+  getReviewMembers().forEach(m => {
+    if (cloudData.salaryBase[m] === undefined) cloudData.salaryBase[m] = 5000;
+    if (cloudData.firstYear[m] === undefined) cloudData.firstYear[m] = false;
+  });
+}
 
-// ===== 进步池主渲染 =====
+// ===== 季度统计（第十三条阈值 + 第十四条抵扣）=====
+function computeQuarterStats(member, monthStr) {
+  const q = quarterOf(monthStr);
+  const faults = reviewEntries().filter(e => e.kind === 'fault' && e.targetMember === member && quarterOf(monthOfDate(e.date)) === q);
+  const counted = faults.filter(e => !e.waived && !e.isBottomLine);
+  const rawPoints = counted.reduce((s, e) => s + faultPoints(e), 0);
+  const majorCount = counted.filter(e => e.grade === '重大').length;
+  const bottomQ = faults.filter(e => e.isBottomLine && !e.waived).length;
+  // 底线记录保留12个月不随季度清零（第十一条5款）
+  const yearAgo = new Date(Date.now() - 365 * 86400000).toISOString().slice(0, 10);
+  const bottomAll = reviewEntries().filter(e => e.kind === 'fault' && e.targetMember === member && e.isBottomLine && (e.date || '') >= yearAgo).length;
+  const ded = (cloudData.deductions || []).filter(d => d.member === member && d.quarter === q);
+  const dedPoints = Math.min(5, ded.reduce((s, d) => s + (d.points || 0), 0));
+  const effective = Math.max(0, rawPoints - dedPoints);
+  let action, level;
+  if (bottomQ >= 1) { action = '底线事项1次：触发留用资格评估（双人确认）+ 取消当季评优 + 24小时内面谈复盘'; level = 'danger'; }
+  else if (effective >= 20 || majorCount >= 2) { action = '≥20分或当季重大达2次：视为季度考核不合格，评估是否继续留用'; level = 'danger'; }
+  else if (effective >= 15) { action = '≥15分：正式改进计划（每周提交改进报告）+ 取消当季评优'; level = 'warn'; }
+  else if (effective >= 8 || majorCount >= 1) { action = '≥8分或存在重大(5分)事项：书面改进提醒，限期1个月观察'; level = 'warn'; }
+  else { action = '未触发管理阈值，状态正常'; level = 'ok'; }
+  const hlQ = reviewEntries().filter(e => e.kind === 'highlight' && e.targetMember === member && quarterOf(monthOfDate(e.date)) === q);
+  const hlTotal = hlQ.reduce((s, e) => s + hlCount(e), 0);
+  return { q, rawPoints, dedPoints, effective, majorCount, bottomQ, bottomAll, action, level, hlTotal };
+}
+
+// ===== 月度统计 =====
+function computeMonthStats(member, month) {
+  const es = reviewEntries().filter(e => e.targetMember === member && monthOfDate(e.date) === month);
+  const hl = es.filter(e => e.kind === 'highlight');
+  const hlTotal = hl.reduce((s, e) => s + hlCount(e), 0);
+  const hlBonus = hl.reduce((s, e) => s + (e.bonusAmount || 0), 0);
+  const faults = es.filter(e => e.kind === 'fault' && !e.waived && !e.isBottomLine);
+  const monthPoints = faults.reduce((s, e) => s + faultPoints(e), 0);
+  const bottomM = es.filter(e => e.kind === 'fault' && e.isBottomLine && !e.waived).length;
+  const hasPraise = hl.some(e => e.cat === '客户锦旗/书面表扬');
+  const bonus = es.filter(e => e.kind === 'bonus');
+  const bonusTotal = bonus.reduce((s, e) => s + (e.amount || 0), 0);
+  return { hlTotal, hlBonus, monthPoints, bottomM, hasPraise, bonus, bonusTotal, entries: es };
+}
+
+// ===== 月度之星（第九条）=====
+function computeMonthStar(month) {
+  const members = getReviewMembers();
+  const stats = {}; members.forEach(m => stats[m] = computeMonthStats(m, month));
+  const ranked = members.map(m => ({ m, hl: stats[m].hlTotal })).sort((a, b) => b.hl - a.hl);
+  const n = members.length;
+  const rows = members.map(m => {
+    const st = stats[m];
+    const rank = ranked.findIndex(r => r.m === m) + 1;
+    const noPoints = st.monthPoints === 0 && st.bottomM === 0;
+    const rankOk = (n >= 3 ? rank <= 2 : rank === 1);
+    const eligible = noPoints && (rankOk || st.hasPraise) && (st.hlTotal > 0 || st.hasPraise);
+    return { m, rank, hl: st.hlTotal, points: st.monthPoints, praise: st.hasPraise, noPoints, eligible };
+  });
+  const elig = rows.filter(r => r.eligible);
+  let winner = null, tie = false;
+  if (elig.length > 0) {
+    const maxHl = Math.max(...elig.map(r => r.hl));
+    const tops = elig.filter(r => r.hl === maxHl);
+    if (tops.length === 1) winner = tops[0].m; else tie = true;
+  }
+  return { rows, winner, tie, month };
+}
+
+// ===== 季度之星（第十条）=====
+function computeQuarterStar(monthStr) {
+  const q = quarterOf(monthStr);
+  return getReviewMembers().map(m => {
+    const qs = computeQuarterStats(m, monthStr);
+    const ok = qs.hlTotal >= 12 && qs.majorCount === 0 && qs.effective < 15 && qs.bottomQ === 0;
+    return Object.assign({ m }, qs, { ok });
+  });
+}
+
+// ===== 月度考核评定（第三条：连续12个考核周期达标可获调薪资格）=====
+function getAssessment(member, month) {
+  return (cloudData.assessments || []).find(a => a.member === member && a.month === month);
+}
+function prevMonthOf(month) {
+  const [y, m] = month.split('-').map(Number);
+  const d = new Date(y, m - 2, 1);
+  return d.toISOString().slice(0, 7);
+}
+function assessStreak(member, uptoMonth) {
+  let streak = 0;
+  let cur = uptoMonth;
+  for (let i = 0; i < 60; i++) {
+    const a = getAssessment(member, cur);
+    if (a && a.result === '达标') { streak++; cur = prevMonthOf(cur); }
+    else break;
+  }
+  return streak;
+}
+
+
+// ===== 律师考核视图主渲染 =====
 function renderReview() {
-  const entries = (cloudData.reviews || []).filter(r => r.type === 'growth' || r.type === 'improvement');
-  const legacyReviews = (cloudData.reviews || []).filter(r => !r.type || (r.type !== 'growth' && r.type !== 'improvement'));
-  const members = getMemberNames();
-  const today = new Date().toISOString().slice(0, 10);
+  const members = getReviewMembers();
+  const now = new Date();
+  const month = now.toISOString().slice(0, 7);
+  const entries = reviewEntries().filter(e => e.kind === 'highlight' || e.kind === 'fault' || e.kind === 'bonus');
+  const legacy = reviewEntries().filter(e => e.kind === 'legacy');
 
-  if (entries.length === 0 && legacyReviews.length === 0) {
+  if (entries.length === 0 && legacy.length === 0) {
     const emptyAction = isManager()
-      ? `<div style="margin-top:20px;"><button class="gp-btn gp-btn-primary" onclick="openReview()">+ 写第一条记录</button></div>`
-      : `<div class="gp-viewonly-bar" style="margin-top:20px;"><span class="vicon">👁</span><span>查看模式：仅刘芳律师可录入考核记录。</span></div>`;
+      ? `<div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="gp-btn gp-btn-primary" onclick="openReview('hl')">🌟 记录第一条成长亮点</button>
+          <button class="gp-btn gp-btn-secondary" onclick="openSpec()">📋 查看考核制度</button>
+        </div>`
+      : `<div class="gp-viewonly-bar" style="margin-top:20px;"><span class="vicon">👁</span><span>查看模式：仅团队负责人可录入考核记录。</span></div>`;
     return `<div class="growth-pool">
-      <div class="empty-state"><div class="big-icon">🌱</div><p>律师考核尚未开启</p>
-      <p class="hint">记录团队成员的成长亮点和改进机会，用数据驱动正向成长</p>
+      <div class="empty-state"><div class="big-icon">⚖️</div><p>律师考核尚未开启</p>
+      <p class="hint">依据《律师团队内部绩效管理与考核办法》：记录成长亮点、改进机会积分与奖金激励，季度阈值与评优自动核算</p>
       ${emptyAction}</div></div>`;
   }
-
-  // ---- 分析数据 ----
-  const analytics = buildGrowthAnalytics(entries, members);
-  const todayEntries = entries.filter(e => e.date === today);
-  const todayScore = todayEntries.reduce((s, e) => s + (e.score || 0), 0);
 
   let html = `<div class="growth-pool">`;
 
   // 操作按钮行 / 查看模式提示
   if (isManager()) {
     html += `<div class="gp-actions-row">
-      <button class="gp-btn gp-btn-primary" onclick="openReview()">🌟 记录成长亮点</button>
-      <button class="gp-btn gp-btn-secondary" onclick="openReview('improve')">🔧 记录改进机会</button>
+      <button class="gp-btn gp-btn-primary" onclick="openReview('hl')">🌟 记成长亮点</button>
+      <button class="gp-btn gp-btn-secondary" onclick="openReview('ft')">🔧 记改进机会</button>
+      <button class="gp-btn gp-btn-secondary" onclick="openReview('bn')">💰 登记奖金激励</button>
       <button class="gp-btn gp-btn-secondary" onclick="openReport()">📊 月度考核报告</button>
       <button class="gp-btn gp-btn-secondary" onclick="openWeekly()">📅 周汇总</button>
-      <button class="gp-btn gp-btn-ghost" onclick="openSpec()">📋 考核办法说明</button>
+      <button class="gp-btn gp-btn-ghost" onclick="openSpec()">📋 考核制度</button>
     </div>`;
   } else {
-    html += `<div class="gp-viewonly-bar"><span class="vicon">👁</span><span>当前为<strong>查看模式</strong>：仅刘芳律师（管理律师）可录入与修改考核记录，您可查看全部成长数据与月度考核报告。</span></div>
+    html += `<div class="gp-viewonly-bar"><span class="vicon">👁</span><span>当前为<strong>查看模式</strong>：仅团队负责人可录入与修改考核记录，您可查看全部考核数据与报告。</span></div>
     <div class="gp-actions-row">
       <button class="gp-btn gp-btn-secondary" onclick="openReport()">📊 月度考核报告</button>
       <button class="gp-btn gp-btn-secondary" onclick="openWeekly()">📅 周汇总</button>
-      <button class="gp-btn gp-btn-ghost" onclick="openSpec()">📋 考核办法说明</button>
+      <button class="gp-btn gp-btn-ghost" onclick="openSpec()">📋 考核制度</button>
     </div>`;
   }
-  // ---- 顶部概览区 ----
-  html += renderGrowthOverview(analytics, todayScore, members);
 
-  // ---- 高频改进提醒 ----
-  const hint = buildHighFreqHint(entries);
-  if (hint) html += `<div class="gp-hint-bar">${hint}</div>`;
-
-  // ---- 个人成长卡片（按成员分组）----
-  html += `<div class="gp-members-section"><div class="gp-section-title">👥 个人成长卡片</div>`;
+  // ---- 季度概览卡片 ----
+  const q = quarterOf(month);
+  html += `<div class="gp-section-title" style="margin-top:4px;">📊 ${q} 季度考核概览（积分季末清零 · 底线记录保留12个月）</div><div class="kp-quarter-grid">`;
   members.forEach(m => {
-    const memberEntries = entries.filter(e => e.targetMember === m).sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
-    if (memberEntries.length === 0) return;
-    html += renderGrowthMemberCard(m, memberEntries, analytics.memberStats[m] || {growth:0, improve:0, net:0});
+    const qs = computeQuarterStats(m, month);
+    const ms = computeMonthStats(m, month);
+    const actCls = qs.level === 'danger' ? 'danger' : (qs.level === 'warn' ? 'warn' : 'ok');
+    html += `<div class="kp-qcard">
+      <div class="kp-qcard-head">
+        <div class="gp-avatar" style="width:34px;height:34px;font-size:14px;">${esc(m.charAt(0))}</div>
+        <div class="kp-qcard-name">${esc(m)}</div>
+        <span class="kp-qcard-act ${actCls}">${qs.level === 'ok' ? '✓ 状态正常' : (qs.level === 'warn' ? '⚠ 需关注' : '⛔ 触发阈值')}</span>
+      </div>
+      <div class="kp-qstats">
+        <div class="kp-qstat"><div class="k">本季亮点</div><div class="v good">${qs.hlTotal}</div></div>
+        <div class="kp-qstat"><div class="k">季度积分</div><div class="v ${qs.effective > 0 ? 'bad' : ''}">${qs.effective}<span style="font-size:11px;color:var(--text-light);">/${qs.rawPoints}</span></div></div>
+        <div class="kp-qstat"><div class="k">重大(5分)</div><div class="v ${qs.majorCount ? 'bad' : ''}">${qs.majorCount}次</div></div>
+        <div class="kp-qstat"><div class="k">底线(10分)</div><div class="v ${qs.bottomAll ? 'bad' : ''}">${qs.bottomAll}次</div></div>
+      </div>
+      <div class="kp-qnote">📋 ${esc(qs.action)}<br>本月：亮点 ${ms.hlTotal} 个 · 改进积分 ${ms.monthPoints} 分${ms.bottomM ? ` · <b style="color:#b91c1c;">底线事项 ${ms.bottomM} 次</b>` : ''}${qs.dedPoints ? ` · 本季已抵扣 ${qs.dedPoints} 分` : ''}</div>
+    </div>`;
   });
   html += `</div>`;
 
-  // ---- 排行榜（仅加分TOP）----
-  html += renderGrowthLeaderboard(analytics);
+  // ---- 评优面板 ----
+  const ms2 = computeMonthStar(month);
+  const qs2 = computeQuarterStar(month);
+  html += `<div class="kp-star-panel">
+    <div class="kp-star-card month">
+      <div class="kp-star-title">🌙 ${month} 月度之星（第九条 · 奖励300元+内部表扬）</div>
+      ${ms2.rows.map(r => {
+        let badge, cond;
+        if (ms2.winner === r.m) { badge = `<span class="kp-star-badge win">🏆 当选</span>`; }
+        else if (r.eligible) { badge = `<span class="kp-star-badge yes">✓ 达标</span>`; }
+        else { badge = `<span class="kp-star-badge no">未达标</span>`; }
+        if (!r.noPoints) cond = `当月有改进积分（${r.points}分）`;
+        else if (!(r.rank <= (ms2.rows.length >= 3 ? 2 : 1)) && !r.praise) cond = `亮点排名第${r.rank}（须前${ms2.rows.length >= 3 ? '二' : '一'}或获客户表扬）`;
+        else if (r.hl === 0 && !r.praise) cond = '本月无亮点';
+        else cond = '条件满足';
+        const grantBtn = (isManager() && ms2.winner === r.m)
+          ? ` <button class="kp-mini-btn green" onclick="grantStarBonus('${esc(r.m)}','月度之星',300,'${month}')">发放奖金300元</button>` : '';
+        return `<div class="kp-star-row"><span class="nm">${esc(r.m)}</span><span class="cond">亮点 ${r.hl} 个 · ${cond}</span>${badge}${grantBtn}</div>`;
+      }).join('')}
+      <div class="kp-star-foot">${ms2.winner ? `当选：${esc(ms2.winner)}（当月无人达标则名额作废，不递补）` : (ms2.tie ? '多人并列达标，由负责人裁定（并列时名额可作废）' : '本月暂无人达标，名额作废不递补')}</div>
+    </div>
+    <div class="kp-star-card quarter">
+      <div class="kp-star-title">🏅 ${q} 季度之星（第十条 · 奖励500元+下月优先选值班时间）</div>
+      ${qs2.map(r => {
+        const badge = r.ok ? `<span class="kp-star-badge yes">✓ 达标</span>` : `<span class="kp-star-badge no">未达标</span>`;
+        const grantBtn = (isManager() && r.ok) ? ` <button class="kp-mini-btn green" onclick="grantStarBonus('${esc(r.m)}','季度之星',500,'${month}')">发放奖金500元</button>` : '';
+        const missing = [];
+        if (r.hlTotal < 12) missing.push(`亮点${r.hlTotal}/12`);
+        if (r.majorCount > 0) missing.push(`有重大事项`);
+        if (r.effective >= 15) missing.push(`触发正式改进计划`);
+        if (r.bottomQ > 0) missing.push(`有底线事项`);
+        return `<div class="kp-star-row"><span class="nm">${esc(r.m)}</span><span class="cond">${missing.length ? '差距：' + missing.join(' · ') : '全部条件满足'}</span>${badge}${grantBtn}</div>`;
+      }).join('')}
+      <div class="kp-star-foot">条件：季度累计亮点≥12 · 无重大(5分)事项 · 未触发正式改进计划（有效积分&lt;15）。多人均达标时均发放500元，不限名额。</div>
+    </div>
+  </div>`;
 
-  // ---- 团队知识库 ----
-  const kb = buildKnowledgeBase(entries);
-  if (kb.length > 0) {
-    html += `<div class="gp-knowledge"><div class="gp-section-title">📚 团队避坑清单</div><div class="gp-kb-grid">`;
-    kb.forEach(k => {
-      const solvedCls = k.solved ? 'solved' : '';
-      const badge = k.solved ? '<span class="gp-kb-badge solved">✅ 已攻克</span>' : '<span class="gp-kb-badge active">进行中</span>';
-      html += `<div class="gp-kb-item ${solvedCls}">
-        <div>${esc(k.type)} ${badge}</div>
-        <div class="gp-kb-stats">出现${k.count}次 · 已改进${k.fixedCount}次</div>
-        <div class="gp-kb-solution">${esc(k.solution) || '待补充标准化方案'}</div>
+  // ---- 调薪与底薪面板 ----
+  if (isManager() || true) {
+    html += `<div class="gp-section-title">💰 底薪与调薪进度（第三条：连续12个考核周期达标可获调薪资格）</div>`;
+    members.forEach(m => {
+      const base = cloudData.salaryBase && cloudData.salaryBase[m] !== undefined ? cloudData.salaryBase[m] : 5000;
+      const streak = assessStreak(m, prevMonthOf(month));
+      const ready = streak >= 12;
+      const baseHtml = isManager()
+        ? `<input type="number" value="${base}" step="100" onchange="saveSalaryBase('${esc(m)}', this.value)" title="修改底薪" />`
+        : `<b>${base}</b>`;
+      const adjBtn = (isManager() && ready) ? ` <button class="kp-mini-btn" onclick="adjustSalary('${esc(m)}')">确认调薪（+500元/年）</button>` : '';
+      const fyChk = isManager() ? `<label class="kp-switch"><input type="checkbox" ${cloudData.firstYear && cloudData.firstYear[m] ? 'checked' : ''} onchange="toggleFirstYear('${esc(m)}')" /> 入职第一年（轻微档只提醒不积分）</label>` : '';
+      html += `<div class="kp-salary-row">
+        <span class="nm">${esc(m)}</span>
+        <span>底薪：${baseHtml} 元</span>
+        <span class="kp-streak">连续达标：<b>${streak}</b>/12 个周期${ready ? ' · <b style="color:#15803d;">已获调薪资格</b>' : ''}</span>
+        ${fyChk}${adjBtn}
       </div>`;
     });
-    html += `</div></div>`;
   }
 
-  // ---- 旧数据兼容展示 ----
-  if (legacyReviews.length > 0) {
-    html += `<div class="gp-legacy-note">
-      <strong>📋 历史复盘记录（旧格式，可编辑迁移为新结构）</strong>
-      <p style="margin-top:6px;">共有 ${legacyReviews.length} 条旧格式复盘记录。这些记录使用的是自由文本格式，建议逐步迁移为结构化的「成长亮点」或「改进机会」。</p>
+  // ---- 成员考核明细卡片 ----
+  html += `<div class="gp-members-section"><div class="gp-section-title">👥 成员考核明细</div>`;
+  members.forEach(m => {
+    const me = entries.filter(e => e.targetMember === m).sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.createdAt || '').localeCompare(a.createdAt || ''));
+    if (me.length === 0) return;
+    const hlList = me.filter(e => e.kind === 'highlight');
+    const ftList = me.filter(e => e.kind === 'fault');
+    const bnList = me.filter(e => e.kind === 'bonus');
+    html += `<div class="gp-member-card">
+      <div class="gp-member-header">
+        <div class="gp-avatar">${esc(m.charAt(0))}</div>
+        <div class="gp-member-name">${esc(m)}</div>
+      </div>
+      <div class="gp-zones">
+        <div class="gp-zone gp-zone-growth">
+          <div class="gp-zone-title"><span class="gicon">🌟</span> 成长亮点（累计 ${hlList.reduce((s, e) => s + hlCount(e), 0)} 个）</div>
+          ${hlList.length ? hlList.map(renderHlEntry).join('') : '<div style="font-size:12px;color:#166534;padding:8px 0;opacity:0.65;">暂无记录</div>'}
+        </div>
+        <div class="gp-zone gp-zone-improve">
+          <div class="gp-zone-title"><span class="gicon">🔧</span> 改进机会（${ftList.length} 条）</div>
+          ${ftList.length ? ftList.map(renderFtEntry).join('') : '<div style="font-size:12px;color:#a16207;padding:8px 0;opacity:0.65;">暂无改进事项</div>'}
+        </div>
+      </div>
+      ${bnList.length ? `<div class="gp-zone gp-zone-growth" style="margin-top:12px;">
+        <div class="gp-zone-title"><span class="gicon">💰</span> 奖金激励（累计 ${bnList.reduce((s, e) => s + (e.amount || 0), 0).toLocaleString('zh-CN')} 元）</div>
+        ${bnList.map(renderBnEntry).join('')}
+      </div>` : ''}
     </div>`;
-    legacyReviews.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||'')).forEach(r => {
-      const mood = {good:'😊',normal:'😐',bad:'😣'}[r.mood] || '📝';
+  });
+  html += `</div>`;
+
+  // ---- 旧数据兼容展示 ----
+  if (legacy.length > 0) {
+    html += `<div class="gp-legacy-note">
+      <strong>📋 历史复盘记录（旧格式）</strong>
+      <p style="margin-top:6px;">共有 ${legacy.length} 条自由文本格式的旧记录，仅作存档展示。</p>
+    </div>`;
+    legacy.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '')).forEach(r => {
+      const mood = { good: '😊', normal: '😐', bad: '😣' }[r.mood] || '📝';
       html += `<div class="review-card" style="margin-bottom:10px; opacity:0.85;">
         <div class="review-card-header">
-          <span class="review-author"><span class="avatar">${esc((r.author||'?').charAt(0))}</span>${esc(r.author||'')}</span>
+          <span class="review-author"><span class="avatar">${esc((r.author || '?').charAt(0))}</span>${esc(r.author || '')}</span>
           <span>${mood}</span>
           <span class="review-time">${r.date || ''}</span>
         </div>
-        <div class="review-content" style="font-size:13px;">${esc(r.content||'')}</div>
-        <div class="review-actions">
-          ${isManager() ? `<button onclick="deleteReview('${r.id}')">删除旧记录</button>` : ''}
-        </div>
+        <div class="review-content" style="font-size:13px;">${esc(r.content || '')}</div>
+        <div class="review-actions">${isManager() ? `<button onclick="deleteReview('${r.id}')">删除旧记录</button>` : ''}</div>
       </div>`;
     });
   }
@@ -3671,837 +3810,110 @@ function renderReview() {
   return html;
 }
 
-// ===== 构建分析数据 =====
-function buildGrowthAnalytics(entries, members) {
-  const now = new Date();
-  const todayStr = now.toISOString().slice(0, 10);
-  const weekAgo = new Date(now - 7 * 86400000).toISOString().slice(0, 10);
-
-  const memberStats = {};
-  members.forEach(m => memberStats[m] = {growth:0, improve:0, net:0, growthList:[], improveList:[]});
-
-  // 每日净进步值（用于趋势图）
-  const dailyNet = {};
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date(now - i * 86400000).toISOString().slice(0, 10);
-    dailyNet[d] = 0;
-  }
-
-  entries.forEach(e => {
-    const m = e.targetMember;
-    if (!memberStats[m]) memberStats[m] = {growth:0, improve:0, net:0, growthList:[], improveList:[]};
-    const s = e.score || 0;
-    if (e.type === 'growth') { memberStats[m].growth += s; memberStats[m].growthList.push(e); }
-    else { memberStats[m].improve += s; memberStats[m].improveList.push(e); }
-    memberStats[m].net += s;
-    if (dailyNet[e.date] !== undefined) dailyNet[e.date] += s;
-  });
-
-  return { memberStats, dailyNet, weekAgo, todayStr };
-}
-
-// ===== 渲染顶部概览 =====
-function renderGrowthOverview(analytics, todayScore, members) {
-  const { dailyNet } = analytics;
-  const days = Object.keys(dailyNet).sort();
-  const values = days.map(d => dailyNet[d]);
-  const maxVal = Math.max(...values.map(Math.abs), 5);
-  const minVal = Math.min(...values, 0);
-
-  // SVG 折线图
-  const W = 520, H = 130, padL = 32, padR = 16, padT = 12, padB = 24;
-  const chartW = W - padL - padR, chartH = H - padT - padB;
-  const pts = values.map((v, i) => {
-    const x = padL + (i / Math.max(days.length - 1, 1)) * chartW;
-    const y = padT + chartH - ((v - minVal) / (maxVal - minVal || 1)) * chartH;
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  });
-
-  // 零线
-  const zeroY = maxVal !== minVal ? (padT + chartH - ((0 - minVal) / (maxVal - minVal)) * chartH) : (padT + chartH / 2);
-
-  const polyline = pts.join(' ');
-  const dots = values.map((v, i) => {
-    const x = padL + (i / Math.max(days.length - 1, 1)) * chartW;
-    const y = padT + chartH - ((v - minVal) / (maxVal - minVal || 1)) * chartH;
-    const color = v >= 0 ? '#22c55e' : '#f59e0b';
-    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${color}" stroke="white" stroke-width="1.5"/>`;
-  }).join('');
-  const labels = days.map((d, i) => {
-    const x = padL + (i / Math.max(days.length - 1, 1)) * chartW;
-    const md = d.slice(5);
-    return `<text x="${x.toFixed(1)}" y="${H - 4}" text-anchor="middle" font-size="10" fill="#94a3b8">${md}</text>`;
-  }).join('');
-
-  const scoreLabel = todayScore > 0 ? `+${todayScore}` : (todayScore < 0 ? String(todayScore) : '0');
-  const scoreColor = todayScore > 0 ? '#16a34a' : (todayScore < 0 ? '#dc2626' : '#94a3b8');
-
-  return `<div class="growth-overview">
-    <div class="gp-score-card">
-      <div class="gp-score-label">今日律师考核总分</div>
-      <div class="gp-score-value" style="color:${scoreLabel}">${scoreLabel}</div>
-      <div class="gp-score-sub">${members.length} 位成员 · 本周累计正向成长中</div>
+// ===== 单条渲染：成长亮点 =====
+function renderHlEntry(e) {
+  const cnt = hlCount(e);
+  const bonus = (e.bonusAmount > 0) ? `<span class="kp-amt pos">+${e.bonusAmount}元</span>` : '';
+  const caseRef = e.caseRef ? `<div class="kp-entry-caseref">🔗 ${esc(e.caseRef)}</div>` : '';
+  const del = isManager() ? `<span class="del" onclick="deleteReview('${e.id}')" title="删除">✕</span>` : '';
+  return `<div class="kp-entry">
+    <div class="kp-entry-head">
+      <span class="kp-grade bonus">🌟 ${esc(e.cat)}</span>
+      <span class="kp-entry-text">${esc(e.desc || '')}</span>
+      ${del}
     </div>
-    <div class="gp-trend-card">
-      <div class="gp-trend-header">
-        <span class="gp-trend-title">📈 本周净进步趋势</span>
-      </div>
-      <div class="gp-chart-area">
-        <svg class="gp-chart-svg" viewBox="0 0 ${W} ${H}">
-          <!-- 网格线 -->
-          <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}" stroke="#e2e8f0" stroke-width="1"/>
-          <line x1="${padL}" y1="${zeroY}" x2="${W-padR}" y2="${zeroY}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4"/>
-          <line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#e2e8f0" stroke-width="1"/>
-          <!-- 折线 -->
-          <polyline fill="none" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${polyline}"/>
-          ${dots}
-          ${labels}
-          <!-- Y轴标签 -->
-          <text x="${padL-4}" y="${padT+4}" text-anchor="end" font-size="9" fill="#94a3b8">${maxVal}</text>
-          <text x="${padL-4}" y="${H-padB+3}" text-anchor="end" font-size="9" fill="#94a3b8">${minVal}</text>
-        </svg>
-      </div>
-    </div>
+    ${caseRef}
+    <div class="kp-entry-meta"><span>+${cnt} 亮点</span>${bonus}<span>${e.date || ''}</span>${e.recorder ? `<span class="gp-entry-recorder">· ${esc(e.recorder)}</span>` : ''}</div>
   </div>`;
 }
 
-// ===== 高频改进提醒 =====
-function buildHighFreqHint(entries) {
-  const now = new Date();
-  const sevenDaysAgo = new Date(now - 7 * 86400000);
-  const recentImprove = entries.filter(e =>
-    e.type === 'improvement' && e.createdAt && new Date(e.createdAt) > sevenDaysAgo
-  );
-  if (recentImprove.length < 2) return '';
-
-  // 按分类统计
-  const catCount = {};
-  recentImprove.forEach(e => { catCount[e.category] = (catCount[e.category]||0) + 1; });
-  const freqCats = Object.entries(catCount).filter(([,c]) => c >= 2).sort((a,b) => b[1]-a[1]);
-  if (freqCats.length === 0) return '';
-
-  const top = freqCats[0];
-  const suggestions = {
-    '条款遗漏': '建议团队统一使用终稿检查清单',
-    '引用错误': '建议建立法规引用模板库',
-    '时间节点延误': '建议提前设置日历提醒',
-    '沟通边界': '建议明确对外沟通的授权范围',
-    '格式规范': '建议统一文书排版模板',
-  };
-  const suggestion = suggestions[top[0]] || '建议制定标准化流程';
-
-  return `💡 <strong>本周改进提醒：</strong>「${top[0]}」出现了 <strong>${top[1]} 次</strong>。${suggestion}`;
-}
-
-// ===== 个人成长卡片 =====
-function renderGrowthMemberCard(member, entries, stats) {
-  const net = stats.net || 0;
-  const netCls = net > 0 ? 'gp-net-pos' : (net < 0 ? 'gp-net-neg' : 'gp-net-zero');
-  const netIcon = net > 0 ? '↑' : (net < 0 ? '↓' : '→');
-  const netLabel = net > 0 ? `+${net}` : String(net);
-
-  const growEntries = entries.filter(e => e.type === 'growth');
-  const impEntries = entries.filter(e => e.type === 'improvement');
-
-  return `<div class="gp-member-card">
-    <div class="gp-member-header">
-      <div class="gp-avatar">${esc(member.charAt(0))}</div>
-      <div>
-        <div class="gp-member-name">${esc(member)}</div>
-      </div>
-      <div class="gp-net-score ${netCls}">${netLabel}<span class="gp-net-trend">${netIcon}</span></div>
+// ===== 单条渲染：改进机会 =====
+function renderFtEntry(e) {
+  const pts = faultPoints(e);
+  const gradeCls = e.grade === '轻微' ? 'g1' : (e.grade === '一般' ? 'g3' : (e.grade === '重大' ? 'g5' : 'g10'));
+  const gradeBadge = e.waived
+    ? `<span class="kp-grade waived">${esc(e.grade)} · ${e.waiveReason ? esc(e.waiveReason) : '不积分'}</span>`
+    : `<span class="kp-grade ${gradeCls}">${esc(e.grade)} · ${pts}分</span>`;
+  const bottomTag = e.isBottomLine ? `<span class="kp-grade g10">⛔ ${e.bottomKind || '底线'} · 保留12个月</span>` : '';
+  const stMap = { '待告知': 'st-notify', '已生效': 'st-effective', '申辩中': 'st-dispute' };
+  const st = e.status || '生效';
+  const stKey = (st === '待告知') ? '待告知' : (st === '申辩中' ? '申辩中' : '已生效');
+  const statusBadge = isManager()
+    ? `<span class="kp-status ${stMap[stKey]}" onclick="cycleFaultStatus('${e.id}')" title="点击切换：待告知 → 已生效 → 申辩中（第十一条4款：3个工作日内告知，本人可申辩，负责人复核生效）">${stKey} ⇄</span>`
+    : `<span class="kp-status ${stMap[stKey]}">${stKey}</span>`;
+  const caseRef = e.caseRef ? `<div class="kp-entry-caseref">🔗 ${esc(e.caseRef)}</div>` : '';
+  const del = isManager() ? `<span class="del" onclick="deleteReview('${e.id}')" title="删除">✕</span>` : '';
+  return `<div class="kp-entry">
+    <div class="kp-entry-head">
+      ${gradeBadge}${bottomTag}
+      <span class="kp-entry-text">${esc(e.desc || '')}</span>
+      ${del}
     </div>
-    <div class="gp-zones">
-      <div class="gp-zone gp-zone-growth">
-        <div class="gp-zone-title"><span class="gicon">🌟</span> 成长亮点 (${growEntries.length})</div>
-        ${growEntries.length > 0 ? growEntries.map(e => renderGrowEntry(e, true)).join('')
-          : '<div style="font-size:12px;color:#166534;padding:8px 0;opacity:0.65;">暂无记录，继续保持！</div>'}
-      </div>
-      <div class="gp-zone gp-zone-improve">
-        <div class="gp-zone-title"><span class="gicon">🔧</span> 改进机会 (${impEntries.length})</div>
-        ${impEntries.length > 0 ? impEntries.map(e => renderGrowEntry(e, false)).join('')
-          : '<div style="font-size:12px;color:#a16207;padding:8px 0;opacity:0.65;">干得漂亮！暂无改进项</div>'}
-      </div>
-    </div>
+    ${e.item && e.item !== '其他/未列明情形' ? `<div class="kp-entry-std">📋 ${esc(e.scene || '')} · ${esc(e.item)}</div>` : ''}
+    ${e.impact ? `<div style="font-size:11.5px;color:#b45309;margin-top:3px;padding-left:6px;border-left:2px solid #fcd34d;">影响：${esc(e.impact)}</div>` : ''}
+    ${caseRef}
+    <div class="kp-entry-meta">${statusBadge}<span>${e.date || ''}</span>${e.recorder ? `<span class="gp-entry-recorder">· ${esc(e.recorder)}</span>` : ''}</div>
   </div>`;
 }
 
-// ===== 单条记录渲染 =====
-function renderGrowEntry(e, isGrowth) {
-  const catCls = isGrowth ? 'grow' : 'imp';
-  const scoreCls = (e.score || 0) >= 0 ? 'pos' : 'neg';
-  const scoreLabel = (e.score || 0) > 0 ? `+${e.score}` : String(e.score || 0);
-  const dateStr = e.date ? new Date(e.date).toLocaleDateString('zh-CN',{month:'short',day:'numeric'}) : '';
-  const recorder = e.recorder ? `· ${esc(e.recorder)}` : '';
-
-  // 重复检测显示
-  let repeatTag = '';
-  if (e.repeatCount > 1) {
-    repeatTag = `<span class="gp-repeat-tag">第${e.repeatCount}次 · 间隔${e.daysSinceLast || '?'}天</span>`;
-  }
-
-  const behaviorText = isGrowth
-    ? `${esc(e.behavior || '')}${e.result ? ` → <strong>${esc(e.result)}</strong>` : ''}`
-    : `${esc(e.behavior || '')}${e.impact ? `（影响：${esc(e.impact)}）` : ''}`;
-
-  const pieceHtml = (e.pieceAmount && e.pieceAmount !== 0)
-    ? `<span class="gp-entry-piece ${e.pieceAmount > 0 ? 'pos' : 'neg'}">${e.pieceAmount > 0 ? '💰+' + e.pieceAmount : '💰' + e.pieceAmount}元</span>` : '';
-  const capTag = (e.coeffCap !== undefined && e.coeffCap !== null) ? `<span class="gp-coeffcap-tag">系数封顶${e.coeffCap}</span>` : '';
-  const caseRefHtml = (e.caseRef && e.caseRef !== '不关联') ? `<div class="gp-entry-caseref">🔗 ${esc(e.caseRef)}</div>` : '';
-  const standardHtml = e.standardNote ? `<div class="gp-entry-standard">标准：${esc(e.standardNote)}</div>` : '';
-  const delBtn = isManager() ? `<span style="margin-left:auto;cursor:pointer;font-size:11px;color:var(--text-light);" onclick="deleteReview('${e.id}')" title="删除此记录">✕</span>` : '';
-
-  return `<div class="gp-entry">
-    <div class="gp-entry-head">
-      <span class="gp-entry-cat ${catCls}">${isGrowth ? '↑' : '→'} ${esc(e.category || '')}</span>
-      <span class="gp-entry-text">${behaviorText}</span>
+// ===== 单条渲染：奖金激励 =====
+function renderBnEntry(e) {
+  const meta = BONUS_META[e.btype] || { icon: '💰' };
+  const del = isManager() ? `<span class="del" onclick="deleteReview('${e.id}')" title="删除">✕</span>` : '';
+  const caseRef = e.caseRef || e.note ? `<div class="kp-entry-caseref">🔗 ${esc(e.caseRef || '')}${e.note ? ' · ' + esc(e.note) : ''}</div>` : '';
+  return `<div class="kp-entry">
+    <div class="kp-entry-head">
+      <span class="kp-grade bonus">${meta.icon} ${esc(e.btype)}</span>
+      <span class="kp-entry-text">${esc(e.calcNote || meta.desc || '')}</span>
+      ${del}
     </div>
-    ${e.suggestion && !isGrowth ? `<div style="font-size:11.5px;color:#b45309;margin-top:3px;padding-left:4px;border-left:2px solid #fcd34d;">💡 建议：${esc(e.suggestion)}</div>` : ''}
-    ${standardHtml}${caseRefHtml}
-    <div class="gp-entry-meta">
-      <span class="gp-entry-score ${scoreCls}">${scoreLabel}分</span>
-      ${pieceHtml}${capTag}
-      <span>${dateStr}</span>
-      <span class="gp-entry-recorder">${recorder}</span>
-      ${repeatTag}
-      ${delBtn}
-    </div>
+    ${caseRef}
+    <div class="kp-entry-meta"><span class="kp-amt pos">+${(e.amount || 0).toLocaleString('zh-CN')} 元</span><span>${e.date || ''}</span>${e.recorder ? `<span class="gp-entry-recorder">· ${esc(e.recorder)}</span>` : ''}</div>
   </div>`;
 }
 
-// ===== 排行榜（仅加分TOP）=====
-function renderGrowthLeaderboard(analytics) {
-  const sorted = Object.entries(analytics.memberStats)
-    .map(([m, s]) => ({name:m, growth:s.growth}))
-    .filter(s => s.growth > 0)
-    .sort((a, b) => b.growth - a.growth);
-  if (sorted.length === 0) return '';
 
-  return `<div class="gp-leaderboard">
-    <div class="gp-section-title">🏆 成长排行榜（本周加分TOP）</div>
-    ${sorted.slice(0, 8).map((row, i) => {
-      const rankCls = i === 0 ? 'top1' : (i === 1 ? 'top2' : (i === 2 ? 'top3' : ''));
-      const medals = ['🥇','🥈','🥉'];
-      return `<div class="gp-lb-row">
-        <span class="gp-lb-rank ${rankCls}">${i < 3 ? medals[i] : (i+1)}</span>
-        <span class="gp-lb-name">${esc(row.name)}</span>
-        <span class="gp-lb-val">+${row.growth}分</span>
-      </div>`;
-    }).join('')}
-  </div>`;
-}
-
-// ===== 团队知识库 =====
-function buildKnowledgeBase(entries) {
-  const improveOnly = entries.filter(e => e.type === 'improvement');
-  if (improveOnly.length === 0) return [];
-
-  const catMap = {};
-  improveOnly.forEach(e => {
-    const key = e.category || '其他';
-    if (!catMap[key]) catMap[key] = {type:key, count:0, fixedCount:0, lastSeen:null, solution:e.suggestion||'', dates:[]};
-    catMap[key].count++;
-    catMap[key].dates.push(e.date);
-    if (e.suggestion) catMap[key].solution = e.suggestion;
-    if (e.date && (!catMap[key].lastSeen || e.date > catMap[key].lastSeen)) catMap[key].lastSeen = e.date;
-  });
-
-  // 判断是否已攻克：连续7天未再出现
-  const now = new Date();
-  const solvedThreshold = new Date(now - 7 * 86400000).toISOString().slice(0, 10);
-
-  return Object.values(catMap).map(k => ({
-    ...k,
-    solved: k.lastSeen && k.lastSeen < solvedThreshold,
-    fixedCount: Math.max(0, k.count - (k.lastSeen && k.lastSeen >= solvedThreshold ? 1 : 0)),
-  })).sort((a, b) => b.count - a.count);
-}
-
-// ===== 事件自动识别引擎 =====
-let _quickMode = true; // 默认快速录入模式
-
-function parseEvent(text) {
-  if (!text || !text.trim()) return null;
-  const t = text.trim();
-  // 遍历规则，返回首个匹配（优先匹配更具体的规则靠前）
-  for (const rule of EVENT_RULES) {
-    for (const kw of rule.kw) {
-      if (t.includes(kw)) {
-        // 四档分离：重大不再翻倍；底线(10分)为独立纪律档
-        let finalScore = rule.sc;
-        let isMajor = rule.fg === '重大';        // 重大(5分)标记
-        let isBottomLine = rule.fg === '底线';    // 底线(10分)纪律红线标记
-        return {
-          type: rule.type,
-          category: rule.cat,
-          score: finalScore,
-          pieceAmount: rule.pc,
-          mediateLevel: rule.ml || '',
-          faultGrade: rule.fg || '',
-          isMajor,
-          isBottomLine,
-          behavior: t, // 原文作为行为描述
-          hint: rule.h,
-          matchedKw: kw,
-          suggestions: null, // 精确匹配，无建议
-        };
-      }
-    }
-  }
-  // ── 无精确匹配 → 模糊推荐：按关键词重叠度排序，返回最接近的3条 ──
-  const suggestions = fuzzyMatch(t);
-  return { type: null, score: 0, behavior: t, suggestions };
-}
-
-// 模糊匹配：计算输入文本与每条规则的关键词重叠度，返回 top 3
-function fuzzyMatch(text) {
-  const short = text.replace(/\s+/g, '');
-  const scored = [];
-  for (const rule of EVENT_RULES) {
-    let maxOverlap = 0;
-    let bestKw = '';
-    for (const kw of rule.kw) {
-      // 计算关键词中有多少字符出现在输入中（模糊度）
-      let overlap = 0;
-      for (const ch of kw) { if (short.includes(ch)) overlap++; }
-      const ratio = overlap / kw.length; // 重叠比例
-      if (ratio > maxOverlap) { maxOverlap = ratio; bestKw = kw; }
-    }
-    if (maxOverlap > 0.25) { // 至少25%字符重叠才推荐
-      scored.push({ rule, score: maxOverlap, kw: bestKw });
-    }
-  }
-  scored.sort((a, b) => b.score - a.score);
-  return scored.slice(0, 3).map(s => ({
-    type: s.rule.type, cat: s.rule.category, sc: s.rule.score,
-    pc: s.rule.pieceAmount, ml: s.rule.ml || '', fg: s.rule.fg || '',
-    h: s.rule.h, kw: s.kw, confidence: s.score,
-  }));
-}
-
-function renderQuickPreview(result) {
-  const el = document.getElementById('quickPreview');
-  if (!result) {
-    el.innerHTML = '<div class="quick-placeholder">✍️ 输入事件描述后自动识别考核项…</div>';
-    el.className = 'quick-preview';
-    return;
-  }
-  // ── 无精确匹配 → 显示智能推荐或手动录入 ──
-  if (!result.type && result.suggestions) {
-    const sugs = result.suggestions;
-    if (sugs.length > 0) {
-      let sugHtml = sugs.map((s, i) => {
-        const icon = s.type === 'growth' ? '🌟' : '🔧';
-        const lbl = s.type === 'growth' ? '成长亮点' : '改进机会';
-        const sc = s.sc > 0 ? `+${s.sc}` : `${s.sc}`;
-        const scCls = s.sc > 0 ? 'pos' : 'neg';
-        const fgTag = s.fg ? `<span class="quick-tag ${s.fg==='底线'?'tag-danger':(s.fg==='重大'?'tag-major':'')}">${s.fg}</span>` : '';
-        const mlTag = s.ml ? `<span class="quick-tag">级别:${s.ml}</span>` : '';
-        return `<div class="fuzzy-sug-item" onclick="applySuggestion(${i})" style="cursor:pointer;padding:8px 10px;margin:4px 0;border:1.5px solid #e9dff5;border-radius:10px;background:linear-gradient(135deg,#faf5ff,#fff);transition:all 0.15s;">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
-            <span>${icon}</span><span style="font-weight:600;font-size:13px;color:#4c1d95;">${lbl}</span>
-            <span style="font-size:11px;color:#7c3aed;background:#ede9fe;padding:1px 6px;border-radius:6px;">${esc(s.cat)}</span>
-            <span style="font-weight:700;font-size:14px;color:${s.sc>0?'#059669':'#dc2626'};">${sc}分</span>
-            ${fgTag}${mlTag}
-          </div>
-          <div style="font-size:12px;color:#6b7280;">💡 ${esc(s.h)} · 匹配关键词「${esc(s.kw)}」</div>
-        </div>`;
-      }).join('');
-      el.innerHTML = `<div style="padding:4px 0;">
-        <div style="font-size:12.5px;color:#92400e;margin-bottom:6px;display:flex;align-items:center;gap:4px;">🔍 未精确匹配，系统推荐以下最接近的考核项（点击选用）：</div>
-        ${sugHtml}
-        <div style="margin-top:8px;text-align:center;">
-          <span style="font-size:12px;color:#94a3b8;cursor:pointer;text-decoration:underline;" onclick="switchEntryMode(false)">或切换到「详细录入」手动填写 →</span>
-        </div>
-      </div>`;
-    } else {
-      // 完全无匹配 → 显示手动分值选择
-      el.innerHTML = `<div style="padding:6px 0;">
-        <div class="quick-no-match" style="margin-bottom:8px;">⚠️ 未识别到匹配项，可手动选择分值后保存</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
-          <span style="font-size:12.5px;font-weight:600;color:#374151;">手动选分值：</span>
-          <select id="manualScoreSelect" onchange="window._manualScore=this.value" style="padding:5px 8px;border:1.5px solid #c4b5fd;border-radius:8px;font-size:13px;background:#fff;">
-            <option value="">请选择</option>
-            <optgroup label="🌟 成长亮点">
-              <option value="+3">+3 分（一般成长）</option>
-              <option value="+2">+2 分（学习/普法）</option>
-              <option value="+1">+1 分（轻微成长）</option>
-            </optgroup>
-            <optgroup label="🔧 改进机会">
-              <option value="-1">-1 分（轻微）</option>
-              <option value="-3">-3 分（一般）</option>
-              <option value="-5">-5 分（重大）</option>
-              <option value="-10">-10 分（底线·纪律红线）</option>
-            </optgroup>
-          </select>
-          <span style="font-size:12px;color:#94a3b8;">或</span>
-          <span style="font-size:12px;color:#8b5cf6;cursor:pointer;text-decoration:underline;" onclick="switchEntryMode(false)">切换到详细录入 →</span>
-        </div>
-      </div>`;
-    }
-    el.className = 'quick-preview';
-    // 存储建议列表供点击使用
-    window._suggestionList = sugs;
-    return;
-  }
-  // ── 精确匹配：原有渲染逻辑 ──
-  const typeIcon = result.type === 'growth' ? '🌟' : '🔧';
-  const typeLabel = result.type === 'growth' ? '成长亮点' : '改进机会';
-  const scoreCls = result.score > 0 ? 'pos' : 'neg';
-  const scoreText = result.score > 0 ? `+${result.score}` : `${result.score}`;
-  const pieceText = result.pieceAmount > 0 ? ` · 计件 +${result.pieceAmount}元` : '';
-  const levelTag = result.mediateLevel ? `<span class="quick-tag">级别：${result.mediateLevel}</span>` : '';
-  const gradeTag = result.faultGrade ? `<span class="quick-tag ${result.faultGrade==='底线'?'tag-danger':(result.faultGrade==='重大'?'tag-major':'')}">档次：${result.faultGrade}</span>` : '';
-  // 底线(10分)纪律红线：特殊规则标记；重大(5分)仅标注，不直接取消评优
-  const bottomLineTag = result.isBottomLine
-    ? `<div class="quick-tag tag-danger" style="width:100%;margin-top:4px;">⚠️ 底线纪律档：双人确认+取消当季评优+24h面谈+不抵扣+保留12个月</div>`
-    : '';
-  const clauseHint = result.type === 'improvement' ? '<div style="margin-top:6px;font-size:12px;color:#8b5cf6;cursor:pointer;" onclick="switchEntryMode(false);setTimeout(()=>setGrowType(\'improvement\'),100);">📋 点此切换到「详细录入」查看完整触发条款 →</div>' : '';
-
-  el.innerHTML = `
-    <div class="quick-result">
-      <div class="quick-result-header">
-        <span class="quick-type-icon">${typeIcon}</span>
-        <span class="quick-type-label">${typeLabel}</span>
-        <span class="quick-cat">${esc(result.category)}</span>
-      </div>
-      <div class="quick-result-body">
-        <div class="quick-row"><span class="quick-lbl">分值</span><span class="quick-val ${scoreCls}">${scoreText}分</span>${pieceText}</div>
-        ${levelTag}${gradeTag}${bottomLineTag}
-        <div class="quick-row"><span class="quick-lbl">识别依据</span><span class="quick-hint">${esc(result.hint)}</span></div>
-        ${clauseHint}
-      </div>
-    </div>`;
-  el.className = 'quick-preview quick-has-match';
-}
-
-// 点击模糊推荐 → 自动填入并识别
-function applySuggestion(idx) {
-  const sug = (window._suggestionList || [])[idx];
-  if (!sug) return;
-  // 将推荐结果转为精确匹配格式，存为 _lastParsedResult
-  window._lastParsedResult = {
-    type: sug.type, category: sug.cat, score: sug.sc,
-    pieceAmount: sug.pc, mediateLevel: sug.ml,
-    faultGrade: sug.fg, isMajor: sug.fg === '重大',
-    isBottomLine: sug.fg === '底线',
-    behavior: document.getElementById('quickEventText').value.trim(),
-    hint: sug.h, matchedKw: sug.kw,
-    suggestions: null,
-  };
-  renderQuickPreview(window._lastParsedResult);
-}
-
-function onQuickInput() {
-  try {
-    const text = document.getElementById('quickEventText').value;
-    const result = parseEvent(text);
-    renderQuickPreview(result);
-    window._lastParsedResult = result;
-  } catch(e) {
-    console.warn('[onQuickInput]', e);
-    document.getElementById('quickPreview').innerHTML = '<div class="quick-no-match">⚠️ 识别异常，请切换到「详细录入」</div>';
-  }
-}
-
-function switchEntryMode(quick) {
-  _quickMode = quick;
-  document.getElementById('quickEntryPanel').style.display = quick ? '' : 'none';
-  document.getElementById('detailEntryPanel').style.display = quick ? 'none' : '';
-  document.getElementById('modeToggleBtn').textContent = quick ? '📋 切换到详细录入' : '✨ 切换到快速录入';
-}
-
-// 快捷标签：填入事件描述并自动识别
-function fillQuickTag(text) {
-  const ta = document.getElementById('quickEventText');
-  ta.value = text;
-  onQuickInput();
-  ta.focus();
-}
-
-// ===== 打开记录弹窗 =====
-function openReview(forceType) {
-  if (!isManager()) { showToast('仅刘芳律师可录入考核记录'); return; }
+// ===== 考核录入弹窗逻辑 =====
+function openReview(tab) {
+  if (!isManager()) { showToast('仅团队负责人可录入考核记录（当前身份：' + (currentUser || '未设置') + '，可在「设置」中切换）'); return; }
   editingReviewId = null;
-  currentGrowType = forceType || 'growth';
-  selectedScore = currentGrowType === 'growth' ? 3 : -1;
-  _quickMode = true; // 默认快速录入模式
+  const memberSel = document.getElementById('revTargetMember');
+  const reviewMembers = getReviewMembers();
+  memberSel.innerHTML = reviewMembers.length
+    ? '<option value="">请选择成员</option>' + reviewMembers.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('')
+    : '<option value="">（成员名单为空）</option>';
+  // 成员名单为空时给出醒目提示与入口
+  const warnEl = document.getElementById('revMemberWarn');
+  if (warnEl) warnEl.style.display = reviewMembers.length ? 'none' : '';
+  document.getElementById('revDate').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('revCaseRef').value = '';
 
-  const names = Object.keys(BEHAVIOR_CATS);
-  const memberOpts = '<option value="">请选择成员</option>' + names.map(n => `<option value="${n}">${n}</option>`).join('');
+  // 成长亮点面板
+  document.getElementById('hlCat').innerHTML = HIGHLIGHT_CATS.map(h => `<option value="${esc(h.cat)}">${esc(h.cat)}</option>`).join('');
+  document.getElementById('hlDesc').value = '';
+  document.getElementById('hlBonus').value = '';
+  onHlCatChange();
 
-  // 快速录入面板初始化
-  document.getElementById('quickTargetMember').innerHTML = memberOpts;
-  document.getElementById('quickEventText').value = '';
-  document.getElementById('quickCaseRef').value = '';
-  document.getElementById('quickPreview').innerHTML = '<div class="quick-placeholder">✍️ 输入事件描述后自动识别考核项…</div>';
-  document.getElementById('quickPreview').className = 'quick-preview';
-  window._lastParsedResult = null;
+  // 改进机会面板
+  document.getElementById('ftScene').innerHTML = Object.keys(FAULT_TABLES).map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
+  document.getElementById('ftGrade').value = '';
+  document.getElementById('ftDesc').value = '';
+  document.getElementById('ftImpact').value = '';
+  document.getElementById('ftForce').checked = false;
+  onFtSceneChange();
+  updateFtAlerts();
 
-  // 详细录入面板初始化（保持原有逻辑）
-  document.getElementById('growTargetMember').innerHTML = memberOpts;
-  document.getElementById('growCategory').innerHTML = '<option value="">请先选择被记录人</option>';
-  document.getElementById('growCaseRef').value = '';
-  document.getElementById('growPieceAmount').value = '';
-  document.getElementById('growStandardHint').innerHTML = '';
+  // 奖金面板
+  document.getElementById('bnType').value = '办案提成';
+  document.getElementById('bnFee').value = '';
+  document.getElementById('bnSign').value = '';
+  document.getElementById('bnAmount').value = '';
+  document.getElementById('bnSpecial').checked = false;
+  document.getElementById('bnNote').value = '';
+  onBnTypeChange();
 
-  // 初始化表单
-  setGrowType(currentGrowType);
-  document.getElementById('growBehavior').value = '';
-  document.getElementById('growImpact').value = '';
-  document.getElementById('growSuggestion').value = '';
-  document.getElementById('growRepeatAlert').className = 'grow-repeat-alert';
-
-  // 每次打开都重置为快速录入模式（确保面板可见性正确，避免切换按钮"点不动"）
-  switchEntryMode(true);
-
+  switchRevTab(tab || 'hl');
   document.getElementById('reviewModal').classList.add('show');
-}
-
-// ===== 类型切换 =====
-function setGrowType(type) {
-  currentGrowType = type;
-  document.getElementById('growType').value = type;
-
-  const btnG = document.getElementById('growTypeGrowth');
-  const btnI = document.getElementById('growTypeImprove');
-  btnG.className = 'grow-type-option' + (type === 'growth' ? ' selected-growth' : '');
-  btnI.className = 'grow-type-option' + (type === 'improvement' ? ' selected-improve' : '');
-
-  // 显示/隐藏字段
-  document.getElementById('growImpactField').style.display = type === 'improvement' ? '' : 'none';
-  document.getElementById('growSuggestionField').style.display = type === 'improvement' ? '' : 'none';
-  document.getElementById('growBehaviorLabel').innerHTML =
-    type === 'growth' ? '具体行为与成果 <span style="color:var(--urgent)">*</span>' : '具体事项 <span style="color:var(--urgent)">*</span>';
-  document.getElementById('growBehavior').placeholder =
-    type === 'growth'
-      ? '做了什么？产生了什么可验证的结果？\n例：完成了XX合同风险条款补充建议，避免潜在违约风险'
-      : '具体发生了什么？（客观描述）\n例：XX合同法律依据引用版本号标注不清';
-  document.getElementById('growModalTitle').textContent =
-    type === 'growth' ? '🌟 记录成长亮点' : '🔧 记录改进机会';
-
-  // 分值选项
-  renderScoreOptions(type);
-  // 改进机会用失误档次下拉替代分值按钮
-  document.getElementById('growScoreRangeField').style.display = (type === 'improvement') ? 'none' : '';
-  updateStandardHint();
-  updateGrowExtraFields();
-}
-
-// ===== 被记录人切换：动态填充行为分类 =====
-function onGrowMemberChange() {
-  const m = document.getElementById('growTargetMember').value;
-  const cat = document.getElementById('growCategory');
-  if (m && BEHAVIOR_CATS[m]) {
-    cat.innerHTML = '<option value="">请选择分类</option>' +
-      BEHAVIOR_CATS[m].map(c => `<option value="${c}">${c}</option>`).join('');
-  } else {
-    cat.innerHTML = '<option value="">请先选择被记录人</option>';
-  }
-  document.getElementById('growStandardHint').innerHTML = '';
-  document.getElementById('growPieceAmount').value = '';
-  updateGrowExtraFields();
-}
-
-// ===== 评分标准提示（随被记录人/分类/类型/分值联动） =====
-function updateStandardHint() {
-  const m = document.getElementById('growTargetMember').value;
-  const cat = document.getElementById('growCategory').value;
-  const hint = document.getElementById('growStandardHint');
-  const pieceEl = document.getElementById('growPieceAmount');
-  if (!m || !cat || !SCORE_STANDARDS[m] || !SCORE_STANDARDS[m][cat]) {
-    hint.innerHTML = ''; pieceEl.value = ''; return;
-  }
-  const type = currentGrowType;
-  const rules = SCORE_STANDARDS[m][cat][type] || {};
-  let html = `<div class="gsh-title">📋 评分标准 · ${esc(m)} · ${esc(cat)}（${type === 'growth' ? '成长亮点' : '改进机会'}）</div>`;
-  const scores = Object.keys(rules).map(Number).sort((a, b) => a - b);
-  if (scores.length === 0) {
-    html += `<div class="gsh-note">该分类暂未配置标准，请按实际成果自定义分值与计件金额。</div>`;
-  } else {
-    html += '<div class="gsh-list">';
-    scores.forEach(s => {
-      const r = rules[s];
-      const sel = s === selectedScore ? ' selected' : '';
-      const sign = s > 0 ? `+${s}` : `${s}`;
-      const pieceTxt = r.piece > 0 ? ` · 计件 +${r.piece}元` : (r.piece < 0 ? ` · 计件 ${r.piece}元` : '');
-      const capTxt = r.cap ? ` · 系数封顶${r.cap}` : '';
-      html += `<div class="gsh-item${sel}"><span class="gsh-score">${sign}分</span><span class="gsh-note">${esc(r.note)}${pieceTxt}${capTxt}</span></div>`;
-    });
-    html += '</div>';
-  }
-  hint.innerHTML = html;
-  const sel = rules[selectedScore];
-  if (sel && (pieceEl.value === '' || pieceEl.value === undefined)) {
-    pieceEl.value = sel.piece || 0;
-  }
-}
-
-// ===== 分值选项渲染 =====
-function renderScoreOptions(type) {
-  const opts = SCORE_OPTIONS[type] || [];
-  if (!opts.length) { selectedScore = type === 'growth' ? 3 : -1; return; }
-  selectedScore = opts[Math.floor(opts.length / 2)];
-  const container = document.getElementById('growScoreRange');
-  container.innerHTML = opts.map(v => {
-    const cls = v === selectedScore ? 'selected' : '';
-    const label = v > 0 ? `+${v}` : v;
-    return `<button type="button" class="grow-score-opt ${cls}" data-score="${v}" onclick="selectScore(${v},this)">${label}</button>`;
-  }).join('');
-}
-function syncScoreButtons() {
-  document.querySelectorAll('.grow-score-opt').forEach(b => {
-    b.classList.toggle('selected', Number(b.getAttribute('data-score')) === selectedScore);
-  });
-}
-
-function selectScore(val, el) {
-  selectedScore = val;
-  document.querySelectorAll('.grow-score-opt').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  updateStandardHint();
-}
-
-// ===== 调解级别 / 失误档次 联动（说明文档条款接入） =====
-function updateGrowExtraFields() {
-  const cat = document.getElementById('growCategory').value;
-  const showMediate = currentGrowType === 'growth' && cat === '调解工作';
-  const showFault = currentGrowType === 'improvement';
-  document.getElementById('growMediateField').style.display = showMediate ? '' : 'none';
-  document.getElementById('growFaultField').style.display = showFault ? '' : 'none';
-  // 触发条款面板：改进机会时始终显示
-  document.getElementById('triggerClausePanel').style.display = showFault ? '' : 'none';
-  if (showFault) renderTriggerClauses();
-  if (!showMediate) document.getElementById('growMediateLevel').value = '';
-  if (!showFault) {
-    document.getElementById('growFaultGrade').value = '';
-    document.getElementById('growFaultBottomLine').style.display = 'none';
-    document.getElementById('growFaultScoreLabel').textContent = '';
-  }
-}
-// ===== 渲染考核制度触发条款参考面板 =====
-// 基于《律师团队内部绩效管理与考核办法》（2026修订·签字确认版）第十六、十七条
-function renderTriggerClauses() {
-  const container = document.getElementById('triggerClauseContent');
-  if (!container) return;
-  const clauses = [
-    {
-      category: '⚖️ 诉讼类（含仲裁、执行）',
-      color: '#ef4444',
-      items: [
-        { grade: '轻微', score: '-1', examples: '文书错别字/页码/装订遗漏、格式不符；非紧急询问24h内未回复；开庭迟到≤10分钟未致不利后果' },
-        { grade: '一般', score: '-3', examples: '非关键证据逾期提交/目录不对应(未失权)；未及时提醒上诉期/再审期(未错过)；法律依据引用不当(未造成实质不利)；关键节点未告知当事人；开庭迟到10-30分钟' },
-        { grade: '重大', score: '-5', examples: '错过上诉期/时效但已补救无损失；迟到30分钟以上未致不利后果；送达地址核对错误未致失权；遗失关键案卷材料未致损失' },
-        { grade: '底线', score: '-10', examples: '向对方泄露策略/证据；收受对方利益；私自收取当事人费用；伪造/变造/隐匿证据', special: '纪律红线' },
-        { grade: '底线', score: '-10', examples: '错过期限致当事人失权/团队被追责；无正当理由缺席致撤诉/败诉；关键证据缺失致败诉；送达错误致当事人失权；关键依据引用错误致败诉/重大损失；遗漏保全/续封致无法执行；遗失关键案卷致当事人受损', special: '执业事故' },
-      ]
-    },
-    {
-      category: '📋 非诉/调解类',
-      color: '#f59e0b',
-      items: [
-        { grade: '轻微', score: '-1', examples: '笔录/协议错别字、日期、页码遗漏；回访或台账延迟≤1天；当事人信息登记不全；合同审查格式/非关键条款遗漏' },
-        { grade: '一般', score: '-3', examples: '协议条款明显失衡/履行期限不明；应转介拖延>1工作日；合同审查遗漏一般风险(B级1-2/A级1)；程序瑕疵/结论模糊需补救；法律依据援引错误(未致无效)' },
-        { grade: '重大', score: '-5', examples: '遗漏必参加调解当事人(未致实际损害)；A级2处以上/关键资质瑕疵(未致无效)；遗失关键原件(未致损失)' },
-        { grade: '底线', score: '-10', examples: '泄露调解保密信息；强迫/变相强迫调解；明知违法仍促成签订；故意虚假尽调；挪用代收款项', special: '纪律红线' },
-        { grade: '底线', score: '-10', examples: '调解协议条款违法致协议无效；调解中造成当事人实际经济损失；A级2处以上/关键资质瑕疵致合同无效；法律意见结论错误致客户损失；尽职调查重大遗漏致客户损失；代收款项超7日未交付；遗失关键原件致当事人受损', special: '执业事故' },
-      ]
-    },
-    {
-      category: '📌 通用执业规范',
-      color: '#8b5cf6',
-      items: [
-        { grade: '轻微', score: '-1', examples: '着装不规范、文件杂乱、未参加例会；台账延迟≤1天、值班迟到≤30分钟；结案超30天未归档、委托后3天未建档' },
-        { grade: '一般', score: '-3', examples: '收费未开票/未进公账经提醒未改；文件未审核擅自发出(无后果)、隐私材料乱放；口头投诉经核实属实' },
-        { grade: '重大', score: '-5', examples: '未经同意为非团队案源服务(当月计件及提成归零)；利益冲突未披露未回避；旷工' },
-        { grade: '底线', score: '-10', examples: '私自收费/未经报备私自接案；作胜诉/结果承诺；社交媒体泄密、书面投诉属实、政府负面反馈；伪造出勤记录、虚假报销', special: '纪律红线' },
-      ]
-    }
-  ];
-  // 底线档特殊规则提示（第十五条5款）
-  const blNote = `<div class="trigger-clause-bottomline">⚠️ <b>底线（10分）特殊规则</b>：双人确认（团队负责人+律所主任）· 取消当季评优 · 24小时内面谈复盘 · 不适用积分抵扣 · 记录保留12个月不随季度清零。</div>`;
-  container.innerHTML = blNote + `<div class="trigger-clause-list">${clauses.map(g => `
-    <div class="trigger-clause-group">
-      <div class="trigger-clause-cat" style="border-left:3px solid ${g.color};background:${g.color}10;">
-        <strong>${g.category}</strong>
-      </div>
-      ${g.items.map(it => {
-        const isBl = it.grade === '底线';
-        return `<div class="trigger-clause-item">
-          <span class="trigger-grade" style="background:${isBl?'#fef2f2':g.color+'15'};color:${isBl?'#b91c1c':g.color};">${it.grade}</span>
-          <span class="trigger-score" style="${isBl?'color:#b91c1c;':''}">${it.score}分</span>
-          <span class="trigger-examples">${it.examples}</span>
-          ${it.special ? `<span class="trigger-special" style="${isBl?'background:#fee2e2;color:#991b1b;':''}">${isBl?'🔴 ':''}${it.special}</span>` : ''}
-        </div>`;
-      }).join('')}
-    </div>
-  `).join('')}</div>`;
-}
-
-function onMediateLevelChange() {
-  const lv = document.getElementById('growMediateLevel').value;
-  const pieceEl = document.getElementById('growPieceAmount');
-  if (lv && MEDIATE_LEVELS[lv] !== undefined) {
-    pieceEl.value = MEDIATE_LEVELS[lv];
-    selectedScore = 3; syncScoreButtons(); // 成功调解默认记 +3
-  } else {
-    pieceEl.value = '';
-  }
-  updateStandardHint();
-}
-function onFaultGradeChange() {
-  const grade = document.getElementById('growFaultGrade').value;
-  const lbl = document.getElementById('growFaultScoreLabel');
-  const blBox = document.getElementById('growFaultBottomLine');
-  if (!grade) { selectedScore = -1; lbl.textContent = ''; if (blBox) blBox.style.display = 'none'; syncScoreButtons(); return; }
-  // 四档分离：轻微1/一般3/重大5/底线10，重大不再翻倍
-  const penalty = FAULT_GRADES[grade];
-  selectedScore = -penalty;
-  const isBottom = grade === '底线';
-  if (blBox) blBox.style.display = isBottom ? '' : 'none';
-  lbl.textContent = `本次扣分：${penalty} 分` + (isBottom ? '（底线·纪律红线）' : (grade === '重大' ? '（重大档）' : ''));
-}
-
-// ===== 保存成长记录 =====
-async function saveGrowthEntry() {
-  // ── 快速录入模式：从事件描述自动填充 ──
-  if (_quickMode) {
-    const targetMember = document.getElementById('quickTargetMember').value;
-    const eventText = document.getElementById('quickEventText').value.trim();
-    const caseRef = document.getElementById('quickCaseRef').value.trim();
-    if (!targetMember) { showToast('请选择被记录人'); return; }
-    if (!eventText) { showToast('请输入事件描述'); return; }
-    const parsed = window._lastParsedResult;
-    const manualScore = window._manualScore;
-
-    // 情况A：有精确匹配或已选推荐 → 用解析结果
-    if (parsed && parsed.type) {
-      currentGrowType = parsed.type;
-      selectedScore = parsed.score;
-      document.getElementById('growTargetMember').value = targetMember;
-      document.getElementById('growCategory').value = parsed.category;
-      document.getElementById('growBehavior').value = eventText;
-      document.getElementById('growCaseRef').value = caseRef || '不关联';
-      document.getElementById('growPieceAmount').value = String(parsed.pieceAmount);
-      if (parsed.mediateLevel) document.getElementById('growMediateLevel').value = parsed.mediateLevel;
-      if (parsed.faultGrade) { document.getElementById('growFaultGrade').value = parsed.faultGrade; onFaultGradeChange(); }
-      if (parsed.type === 'improvement') {
-        document.getElementById('growImpact').value = parsed.hint;
-        document.getElementById('growSuggestion').value = '下次注意避免：' + (parsed.matchedKw || '');
-      }
-    }
-    // 情况B：手动选择了分值（下拉框）→ 构建基础 entry
-    else if (manualScore) {
-      const sc = parseInt(manualScore);
-      currentGrowType = sc > 0 ? 'growth' : 'improvement';
-      selectedScore = sc;
-      document.getElementById('growTargetMember').value = targetMember;
-      document.getElementById('growCategory').value = sc > 0 ? '其他成长' : '其他改进';
-      document.getElementById('growBehavior').value = eventText;
-      document.getElementById('growCaseRef').value = caseRef || '不关联';
-      document.getElementById('growPieceAmount').value = '0';
-      if (sc < 0) {
-        const fg = sc === -1 ? '轻微' : (sc === -3 ? '一般' : (sc === -5 ? '重大' : '底线'));
-        document.getElementById('growFaultGrade').value = fg; onFaultGradeChange();
-        document.getElementById('growImpact').value = '手动记录（'+fg+'档）';
-        document.getElementById('growSuggestion').value = '需负责人确认具体改进措施';
-      }
-    }
-    // 情况C：完全无匹配且未选手动分值 → 提示用户操作
-    else {
-      showToast('请先点击推荐项、选手动分值，或切换到「详细录入」');
-      return;
-    }
-  }
-
-  // ── 详细模式（或快速模式已填充后走通用保存）──
-  const targetMember = document.getElementById('growTargetMember').value;
-  const category = document.getElementById('growCategory').value;
-  const behavior = document.getElementById('growBehavior').value.trim();
-  const impact = document.getElementById('growImpact').value.trim();
-  const suggestion = document.getElementById('growSuggestion').value.trim();
-  const caseRef = document.getElementById('growCaseRef').value.trim();
-  let pieceAmount = parseFloat(document.getElementById('growPieceAmount').value);
-  if (isNaN(pieceAmount)) pieceAmount = 0;
-  pieceAmount = Math.round(pieceAmount);
-
-  if (!targetMember) { showToast('请选择被记录人'); return; }
-  if (!category) { showToast('请选择行为分类'); return; }
-  if (!behavior) { showToast(currentGrowType === 'growth' ? '请填写具体行为与成果' : '请填写具体事项'); return; }
-  if (currentGrowType === 'improvement') {
-    if (!impact) { showToast('改进机会必须填写客观影响'); return; }
-    if (!suggestion) { showToast('改进机会必须填写改进措施'); return; }
-  }
-
-  // 重复检测
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
-  const sameCategory = (cloudData.reviews || []).filter(e =>
-    e.type === currentGrowType &&
-    e.targetMember === targetMember &&
-    e.category === category &&
-    e.date &&
-    e.date >= thirtyDaysAgo &&
-    e.id !== editingReviewId
-  );
-
-  const std = SCORE_STANDARDS[targetMember] && SCORE_STANDARDS[targetMember][category] &&
-    SCORE_STANDARDS[targetMember][category][currentGrowType] &&
-    SCORE_STANDARDS[targetMember][category][currentGrowType][selectedScore];
-  const standardNote = std ? std.note : '';
-  const coeffCap = coeffCapOf(targetMember, category, currentGrowType, selectedScore);
-
-  const entry = {
-    id: editingReviewId || ('grow-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6)),
-    type: currentGrowType,
-    targetMember,
-    recorder: currentUser || '刘芳律师',
-    date: new Date().toISOString().slice(0, 10),
-    category,
-    caseRef: caseRef || '不关联',
-    mediateLevel: (document.getElementById('growMediateLevel') || {}).value || '',
-    faultGrade: (document.getElementById('growFaultGrade') || {}).value || '',
-    isBottomLine: (document.getElementById('growFaultGrade') || {}).value === '底线',
-    behavior,
-    result: currentGrowType === 'growth' ? (behavior.includes('→') ? '' : '') : '',
-    impact: currentGrowType === 'improvement' ? impact : '',
-    suggestion: currentGrowType === 'improvement' ? suggestion : '',
-    score: selectedScore,
-    pieceAmount,
-    coeffCap,
-    standardNote,
-    relatedItem: null,
-    repeatCount: sameCategory.length + 1,
-    daysSinceLast: sameCategory.length > 0 ? calcDaysSinceLast(sameCategory) : null,
-    createdAt: new Date().toISOString(),
-    updatedAt: null,
-  };
-
-  setSyncStatus('syncing', '保存中...');
-  try {
-    if (editingReviewId) {
-      const idx = (cloudData.reviews || []).findIndex(x => x.id === editingReviewId);
-      if (idx >= 0) cloudData.reviews[idx] = { ...cloudData.reviews[idx], ...entry, updatedAt: new Date().toISOString() };
-    } else {
-      if (!cloudData.reviews) cloudData.reviews = [];
-      cloudData.reviews.push(entry);
-    }
-    await cloudWrite(cloudData);
-    closeReview();
-    const sign = selectedScore > 0 ? `+${selectedScore}` : `${selectedScore}`;
-    const pieceTxt = pieceAmount !== 0 ? (pieceAmount > 0 ? ` · 计件 +${pieceAmount}元` : ` · 计件 ${pieceAmount}元`) : '';
-    showToast(`已记录：${targetMember} · ${category} ${sign}分${pieceTxt}`);
-    refreshUI();
-  } catch(e) {
-    showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败');
-    setSyncStatus('error', '同步失败');
-  }
-}
-
-function calcDaysSinceLast(sameList) {
-  if (sameList.length === 0) return null;
-  const last = sameList.reduce((a, b) => ((a.date || '') > (b.date || '') ? a : b));
-  if (!last.date) return null;
-  return Math.round((Date.now() - new Date(last.date).getTime()) / 86400000);
 }
 
 function closeReview() {
@@ -4509,16 +3921,305 @@ function closeReview() {
   editingReviewId = null;
 }
 
+function switchRevTab(tab) {
+  currentRevTab = tab;
+  ['hl', 'ft', 'bn'].forEach(t => {
+    const btn = document.getElementById('revTabBtn-' + t);
+    const panel = document.getElementById('revPanel-' + t);
+    if (btn) btn.classList.toggle('active', t === tab);
+    if (panel) panel.classList.toggle('active', t === tab);
+  });
+}
+
+// ---- 成长亮点联动 ----
+function onHlCatChange() {
+  const cat = document.getElementById('hlCat').value;
+  const meta = HIGHLIGHT_CATS.find(h => h.cat === cat);
+  const note = document.getElementById('hlCatNote');
+  if (meta) {
+    const cnt = meta.extra ? `${1 + meta.extra} 个（原亮点1个 + 额外${meta.extra}个）` : '1 个';
+    note.innerHTML = `➕ 本次将记 <b>${cnt}</b> 成长亮点。${esc(meta.note)}`;
+    note.style.display = '';
+  } else note.style.display = 'none';
+}
+
+// ---- 改进机会联动 ----
+function onFtSceneChange() {
+  populateFaultItems();
+  updateFtAlerts();
+}
+function onFtGradeChange() {
+  populateFaultItems();
+  updateFtAlerts();
+}
+function onFtItemChange() { updateFtAlerts(); }
+
+function populateFaultItems() {
+  const scene = document.getElementById('ftScene').value;
+  const grade = document.getElementById('ftGrade').value;
+  const sel = document.getElementById('ftItem');
+  if (!scene || !grade) { sel.innerHTML = '<option value="">请先选择场景与档次</option>'; return; }
+  const table = FAULT_TABLES[scene] || {};
+  let opts = '';
+  if (grade === '底线') {
+    const red = table['底线·纪律红线'] || [];
+    const acc = table['底线·执业事故'] || [];
+    opts += red.map(i => `<option value="${esc(i)}">🔴 纪律红线 · ${esc(i)}</option>`).join('');
+    opts += acc.map(i => `<option value="${esc(i)}">⚠️ 执业事故 · ${esc(i)}</option>`).join('');
+  } else {
+    opts += (table[grade] || []).map(i => `<option value="${esc(i)}">${esc(i)}</option>`).join('');
+  }
+  opts += '<option value="其他/未列明情形">其他/未列明情形（由负责人参照最相近情形认定）</option>';
+  sel.innerHTML = opts;
+}
+
+// 轻微档当月已记录次数（含口头提醒）
+function minorCountOfMonth(member, month) {
+  return reviewEntries().filter(e => e.kind === 'fault' && e.targetMember === member && e.grade === '轻微' && monthOfDate(e.date) === month).length;
+}
+
+function updateFtAlerts() {
+  const grade = document.getElementById('ftGrade').value;
+  const member = document.getElementById('revTargetMember').value;
+  const date = document.getElementById('revDate').value || new Date().toISOString().slice(0, 10);
+  const month = monthOfDate(date);
+  const force = document.getElementById('ftForce').checked;
+
+  // 底线提示
+  document.getElementById('ftBottomAlert').style.display = (grade === '底线') ? '' : 'none';
+
+  // 轻错宽容提示（第十一条6款）
+  const lenientEl = document.getElementById('ftLenientAlert');
+  let lenientHtml = '';
+  if (grade === '轻微' && member) {
+    const firstYear = cloudData.firstYear && cloudData.firstYear[member];
+    const cnt = minorCountOfMonth(member, month);
+    if (firstYear) {
+      lenientHtml = `🛡 <b>轻错宽容</b>：${esc(member)} 为入职第一年（含试用期），轻微档全年只提醒、不累计积分 → 本次将记为<b>口头提醒（不积分）</b>。`;
+    } else if (cnt < 2) {
+      lenientHtml = `🛡 <b>轻错宽容</b>：当月前2次轻微档只口头提醒、不积分。本次为当月第 <b>${cnt + 1}</b> 次轻微 → 将记为<b>口头提醒（不积分）</b>，第3次起记1分。`;
+    } else {
+      lenientHtml = `📌 当月轻微档已满2次，本次（第${cnt + 1}次）起<b>记 1 分</b>。`;
+    }
+  }
+  lenientEl.innerHTML = lenientHtml;
+  lenientEl.style.display = lenientHtml ? '' : 'none';
+
+  // 本次记分预览
+  const preview = document.getElementById('ftPreview');
+  let pts = 0, note = '';
+  if (grade) {
+    if (force) { pts = 0; note = '不可抗力/客观原因免责：不记积分（须书面说明并经负责人确认）'; }
+    else if (grade === '轻微' && member) {
+      const firstYear = cloudData.firstYear && cloudData.firstYear[member];
+      const cnt = minorCountOfMonth(member, month);
+      if (firstYear || cnt < 2) { pts = 0; note = '口头提醒 · 不积分'; }
+      else { pts = 1; note = '记入季度累计积分'; }
+    } else { pts = FAULT_GRADES[grade] || 0; note = grade === '底线' ? '底线档：保留12个月，不随季度清零' : '记入季度累计积分（季度末清零）'; }
+    preview.className = 'rev-alert ' + (pts === 0 ? 'ok' : (grade === '底线' ? 'danger' : 'warn'));
+    preview.innerHTML = `📝 本次记录：<b>${grade}档 · ${pts ? pts + ' 分' : '0 分（不积分）'}</b> —— ${note}`;
+    preview.style.display = '';
+  } else preview.style.display = 'none';
+}
+
+// ---- 奖金联动 ----
+function onBnTypeChange() {
+  const t = document.getElementById('bnType').value;
+  document.getElementById('bnFeeField').style.display = (t === '办案提成') ? '' : 'none';
+  document.getElementById('bnRateField').style.display = (t === '办案提成') ? '' : 'none';
+  document.getElementById('bnSignField').style.display = (t === '案源线索奖' || t === '案件转化奖') ? '' : 'none';
+  document.getElementById('bnAmountField').style.display = (t === '学习激励奖' || t === '评优奖金') ? '' : 'none';
+  document.getElementById('bnSpecialField').style.display = (t === '办案提成') ? '' : 'none';
+  computeBonus();
+}
+
+function computeBonus() {
+  const t = document.getElementById('bnType').value;
+  const calc = document.getElementById('bnCalc');
+  if (t === '办案提成') {
+    const fee = parseFloat(document.getElementById('bnFee').value) || 0;
+    const rate = parseFloat(document.getElementById('bnRate').value) || 0.05;
+    const cap = document.getElementById('bnSpecial').checked ? 50000 : 20000;
+    let v = Math.round(fee * rate);
+    let capNote = '';
+    if (v > cap) { capNote = `（超出每案上限 ${cap.toLocaleString('zh-CN')} 元，按上限发放；超过限额部分不再发放，可在季度评优时作为贡献参考）`; v = cap; }
+    calc.innerHTML = `<div>发放金额：<span class="amt">${v.toLocaleString('zh-CN')}</span> 元</div>
+      <div class="sub">${fee.toLocaleString('zh-CN')} × ${(rate * 100).toFixed(0)}%${capNote}</div>`;
+    calc.style.display = '';
+    return v;
+  }
+  if (t === '案源线索奖' || t === '案件转化奖') {
+    const sign = parseFloat(document.getElementById('bnSign').value) || 0;
+    const v = Math.round(sign * 0.02);
+    calc.innerHTML = `<div>发放金额：<span class="amt">${v.toLocaleString('zh-CN')}</span> 元</div><div class="sub">${sign.toLocaleString('zh-CN')} × 2%（与另一项不重复计发）</div>`;
+    calc.style.display = '';
+    return v;
+  }
+  calc.style.display = 'none';
+  return null;
+}
+
+// ===== 保存考核记录 =====
+async function saveReviewEntry() {
+  const member = document.getElementById('revTargetMember').value;
+  if (!member) { showToast('请选择被记录人'); return; }
+  const date = document.getElementById('revDate').value || new Date().toISOString().slice(0, 10);
+  const caseRef = document.getElementById('revCaseRef').value.trim();
+  const recorder = currentUser || (cloudData.manager || '刘芳律师');
+  let entry = null;
+
+  if (currentRevTab === 'hl') {
+    const cat = document.getElementById('hlCat').value;
+    const desc = document.getElementById('hlDesc').value.trim();
+    const bonus = Math.round(parseFloat(document.getElementById('hlBonus').value) || 0);
+    if (!desc) { showToast('请填写具体描述'); return; }
+    const meta = HIGHLIGHT_CATS.find(h => h.cat === cat);
+    entry = { kind: 'highlight', targetMember: member, recorder, date, cat, count: meta && meta.extra ? meta.extra : 1, desc, caseRef, bonusAmount: bonus };
+  } else if (currentRevTab === 'ft') {
+    const scene = document.getElementById('ftScene').value;
+    const grade = document.getElementById('ftGrade').value;
+    const item = document.getElementById('ftItem').value;
+    const desc = document.getElementById('ftDesc').value.trim();
+    const impact = document.getElementById('ftImpact').value.trim();
+    if (!grade) { showToast('请选择档次'); return; }
+    if (!desc) { showToast('请填写事实描述'); return; }
+    const isBottom = grade === '底线';
+    const bottomKind = isBottom ? (item.includes('纪律红线') ? '纪律红线' : '执业事故') : '';
+    let waived = false, waiveReason = '';
+    if (document.getElementById('ftForce').checked) {
+      waived = true; waiveReason = '不可抗力免责';
+    } else if (grade === '轻微') {
+      const firstYear = cloudData.firstYear && cloudData.firstYear[member];
+      const cnt = minorCountOfMonth(member, monthOfDate(date));
+      if (firstYear) { waived = true; waiveReason = '入职第一年·只提醒'; }
+      else if (cnt < 2) { waived = true; waiveReason = '轻错宽容·口头提醒'; }
+    }
+    entry = { kind: 'fault', targetMember: member, recorder, date, scene, grade, item, bottomKind, isBottomLine: isBottom, desc, impact, waived, waiveReason, status: isBottom ? '待告知' : '待告知' };
+  } else {
+    const btype = document.getElementById('bnType').value;
+    const note = document.getElementById('bnNote').value.trim();
+    let amount = 0, calcNote = '';
+    if (btype === '办案提成') {
+      const fee = parseFloat(document.getElementById('bnFee').value) || 0;
+      if (!fee) { showToast('请填写实际到账律师费'); return; }
+      const rate = parseFloat(document.getElementById('bnRate').value) || 0.05;
+      const cap = document.getElementById('bnSpecial').checked ? 50000 : 20000;
+      amount = Math.round(fee * rate);
+      if (amount > cap) { calcNote = `原计 ${amount.toLocaleString('zh-CN')} 元，按每案上限 ${cap.toLocaleString('zh-CN')} 元发放`; amount = cap; }
+      else { calcNote = `${fee.toLocaleString('zh-CN')} × ${(rate * 100).toFixed(0)}%`; }
+    } else if (btype === '案源线索奖' || btype === '案件转化奖') {
+      const sign = parseFloat(document.getElementById('bnSign').value) || 0;
+      if (!sign) { showToast('请填写案件签约金额'); return; }
+      amount = Math.round(sign * 0.02);
+      calcNote = `${sign.toLocaleString('zh-CN')} × 2%`;
+    } else {
+      amount = Math.round(parseFloat(document.getElementById('bnAmount').value) || 0);
+      if (!amount) { showToast('请填写发放金额'); return; }
+    }
+    entry = { kind: 'bonus', targetMember: member, recorder, date, btype, amount, note, calcNote, caseRef };
+  }
+
+  entry.id = 'rev-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
+  entry.createdAt = new Date().toISOString();
+
+  setSyncStatus('syncing', '保存中...');
+  try {
+    cloudData.reviews.push(entry);
+    await cloudWrite(cloudData);
+    closeReview();
+    let msg = '';
+    if (entry.kind === 'highlight') msg = `已记录：${member} · ${entry.cat} +${hlCount(entry)} 亮点${entry.bonusAmount ? ` · 激励奖${entry.bonusAmount}元` : ''}`;
+    else if (entry.kind === 'fault') msg = `已记录：${member} · ${entry.grade}档${entry.waived ? '（不积分）' : ` ${faultPoints(entry)}分`}`;
+    else msg = `已登记：${member} · ${entry.btype} ${entry.amount.toLocaleString('zh-CN')}元`;
+    showToast(msg);
+    refreshUI();
+  } catch (e) {
+    showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败');
+    setSyncStatus('error', '同步失败');
+  }
+}
+
+// 切换改进记录状态：待告知 → 已生效 → 申辩中 → 已生效（第十一条4款）
+async function cycleFaultStatus(id) {
+  if (!isManager()) { showToast('仅团队负责人可操作'); return; }
+  const e = reviewEntries().find(x => x.id === id);
+  if (!e || e.kind !== 'fault') return;
+  const order = ['待告知', '已生效', '申辩中'];
+  const cur = order.indexOf(e.status || '已生效');
+  e.status = order[(cur + 1) % order.length];
+  setSyncStatus('syncing', '保存...');
+  try {
+    await cloudWrite(cloudData);
+    showToast(`状态已更新：${e.status}`);
+    refreshUI();
+  } catch (err) {
+    showToast('已保存到本地，GitHub 同步失败');
+    setSyncStatus('error', '同步失败');
+  }
+}
+
 // ===== 删除记录 =====
 async function deleteReview(id) {
-  if (!isManager()) { showToast('仅刘芳律师可删除记录'); return; }
+  if (!isManager()) { showToast('仅团队负责人可删除记录'); return; }
   if (!confirm('确认删除此记录？')) return;
   cloudData.reviews = (cloudData.reviews || []).filter(r => r.id !== id);
   setSyncStatus('syncing', '删除中...');
   try { await cloudWrite(cloudData); showToast('已删除'); refreshUI(); }
-  catch(e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
+  catch (e) { showToast('已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
 }
 
+// ===== 评优奖金发放（第九、十条） =====
+async function grantStarBonus(member, label, amount, month) {
+  if (!isManager()) { showToast('仅团队负责人可操作'); return; }
+  if (!confirm(`确认为 ${member} 发放「${label}」奖金 ${amount} 元？`)) return;
+  const entry = {
+    id: 'rev-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6),
+    kind: 'bonus', targetMember: member, recorder: currentUser || (cloudData.manager || '刘芳律师'),
+    date: new Date().toISOString().slice(0, 10), btype: '评优奖金', amount,
+    note: `${label}（${label === '月度之星' ? month : quarterOf(month)}）`,
+    calcNote: label === '月度之星' ? '月度之星 · 300元 + 内部表扬（第九条）' : '季度之星 · 500元 + 下月优先选择值班时间权（第十条）',
+    caseRef: '', createdAt: new Date().toISOString(),
+  };
+  cloudData.reviews.push(entry);
+  setSyncStatus('syncing', '保存...');
+  try {
+    await cloudWrite(cloudData);
+    showToast(`已发放：${member} ${label} ${amount}元`);
+    refreshUI();
+  } catch (e) {
+    showToast('已保存到本地，GitHub 同步失败');
+    setSyncStatus('error', '同步失败');
+  }
+}
+
+// ===== 底薪/入职第一年设置 =====
+async function saveSalaryBase(member, val) {
+  const v = parseInt(val) || 5000;
+  if (!cloudData.salaryBase) cloudData.salaryBase = {};
+  cloudData.salaryBase[member] = v;
+  setSyncStatus('syncing', '保存...');
+  try { await cloudWrite(cloudData); showToast(`${member} 底薪已更新为 ${v} 元`); refreshUI(); }
+  catch (e) { showToast('已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
+}
+
+async function adjustSalary(member) {
+  if (!isManager()) return;
+  const cur = (cloudData.salaryBase && cloudData.salaryBase[member]) || 5000;
+  const next = cur + 500; // 以初始底薪5000为基数增加10%
+  if (!confirm(`确认调薪：${member} 底薪 ${cur} → ${next} 元？（第三条：以初始底薪5000为基数增加10%）`)) return;
+  cloudData.salaryBase[member] = next;
+  setSyncStatus('syncing', '保存...');
+  try { await cloudWrite(cloudData); showToast(`${member} 底薪已调整为 ${next} 元`); refreshUI(); }
+  catch (e) { showToast('已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
+}
+
+async function toggleFirstYear(member) {
+  if (!cloudData.firstYear) cloudData.firstYear = {};
+  cloudData.firstYear[member] = !cloudData.firstYear[member];
+  setSyncStatus('syncing', '保存...');
+  try { await cloudWrite(cloudData); showToast(`${member} 入职第一年标记：${cloudData.firstYear[member] ? '开启（轻微档只提醒不积分）' : '关闭'}`); refreshUI(); }
+  catch (e) { showToast('已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
+}
 // ===== 手记内容自动格式化（智能拆分 + 列表排版）=====
 // 核心场景：用户常把编号列表写成一大段文字（"…事情。一、xxx 二、xxx 三、xxx"）
 // 需要按中文/数字编号在文本中任意位置拆分
@@ -5347,64 +5048,32 @@ async function deleteNote(id) {
   catch (e) { showToast(e.message && e.message.includes('401') ? '已保存到本地，GitHub Token 已失效' : '已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); }
 }
 
-// ===== 月度考核与薪酬核算报告 =====
-// ===== 季度积分累计 · 管理动作（第十七条）· 积分抵扣（第十八条）=====
-function quarterOf(monthStr) {
-  const [y, m] = (monthStr || '').split('-').map(Number);
-  if (!y || !m) return '';
-  return `${y}Q${Math.ceil(m / 3)}`;
-}
+// ===== 月度考核报告 / 积分抵扣（第十四条）/ 周汇总 =====
 
-// 计算某成员某月的季度累计积分、抵扣后分值与触发的管理动作
-function computeQuarterActions(member, monthStr) {
-  const q = quarterOf(monthStr);
-  const qEntries = (cloudData.reviews || []).filter(e =>
-    e.targetMember === member && e.type === 'improvement' && quarterOf((e.date || '').slice(0, 7)) === q);
-  // 季度累计积分（不含底线记录，底线单独处理、保留12月）
-  const counted = qEntries.filter(e => !e.isBottomLine);
-  const rawPoints = counted.reduce((s, e) => s + Math.abs(e.score || 0), 0);
-  const majorCount = counted.filter(e => e.faultGrade === '重大').length;
-  const bottomLineCount = qEntries.filter(e => e.isBottomLine).length;
-  // 积分抵扣（第十八条，每季最多5分）
-  const ded = (cloudData.deductions || []).filter(d => d.member === member && d.quarter === q);
-  const dedPoints = ded.reduce((s, d) => s + (d.points || 0), 0);
-  const effective = Math.max(0, rawPoints - dedPoints);
-  // 触发管理动作（第十七条）
-  let action, level;
-  if (bottomLineCount >= 1) { action = '底线事项1次：直接触发留用资格评估（双人确认）+取消当季评优+24h面谈'; level = 'danger'; }
-  else if (effective >= 20 || majorCount >= 2) { action = '≥20分 或 重大达2次：视为季度考核不合格，评估是否继续留用'; level = 'danger'; }
-  else if (effective >= 15) { action = '≥15分：正式改进计划（每周改进报告）+取消当季评优资格'; level = 'warn'; }
-  else if (effective >= 8 || majorCount >= 1) { action = '≥8分 或 存在重大(5分)事项：书面改进提醒，限期1个月观察'; level = 'warn'; }
-  else { action = '未触发管理阈值（积分<8且无重大/底线），不影响收入'; level = 'ok'; }
-  return { q, rawPoints, dedPoints, effective, majorCount, bottomLineCount, action, level };
-}
-
-// 登记积分抵扣（仅管理律师）
+// 登记积分抵扣（仅团队负责人，每季度总额上限5分，底线档不得抵扣）
 function addDeduction(member, type) {
-  if (!isManager()) { showToast('仅刘芳律师可登记抵扣'); return; }
+  if (!isManager()) { showToast('仅团队负责人可登记抵扣'); return; }
   const month = document.getElementById('reportMonth').value;
   const q = quarterOf(month);
-  const pts = type === '复盘' ? 1 : type === '纠错' ? 1 : 2;
+  const pts = type === '分享' ? 2 : 1;
   const ded = (cloudData.deductions || []).filter(d => d.member === member && d.quarter === q);
-  const maxType = type === '复盘' ? 2 : type === '纠错' ? 1 : 1;
-  const typeCount = ded.filter(d => d.type === type).length;
-  if (typeCount >= maxType) { showToast(`${member} 本季「${type}」已达上限(${maxType})`); return; }
   const totalPts = ded.reduce((s, d) => s + (d.points || 0), 0);
-  if (totalPts + pts > 5) { showToast('本季抵扣总额上限5分'); return; }
+  if (totalPts + pts > 5) { showToast('本季抵扣总额上限 5 分（第十四条）'); return; }
   cloudData.deductions.push({ id: 'ded-' + Date.now(), member, quarter: q, type, points: pts, date: new Date().toISOString().slice(0, 10) });
   setSyncStatus('syncing', '保存抵扣...');
-  cloudWrite().then(() => { renderReportBody(); showToast('已登记抵扣：' + member + ' · ' + type + ' +' + pts + '分'); });
+  cloudWrite(cloudData).then(() => { renderReportBody(); showToast('已登记抵扣：' + member + ' · ' + type + ' -' + pts + '分'); })
+    .catch(() => { showToast('已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败'); });
 }
 
 function renderDeductionControls(member, q, dedPoints) {
   if (!isManager()) {
-    return `<div class="gp-ded-note">本季已抵扣：${dedPoints} 分（上限5分）</div>`;
+    return `<div class="gp-ded-note">本季已抵扣：${dedPoints} 分（上限5分，底线档不得抵扣）</div>`;
   }
   return `<div class="gp-ded-box">
-    <span class="gp-ded-lbl">积分抵扣登记（第十八条，本季已抵 ${dedPoints}/5 分）：</span>
-    <button class="gp-ded-btn" onclick="addDeduction('${member}','复盘')">+1 复盘/类案检索</button>
-    <button class="gp-ded-btn" onclick="addDeduction('${member}','纠错')">+1 自我纠错</button>
-    <button class="gp-ded-btn" onclick="addDeduction('${member}','分享')">+2 团队分享</button>
+    <span class="gp-ded-lbl">积分抵扣登记（第十四条 · 本季已抵 ${dedPoints}/5 分 · 底线档不得抵扣）</span>
+    <button class="gp-ded-btn" onclick="addDeduction('${esc(member)}','复盘')">-1 复盘/类案检索</button>
+    <button class="gp-ded-btn" onclick="addDeduction('${esc(member)}','纠错')">-1 自我纠错</button>
+    <button class="gp-ded-btn" onclick="addDeduction('${esc(member)}','分享')">-2 团队分享</button>
   </div>`;
 }
 
@@ -5416,89 +5085,120 @@ function openReport() {
 }
 function closeReport() { document.getElementById('reportModal').classList.remove('show'); }
 
+// ===== 月度考核评定（第三条） =====
+async function setAssessment(member, month, result) {
+  if (!isManager()) { showToast('仅团队负责人可评定'); return; }
+  if (!cloudData.assessments) cloudData.assessments = [];
+  const idx = cloudData.assessments.findIndex(a => a.member === member && a.month === month);
+  const rec = { id: 'asm-' + Date.now(), member, month, result, recorder: currentUser || (cloudData.manager || ''), date: new Date().toISOString().slice(0, 10) };
+  if (idx >= 0) cloudData.assessments[idx] = Object.assign({}, cloudData.assessments[idx], rec);
+  else cloudData.assessments.push(rec);
+  setSyncStatus('syncing', '保存...');
+  try {
+    await cloudWrite(cloudData);
+    showToast(`已评定：${member} ${month} ${result}`);
+    renderReportBody();
+  } catch (e) {
+    showToast('已保存到本地，GitHub 同步失败'); setSyncStatus('error', '同步失败');
+  }
+}
+
 function renderReportBody() {
   const month = document.getElementById('reportMonth').value || new Date().toISOString().slice(0, 7);
-  const entries = (cloudData.reviews || []).filter(r =>
-    (r.type === 'growth' || r.type === 'improvement') && (r.date || '').slice(0, 7) === month);
-  const members = Object.keys(BEHAVIOR_CATS);
+  const members = getReviewMembers();
+  const ms2 = computeMonthStar(month);
   let html = '';
   members.forEach(m => {
-    const me = entries.filter(e => e.targetMember === m);
-    const growthSum = me.filter(e => e.type === 'growth').reduce((s, e) => s + (e.score || 0), 0);
-    const improveSum = me.filter(e => e.type === 'improvement').reduce((s, e) => s + (e.score || 0), 0);
-    const monthlyScore = Math.max(0, Math.min(100, 100 + growthSum + improveSum));
-    const g = gradeOf(monthlyScore);
-    // 系数封顶（取最严格的惩罚）
-    let penCap = null;
-    me.filter(e => e.type === 'improvement').forEach(e => {
-      const cap = (e.coeffCap !== undefined && e.coeffCap !== null) ? e.coeffCap : coeffCapOf(m, e.category, 'improvement', e.score);
-      if (cap !== null) penCap = (penCap === null) ? cap : Math.min(penCap, cap);
-    });
-    const effCoeff = penCap !== null ? Math.min(g.coeff, penCap) : g.coeff;
-    const pieceTotal = me.reduce((s, e) => s + (e.pieceAmount || 0), 0);
-    const sb = SALARY_BASE[m];
-    const salary = sb.base + sb.allowance + 1500 * effCoeff + pieceTotal;
-    const capNote = penCap !== null ? `（受改进惩罚影响，系数封顶 ${penCap}）` : '';
-    // 季度积分累计与管理动作（第十七、十八条）
-    const qa = computeQuarterActions(m, month);
+    const ms = computeMonthStats(m, month);
+    const qa = computeQuarterStats(m, month);
+    const asm = getAssessment(m, month);
+    const streak = assessStreak(m, prevMonthOf(month));
+    const base = (cloudData.salaryBase && cloudData.salaryBase[m] !== undefined) ? cloudData.salaryBase[m] : 5000;
+    const totalIncome = base + ms.bonusTotal + ms.hlBonus;
+    // 达标建议：当月无底线、当月积分<8、季度未触发正式改进计划
+    const suggest = (ms.bottomM > 0 || ms.monthPoints >= 8 || qa.effective >= 15 || qa.bottomQ > 0) ? '不达标' : '达标';
+
+    // 奖金明细
+    let bonusList = '';
+    const bnAll = ms.entries.filter(e => e.kind === 'bonus');
+    const hlWithBonus = ms.entries.filter(e => e.kind === 'highlight' && (e.bonusAmount || 0) > 0);
+    if (bnAll.length || hlWithBonus.length) {
+      bonusList = '<div class="gp-piece-list">';
+      bnAll.forEach(e => {
+        bonusList += `<div class="pl-row"><span>${esc(e.date)} · ${esc(e.btype)}${e.note ? ' · ' + esc(e.note) : ''}</span><span class="pl-amt pos">+${(e.amount || 0).toLocaleString('zh-CN')}</span></div>`;
+      });
+      hlWithBonus.forEach(e => {
+        bonusList += `<div class="pl-row"><span>${esc(e.date)} · 激励奖 · ${esc(e.cat)}</span><span class="pl-amt pos">+${(e.bonusAmount || 0).toLocaleString('zh-CN')}</span></div>`;
+      });
+      bonusList += '</div>';
+    }
+
+    // 改进记录明细
+    const faults = ms.entries.filter(e => e.kind === 'fault');
+    let faultList = '';
+    if (faults.length) {
+      faultList = '<div style="margin-top:10px;padding:8px 10px;background:rgba(185,28,28,.06);border:1px solid rgba(185,28,28,.18);border-radius:10px;"><div style="font-size:13px;font-weight:600;color:#b91c1c;margin-bottom:4px;">改进机会记录（' + faults.length + ' 条）</div>' +
+        faults.map(e => {
+          const pts = faultPoints(e);
+          const fm = e.waived ? ` · <b style="color:#0e7490;">${esc(e.waiveReason || '不积分')}</b>` : (e.isBottomLine ? ' · <b style="color:#b91c1c;">⚠️底线·保留12个月</b>' : (e.grade === '重大' ? ' · <b style="color:#b91c1c;">重大档</b>' : ''));
+          return `<div style="font-size:12.5px;color:#444;padding:2px 0;">${esc(e.date)} · ${esc(e.scene || '')} · ${esc(e.grade)}档 · ${e.waived ? '0' : pts}分${fm}（${esc(e.status || '生效')}）</div>`;
+        }).join('') + '</div>';
+    }
+
+    // 亮点明细
+    const hls = ms.entries.filter(e => e.kind === 'highlight');
+    let hlList = '';
+    if (hls.length) {
+      hlList = '<div style="margin-top:10px;padding:8px 10px;background:rgba(22,163,74,.06);border:1px solid rgba(22,163,74,.18);border-radius:10px;"><div style="font-size:13px;font-weight:600;color:#15803d;margin-bottom:4px;">成长亮点（' + hls.length + ' 条 · ' + ms.hlTotal + ' 个）</div>' +
+        hls.map(e => `<div style="font-size:12.5px;color:#444;padding:2px 0;">${esc(e.date)} · ${esc(e.cat)} · +${hlCount(e)} 个${e.desc ? ' · ' + esc(String(e.desc).slice(0, 40)) : ''}</div>`).join('') + '</div>';
+    }
+
+    // 季度管理动作
     const actionColor = qa.level === 'danger' ? '#b91c1c' : (qa.level === 'warn' ? '#d97706' : '#059669');
     const actionBlock = `<div class="gp-action-box" style="border-left:3px solid ${actionColor};background:${actionColor}10;">
-      <div style="font-size:12.5px;font-weight:600;color:${actionColor};">📋 管理动作（第十七条 · ${qa.q}）</div>
-      <div style="font-size:12.5px;color:#444;margin-top:3px;">当季改进累计 <b>${qa.rawPoints}</b> 分 · 抵扣 <b>${qa.dedPoints}</b> 分 · 有效 <b>${qa.effective}</b> 分 · 重大(5分) <b>${qa.majorCount}</b> 次 · 底线 <b>${qa.bottomLineCount}</b> 次</div>
-      <div style="font-size:12.5px;color:${actionColor};margin-top:3px;">→ ${qa.action}</div>
+      <div style="font-size:12.5px;font-weight:600;color:${actionColor};">📋 季度积分与管理动作（第十三条 · ${qa.q}）</div>
+      <div style="font-size:12.5px;color:#444;margin-top:3px;">当季累计 <b>${qa.rawPoints}</b> 分 · 抵扣 <b>${qa.dedPoints}</b> 分 · 有效 <b>${qa.effective}</b> 分 · 重大(5分) <b>${qa.majorCount}</b> 次 · 底线(当季/12个月) <b>${qa.bottomQ}/${qa.bottomAll}</b> 次 · 季度亮点 <b>${qa.hlTotal}</b> 个</div>
+      <div style="font-size:12.5px;color:${actionColor};margin-top:3px;">→ ${esc(qa.action)}</div>
       ${renderDeductionControls(m, qa.q, qa.dedPoints)}
     </div>`;
 
-    const pl = me.filter(e => (e.pieceAmount || 0) !== 0);
-    let pieceList = '';
-    const faults = me.filter(e => e.type === 'improvement');
-    let faultList = '';
-    if (faults.length) {
-      faultList = '<div style="margin-top:10px;padding:8px 10px;background:rgba(185,28,28,.06);border:1px solid rgba(185,28,28,.18);border-radius:10px;"><div style="font-size:13px;font-weight:600;color:#b91c1c;margin-bottom:4px;">失误/改进记录（' + faults.length + ' 条）</div>' +
-        faults.map(e => {
-          const fg = e.faultGrade ? ` · 档次：${esc(e.faultGrade)}` : '';
-          const fm = e.isBottomLine ? ' · <b style="color:#b91c1c;">⚠️底线·纪律红线（双人确认+取消评优+24h面谈）</b>' : (e.faultGrade === '重大' ? ' · <b style="color:#b91c1c;">重大档</b>' : '');
-          return `<div style="font-size:12.5px;color:#444;padding:2px 0;">${esc(e.date)} · ${esc(e.category)}${fg} · ${e.score} 分${fm}</div>`;
-        }).join('') + '</div>';
-    }
-    if (pl.length) {
-      pieceList = '<div class="gp-piece-list">' + pl.map(e => {
-        const a = e.pieceAmount;
-        const ml = e.mediateLevel ? ` · 调解级别：${esc(e.mediateLevel)}` : '';
-        return `<div class="pl-row"><span>${esc(e.date)} · ${esc(e.category)}${ml} ${a > 0 ? '+' : ''}${a}元</span><span class="pl-amt ${a > 0 ? 'pos' : 'neg'}">${a > 0 ? '+' : ''}${a}</span></div>`;
-      }).join('') + '</div>';
-    }
+    // 月度评定
+    const asmBadge = asm ? (asm.result === '达标' ? '<span class="kp-grade bonus">✓ 已评定：达标</span>' : '<span class="kp-grade g10">已评定：不达标</span>') : '<span style="font-size:12px;color:#94a3b8;">未评定</span>';
+    const asmBtns = isManager()
+      ? `<button class="kp-mini-btn green" onclick="setAssessment('${esc(m)}','${month}','达标')">评定达标</button>
+         <button class="kp-mini-btn" onclick="setAssessment('${esc(m)}','${month}','不达标')">评定不达标</button>` : '';
+    const asmBlock = `<div class="gp-action-box" style="border-left:3px solid #7c3aed;background:#f5f0ff;">
+      <div style="font-size:12.5px;font-weight:600;color:#6d28d9;">📝 月度考核评定（第三条 · 调薪资格）</div>
+      <div style="font-size:12.5px;color:#444;margin-top:3px;">系统建议：<b>${suggest}</b>（当月无底线事项 · 当月积分&lt;8 · 季度未触发正式改进计划） ${asmBadge}</div>
+      <div style="font-size:12.5px;color:#444;margin-top:3px;">此前连续达标 <b>${streak}</b>/12 个周期${streak >= 12 ? ' · <b style="color:#15803d;">已获调薪资格</b>' : ''}</div>
+      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">${asmBtns}</div>
+    </div>`;
 
     html += `<div class="gp-report-card">
       <h3>${esc(m)}</h3>
-      <div class="gp-report-sub">考核月份：${month} · 本月记录 ${me.length} 条</div>
+      <div class="gp-report-sub">考核月份：${month} · 本月记录 ${ms.entries.length} 条</div>
       <div class="gp-report-grid">
-        <div class="gp-rc"><div class="k">成长亮点合计</div><div class="v good">+${growthSum}</div></div>
-        <div class="gp-rc"><div class="k">改进机会合计</div><div class="v bad">${improveSum}</div></div>
-        <div class="gp-rc"><div class="k">月度考核分</div><div class="v prime">${monthlyScore}</div></div>
-        <div class="gp-rc"><div class="k">等级 / 系数</div><div class="v">${g.grade}<br><span style="font-size:13px;color:#7c3aed;">${effCoeff.toFixed(2)}</span></div></div>
+        <div class="gp-rc"><div class="k">成长亮点</div><div class="v good">${ms.hlTotal} 个</div></div>
+        <div class="gp-rc"><div class="k">当月改进积分</div><div class="v ${ms.monthPoints || ms.bottomM ? 'bad' : ''}">${ms.monthPoints} 分${ms.bottomM ? '+底线' : ''}</div></div>
+        <div class="gp-rc"><div class="k">奖金合计</div><div class="v">${(ms.bonusTotal + ms.hlBonus).toLocaleString('zh-CN')} 元</div></div>
+        <div class="gp-rc"><div class="k">月度之星</div><div class="v ${ms2.winner === m ? 'prime' : ''}">${ms2.winner === m ? '🏆 当选' : (ms2.rows.find(r => r.m === m) && ms2.rows.find(r => r.m === m).eligible ? '达标' : '—')}</div></div>
       </div>
       <div class="gp-salary-box">
-        <div class="lbl">应发月薪（可直接用于发薪核对）</div>
-        <div class="amt">¥ ${salary.toLocaleString('zh-CN')}</div>
-        <div class="lbl" style="margin-top:6px;">${sb.base} 底薪${sb.allowance ? ' + ' + sb.allowance + ' 驻点补贴' : ''} + 1500×${effCoeff.toFixed(2)} 绩效系数 + 计件 ${pieceTotal >= 0 ? '+' : ''}${pieceTotal}元 ${capNote}</div>
+        <div class="lbl">本月应发参考（底薪 + 各项奖金）</div>
+        <div class="amt">¥ ${totalIncome.toLocaleString('zh-CN')}</div>
+        <div class="lbl" style="margin-top:6px;">底薪 ${base.toLocaleString('zh-CN')} 元${ms.bonusTotal + ms.hlBonus ? ' + 奖金 ' + (ms.bonusTotal + ms.hlBonus).toLocaleString('zh-CN') + ' 元' : ''}；办案交通补贴及垫付费用按团队报销制度实报实销（另行结算）</div>
       </div>
-      ${pieceList || '<div class="gp-report-sub">本月无计件金额记录</div>'}
-      ${faultList}
-      ${actionBlock}
+      ${bonusList || '<div class="gp-report-sub">本月无奖金发放记录</div>'}
+      ${hlList}${faultList}${actionBlock}${asmBlock}
     </div>`;
   });
-  html += `<div class="gp-report-note">⚠️ 核算说明：① 月度考核分 = 100 + Σ成长亮点 − Σ改进机会，封顶 100、保底 0；② 案源线索奖（签约金额×2%）、案件提成（回款×10%）等需按实际回款在「计件金额」中据实填写；③ 含系数封顶惩罚的月份已在系数中体现；④ 本表为考核数据，最终以双方签字确认为准。</div>`;
+  html += `<div class="gp-report-note">⚠️ 核算说明（依据《律师团队内部绩效管理与考核办法》）：① 办案提成 = 实际到账律师费（扣除事务所管理费、案源开拓成本）× 5%-10%，于到账次月随基本薪酬发放；② 案源线索奖（签约金额×2%）、学习激励奖与季度奖金同步发放；③ 改进机会只积分不扣钱（第五条规定的违规情形除外）；④ 底线（10分）事项双人确认生效、不适用抵扣、记录保留12个月；⑤ 本表为考核参考数据，最终以负责人确认及双方签字为准。</div>`;
   document.getElementById('reportBody').innerHTML = html;
 }
 
 // ===== 周汇总 =====
 function openWeekly() { renderWeeklyBody(); document.getElementById('weeklyModal').classList.add('show'); }
 function closeWeekly() { document.getElementById('weeklyModal').classList.remove('show'); }
-
-// ===== 考核办法说明 =====
-function openSpec() { document.getElementById('specModal').classList.add('show'); }
-function closeSpec() { document.getElementById('specModal').classList.remove('show'); }
 function renderWeeklyBody() {
   const now = new Date();
   const day = (now.getDay() + 6) % 7;
@@ -5506,35 +5206,40 @@ function renderWeeklyBody() {
   const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
   const fmt = d => d.toISOString().slice(0, 10);
   const start = fmt(monday), end = fmt(sunday);
-  const entries = (cloudData.reviews || []).filter(r =>
-    (r.type === 'growth' || r.type === 'improvement') && (r.date || '') >= start && (r.date || '') <= end);
-  const members = Object.keys(BEHAVIOR_CATS);
+  const entries = reviewEntries().filter(e => (e.kind === 'highlight' || e.kind === 'fault' || e.kind === 'bonus') && (e.date || '') >= start && (e.date || '') <= end);
+  const members = getReviewMembers();
   let html = `<div class="gp-report-sub">统计区间：${start}（周一） ~ ${end}（周日） · 共 ${entries.length} 条记录</div>`;
   members.forEach(m => {
     const me = entries.filter(e => e.targetMember === m);
-    const g = me.filter(e => e.type === 'growth').reduce((s, e) => s + (e.score || 0), 0);
-    const im = me.filter(e => e.type === 'improvement').reduce((s, e) => s + (e.score || 0), 0);
-    const net = g + im;
-    const piece = me.reduce((s, e) => s + (e.pieceAmount || 0), 0);
+    const hl = me.filter(e => e.kind === 'highlight');
+    const hlTotal = hl.reduce((s, e) => s + hlCount(e), 0);
+    const ft = me.filter(e => e.kind === 'fault' && !e.waived);
+    const pts = ft.reduce((s, e) => s + faultPoints(e), 0);
+    const bn = me.filter(e => e.kind === 'bonus');
+    const bnTotal = bn.reduce((s, e) => s + (e.amount || 0), 0) + hl.reduce((s, e) => s + (e.bonusAmount || 0), 0);
     const detail = me.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''))
       .map(e => {
-        const s = e.score > 0 ? `+${e.score}` : `${e.score}`;
-        const b = (e.behavior || '').slice(0, 18);
-        const tag = e.mediateLevel ? `·调解:${e.mediateLevel}` : (e.faultGrade ? `·失误:${e.faultGrade}${e.isBottomLine ? '(底线)' : ''}` : '');
-        const tagHtml = tag ? ` <span style="color:#b91c1c;font-size:11px;">${esc(tag)}</span>` : '';
-        return `<div class="gp-weekly-row"><span class="gp-weekly-name">${esc(e.category)}</span><span class="gp-weekly-meta">${esc(e.date)} ${s}分 ${esc(b)}${e.behavior && e.behavior.length > 18 ? '…' : ''}${tagHtml}</span><span class="gp-weekly-score ${e.score >= 0 ? 'pos' : 'neg'}">${s}</span></div>`;
+        let tag = '', score = '';
+        if (e.kind === 'highlight') { tag = `🌟${esc(e.cat)}`; score = `+${hlCount(e)}亮点`; }
+        else if (e.kind === 'fault') { tag = `🔧${esc(e.grade)}档`; score = e.waived ? '提醒' : `${faultPoints(e)}分`; }
+        else { tag = `💰${esc(e.btype)}`; score = `+${(e.amount || 0).toLocaleString('zh-CN')}元`; }
+        const b = (e.desc || e.note || '').slice(0, 20);
+        return `<div class="gp-weekly-row"><span class="gp-weekly-name">${tag}</span><span class="gp-weekly-meta">${esc(e.date)} ${esc(b)}${(e.desc || e.note || '').length > 20 ? '…' : ''}</span><span class="gp-weekly-score ${e.kind === 'fault' ? 'neg' : 'pos'}">${score}</span></div>`;
       }).join('');
     html += `<div class="gp-report-card"><h3>${esc(m)}</h3>
       <div class="gp-report-grid">
-        <div class="gp-rc"><div class="k">成长</div><div class="v good">+${g}</div></div>
-        <div class="gp-rc"><div class="k">改进</div><div class="v bad">${im}</div></div>
-        <div class="gp-rc"><div class="k">净分</div><div class="v prime">${net > 0 ? '+' : ''}${net}</div></div>
-        <div class="gp-rc"><div class="k">计件</div><div class="v">${piece >= 0 ? '+' : ''}${piece}</div></div>
+        <div class="gp-rc"><div class="k">成长亮点</div><div class="v good">${hlTotal} 个</div></div>
+        <div class="gp-rc"><div class="k">改进积分</div><div class="v ${pts ? 'bad' : ''}">${pts} 分</div></div>
+        <div class="gp-rc"><div class="k">奖金</div><div class="v">${bnTotal ? '+' + bnTotal.toLocaleString('zh-CN') + ' 元' : '—'}</div></div>
+        <div class="gp-rc"><div class="k">记录数</div><div class="v">${me.length}</div></div>
       </div>${detail || '<div class="gp-report-sub">本周暂无记录</div>'}</div>`;
   });
   document.getElementById('weeklyBody').innerHTML = html;
 }
 
+// ===== 考核办法说明 =====
+function openSpec() { document.getElementById('specModal').classList.add('show'); }
+function closeSpec() { document.getElementById('specModal').classList.remove('show'); }
 // ===== Actions =====
 async function quickAdd() {
   const title = document.getElementById('quickTitle').value.trim();
