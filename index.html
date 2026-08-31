@@ -1398,6 +1398,17 @@ body {
 .kp-qcard-act.ok { background: #f0fdf4; color: #15803d; }
 .kp-qcard-act.warn { background: #fffbeb; color: #b45309; }
 .kp-qcard-act.danger { background: #fef2f2; color: #b91c1c; }
+/* 成员概览卡上的修改入口 */
+.kp-qedit-btn { margin-left: auto; font-size: 11px; font-weight: 600; color: #6d28d9; padding: 3px 10px; border-radius: 9px; border: 1px solid #d8b4fe; background: #faf5ff; cursor: pointer; white-space: nowrap; transition: all .15s; }
+.kp-qedit-btn:hover { background: #ede9fe; border-color: #a855f7; }
+.kp-qedit-btn + .kp-qcard-act { margin-left: 0; }
+/* 成员记录快速编辑弹层 */
+.kp-mr-modal { position: fixed; inset: 0; z-index: 1200; background: rgba(20,23,34,0.50); display: none; align-items: center; justify-content: center; }
+.kp-mr-modal.show { display: flex; animation: fadeIn 0.2s ease; }
+.kp-mr-box { background: #fff; border-radius: 22px; width: 92%; max-width: 560px; max-height: 86vh; overflow-y: auto; padding: 24px 26px; box-shadow: 0 28px 56px -14px rgba(20,23,34,0.30); }
+.kp-mr-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.kp-mr-sub { font-size: 12px; color: var(--text-light); margin-bottom: 14px; }
+.kp-mr-list { display: flex; flex-direction: column; gap: 8px; }
 .kp-qstats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 @media(max-width:480px){ .kp-qstats { grid-template-columns: repeat(2, 1fr); } }
 .kp-qstat { background: var(--card-bg-soft); border-radius: 10px; padding: 8px 6px; text-align: center; }
@@ -1892,6 +1903,19 @@ body {
 </div>
 
 <!-- Growth Pool Modal (律师考核记录) -->
+<!-- 成员记录快速编辑弹层 -->
+<div class="kp-mr-modal" id="memberRecordsModal" onclick="if(event.target===this)closeMemberRecords()">
+  <div class="kp-mr-box">
+    <div class="kp-mr-title">✎ 修改 <span id="mrMemberName"></span> 的考核记录</div>
+    <div class="kp-mr-sub">点「✎ 编辑」回填到录入弹窗进行修改，保存后覆盖原记录 · 点「✕」删除</div>
+    <div class="kp-mr-list" id="mrRecordsList"></div>
+    <div class="modal-actions" style="margin-top:18px;">
+      <button class="btn-cancel" onclick="closeMemberRecords()">关闭</button>
+      <button class="btn-save" onclick="closeMemberRecords();openReview('hl')">+ 新增一条</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="reviewModal">
   <div class="modal" style="max-width:660px; max-height:92vh; overflow-y:auto;">
     <h2 id="revModalTitle" style="margin:0 0 4px;font-size:18px;">📝 考核记录录入</h2>
@@ -3686,10 +3710,12 @@ function renderReview() {
     const qs = computeQuarterStats(m, month);
     const ms = computeMonthStats(m, month);
     const actCls = qs.level === 'danger' ? 'danger' : (qs.level === 'warn' ? 'warn' : 'ok');
+    const editBtn = isManager() ? `<button class="kp-qedit-btn" onclick="openMemberRecords('${esc(m)}')" title="查看并修改该成员的全部考核记录">✎ 修改记录</button>` : '';
     html += `<div class="kp-qcard">
       <div class="kp-qcard-head">
         <div class="gp-avatar" style="width:34px;height:34px;font-size:14px;">${esc(m.charAt(0))}</div>
         <div class="kp-qcard-name">${esc(m)}</div>
+        ${editBtn}
         <span class="kp-qcard-act ${actCls}">${qs.level === 'ok' ? '✓ 状态正常' : (qs.level === 'warn' ? '⚠ 需关注' : '⛔ 触发阈值')}</span>
       </div>
       <div class="kp-qstats">
@@ -3878,6 +3904,52 @@ function renderBnEntry(e) {
   </div>`;
 }
 
+
+// ===== 成员记录快速编辑：从概览卡直接进入该成员全部记录 =====
+function openMemberRecords(member) {
+  if (!isManager()) { showToast('仅团队负责人可修改考核记录'); return; }
+  const entries = reviewEntries().filter(e => e.targetMember === member && (e.kind === 'highlight' || e.kind === 'fault' || e.kind === 'bonus'))
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  document.getElementById('mrMemberName').textContent = member;
+  const list = document.getElementById('mrRecordsList');
+  if (entries.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:var(--text-light);font-size:13px;padding:24px 0;">该成员暂无考核记录</div>';
+  } else {
+    list.innerHTML = entries.map(e => {
+      let badge = '', detail = '', pts = '';
+      if (e.kind === 'highlight') {
+        badge = `<span class="kp-grade bonus">🌟 ${esc(e.cat)}</span>`;
+        detail = esc((e.desc || '').slice(0, 50));
+        pts = `+${hlCount(e)} 亮点${e.bonusAmount ? ' · ' + e.bonusAmount + '元' : ''}`;
+      } else if (e.kind === 'fault') {
+        const g = e.waived ? 'waived' : (e.grade === '重大' ? 'g5' : (e.grade === '底线' ? 'g10' : (e.grade === '一般' ? 'g3' : 'g1')));
+        badge = `<span class="kp-grade ${g}">🔧 ${esc(e.grade)}${e.waived ? ' · 不积分' : ' · ' + faultPoints(e) + '分'}</span>`;
+        detail = esc((e.desc || '').slice(0, 50));
+        pts = '';
+      } else {
+        const meta = BONUS_META[e.btype] || { icon: '💰' };
+        badge = `<span class="kp-grade bonus">${meta.icon} ${esc(e.btype)}</span>`;
+        detail = esc((e.note || e.calcNote || '').slice(0, 50));
+        pts = `+${(e.amount || 0).toLocaleString('zh-CN')}元`;
+      }
+      return `<div class="kp-entry" style="background:var(--card-bg-soft);border-radius:12px;padding:10px 12px;">
+        <div class="kp-entry-head">
+          ${badge}
+          <span class="kp-entry-text" style="font-size:12.5px;">${detail}</span>
+          <span class="kp-ops">
+            <span class="edit" onclick="closeMemberRecords();editReview('${e.id}')" title="编辑修改">✎ 编辑</span>
+            <span class="del" onclick="deleteReview('${e.id}');setTimeout(openMemberRecords,600,'${esc(member)}')" title="删除">✕</span>
+          </span>
+        </div>
+        <div class="kp-entry-meta"><span>${e.date || ''}</span>${pts ? `<span class="kp-amt pos">${pts}</span>` : ''}<span>${esc(e.status || '')}</span></div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('memberRecordsModal').classList.add('show');
+}
+function closeMemberRecords() {
+  document.getElementById('memberRecordsModal').classList.remove('show');
+}
 
 // ===== 考核录入弹窗逻辑 =====
 function openReview(tab) {
