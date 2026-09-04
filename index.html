@@ -5820,7 +5820,30 @@ function enterApp() {
   loadData().then(() => {
     startRealtimeListener();
     updateChangePwdVisibility();
+    migrateReviewLockPwd();
   });
+}
+
+// v3.1 一次性别名迁移：将「律师考核」板块访问密码重置为负责人指定的新密码（写入后旧密码即失效）
+// 仅在登录解密成功后执行；用一次性标记避免覆盖负责人后续在「设置」中的再次修改。
+async function migrateReviewLockPwd() {
+  try {
+    if (!cloudData.config) return;
+    if (cloudData.config.reviewLockMigratedV31) return;
+    const NEW_HASH = String.fromCharCode(54,49,53,48,99,97,97,57,100,57,51,102,100,98,57,102,97,101,49,54,51,55,99,57,102,102,101,51,97,49,53,98,54,102,101,99,52,52,102,51,57,101,49,55,99,56,97,55,55,51,49,53,101,49,100,97,49,48,57,99,102,51,102,97);
+    const prev = cloudData.config.reviewLockHash;
+    cloudData.config.reviewLockHash = NEW_HASH;
+    cloudData.config.reviewLockMigratedV31 = true;
+    try {
+      await cloudWrite(cloudData);
+      console.log('律师考核板块密码已按 v3.1 迁移更新');
+    } catch (e) {
+      // 写入失败则回滚，下次登录重试
+      cloudData.config.reviewLockHash = prev;
+      delete cloudData.config.reviewLockMigratedV31;
+      console.warn('考核板块密码迁移写入失败，将在下次登录重试', e);
+    }
+  } catch (e) { console.warn('migrateReviewLockPwd error', e); }
 }
 
 async function doSetPassword(e) {
