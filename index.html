@@ -1603,7 +1603,7 @@ body {
     </button>
   </nav>
   <div class="sidebar-footer">
-    刘芳律师团队 · v3.1
+    刘芳律师团队 · v3.5
   </div>
 </aside>
 
@@ -2526,6 +2526,7 @@ function startRealtimeListener() {
       // 数据有变化才更新
       if (cloudData.lastUpdate && data.lastUpdate === cloudData.lastUpdate) return;
       cloudData = data;
+      reviewLockSelfHeal();
       if (!cloudData.items) cloudData.items = [];
       if (!cloudData.members) cloudData.members = [];
       if (!cloudData.reviews) cloudData.reviews = [];
@@ -3003,15 +3004,17 @@ async function submitReviewLock(e) {
   if (e) e.preventDefault();
   const pwd = document.getElementById('reviewLockPassword').value;
   const err = document.getElementById('reviewLockError');
+  // 输入归一化：中文输入法全角字符自动转半角
+  const normPwd = (pwd || '').replace(/[\uFF01-\uFF5E]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0)).trim();
   let storedHash = (cloudData.config && cloudData.config.reviewLockHash) || '';
-  // 兜底：云端尚未初始化密码时，按默认密码比对，并补写哈希
-  if (!storedHash) {
+  // 兜底：云端尚未初始化密码或为已知错误哈希时，按 lfls102810 重置
+  if (!storedHash || storedHash === '6150caa9d93fdb9fae1637c9ffe3a15b6fec44f39e17c8a77315e1da109cf3fa') {
     storedHash = await sha256('lfls102810');
     cloudData.config = cloudData.config || {};
     cloudData.config.reviewLockHash = storedHash;
     try { await cloudWrite(cloudData); } catch (err2) { console.warn('lock init fail', err2); }
   }
-  const inputHash = await sha256(pwd);
+  const inputHash = await sha256(normPwd);
   if (inputHash === storedHash) {
     _reviewUnlockedSession = true;
     sessionStorage.setItem('review_unlocked', '1');
@@ -5824,26 +5827,37 @@ function enterApp() {
   });
 }
 
-// v3.4 一次性别名迁移：将「律师考核」板块访问密码重置回负责人确认的 lfls102810（修复 v3.1 迁移写错哈希导致的密码错误）
-// 仅在登录解密成功后执行；用一次性标记避免覆盖负责人后续在「设置」中的再次修改。
+// v3.5 密码自愈：登录后将「律师考核」板块密码强制重置为 lfls102810，并自动纠正被旧设备写回的错误哈希
 async function migrateReviewLockPwd() {
   try {
-    if (!cloudData.config) return;
-    if (cloudData.config.reviewLockResetV34) return;
-    const NEW_HASH = "97974f355b375045fd0dc5a516f3df054617607f122f57f7fc1a838c6e34ea35";
-    const prev = cloudData.config.reviewLockHash;
-    cloudData.config.reviewLockHash = NEW_HASH;
-    cloudData.config.reviewLockResetV34 = true;
+    if (!cloudData.config) cloudData.config = {};
+    const LFLS_HASH = "97974f355b375045fd0dc5a516f3df054617607f122f57f7fc1a838c6e34ea35";
+    const WRONG_HASH = "6150caa9d93fdb9fae1637c9ffe3a15b6fec44f39e17c8a77315e1da109cf3fa"; // 9/4错误迁移写入的哈希，出现即视为脏数据
+    const cur = cloudData.config.reviewLockHash;
+    // 需要修复的三种情况：①未执行过v3.5强制重置 ②哈希为空 ③哈希等于已知错误值
+    const needFix = !cloudData.config.reviewLockForceV35 || !cur || cur === WRONG_HASH;
+    if (!needFix) return;
+    cloudData.config.reviewLockHash = LFLS_HASH;
+    cloudData.config.reviewLockForceV35 = true;
     try {
       await cloudWrite(cloudData);
-      console.log('律师考核板块密码已按 v3.1 迁移更新');
+      console.log('考核板块密码已重置为 lfls102810');
     } catch (e) {
-      // 写入失败则回滚，下次登录重试
-      cloudData.config.reviewLockHash = prev;
-      delete cloudData.config.reviewLockResetV34;
-      console.warn('考核板块密码迁移写入失败，将在下次登录重试', e);
+      delete cloudData.config.reviewLockForceV35; // 写失败回滚标记，下次登录重试
+      console.warn('考核板块密码重置写入失败，将在下次登录重试', e);
     }
   } catch (e) { console.warn('migrateReviewLockPwd error', e); }
+}
+
+// 轮询同步后的自愈检查：若云端哈希被旧设备覆盖为已知错误值，立即纠正
+function reviewLockSelfHeal() {
+  try {
+    if (!cloudData.config || !cloudData.config.reviewLockHash) return;
+    if (cloudData.config.reviewLockHash === "6150caa9d93fdb9fae1637c9ffe3a15b6fec44f39e17c8a77315e1da109cf3fa") {
+      cloudData.config.reviewLockHash = "97974f355b375045fd0dc5a516f3df054617607f122f57f7fc1a838c6e34ea35";
+      cloudWrite(cloudData).catch(() => {});
+    }
+  } catch (e) {}
 }
 
 async function doSetPassword(e) {
