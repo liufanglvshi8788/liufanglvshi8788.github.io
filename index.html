@@ -4193,9 +4193,6 @@ function renderGrowEntry(e, isGrowth) {
     ? `${esc(e.behavior || '')}${e.result ? ` → <strong>${esc(e.result)}</strong>` : ''}`
     : `${esc(e.behavior || '')}${e.impact ? `（影响：${esc(e.impact)}）` : ''}`;
 
-  const pieceHtml = (e.pieceAmount && e.pieceAmount !== 0)
-    ? `<span class="gp-entry-piece ${e.pieceAmount > 0 ? 'pos' : 'neg'}">${e.pieceAmount > 0 ? '💰+' + e.pieceAmount : '💰' + e.pieceAmount}元</span>` : '';
-  const capTag = (e.coeffCap !== undefined && e.coeffCap !== null) ? `<span class="gp-coeffcap-tag">系数封顶${e.coeffCap}</span>` : '';
   const caseRefHtml = (e.caseRef && e.caseRef !== '不关联') ? `<div class="gp-entry-caseref">🔗 ${esc(e.caseRef)}</div>` : '';
   const standardHtml = e.standardNote ? `<div class="gp-entry-standard">标准：${esc(e.standardNote)}</div>` : '';
   const delBtn = isManager() ? `<span style="margin-left:auto;cursor:pointer;font-size:11px;color:var(--text-light);" onclick="deleteReview('${e.id}')" title="删除此记录">✕</span>` : '';
@@ -4209,7 +4206,6 @@ function renderGrowEntry(e, isGrowth) {
     ${standardHtml}${caseRefHtml}
     <div class="gp-entry-meta">
       <span class="gp-entry-score ${scoreCls}">${scoreLabel}分</span>
-      ${pieceHtml}${capTag}
       <span>${dateStr}</span>
       <span class="gp-entry-recorder">${recorder}</span>
       ${repeatTag}
@@ -4398,7 +4394,6 @@ function renderQuickPreview(result) {
   const typeLabel = result.type === 'growth' ? '成长亮点' : '改进机会';
   const scoreCls = result.score > 0 ? 'pos' : 'neg';
   const scoreText = result.score > 0 ? `+${result.score}` : `${result.score}`;
-  const pieceText = result.pieceAmount > 0 ? ` · 计件 +${result.pieceAmount}元` : '';
   const levelTag = result.mediateLevel ? `<span class="quick-tag">级别：${result.mediateLevel}</span>` : '';
   const gradeTag = result.faultGrade ? `<span class="quick-tag ${result.faultGrade==='底线'?'tag-danger':(result.faultGrade==='重大'?'tag-major':'')}">档次：${result.faultGrade}</span>` : '';
   // 底线(10分)纪律红线：特殊规则标记；重大(5分)仅标注，不直接取消评优
@@ -4415,7 +4410,7 @@ function renderQuickPreview(result) {
         <span class="quick-cat">${esc(result.category)}</span>
       </div>
       <div class="quick-result-body">
-        <div class="quick-row"><span class="quick-lbl">分值</span><span class="quick-val ${scoreCls}">${scoreText}分</span>${pieceText}</div>
+        <div class="quick-row"><span class="quick-lbl">分值</span><span class="quick-val ${scoreCls}">${scoreText}分</span></div>
         ${levelTag}${gradeTag}${bottomLineTag}
         <div class="quick-row"><span class="quick-lbl">识别依据</span><span class="quick-hint">${esc(result.hint)}</span></div>
         ${clauseHint}
